@@ -5,13 +5,13 @@
     "keywords": [
         "yii2",
         "merchant",
-        "paypal",
-        "webmoney",
-        "ecoin",
-        "paxum",
-        "okpay",
-        "qiwi",
-        "yandex.money"
+        "PayPal",
+        "WebMoney",
+        "Yandex.Money",
+        "eCoin",
+        "Paxum",
+        "OKpay",
+        "Qiwi"
     ],
     "homepage": "https://github.com/hiqdev/yii2-merchant",
     "license": "BSD-3-Clause",

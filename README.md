@@ -5,6 +5,7 @@ Payment merchants extension for Yii2
 
 [![Latest Stable Version](https://poser.pugx.org/hiqdev/yii2-merchant/v/stable.png)](https://packagist.org/packages/hiqdev/yii2-merchant)
 [![Total Downloads](https://poser.pugx.org/hiqdev/yii2-merchant/downloads.png)](https://packagist.org/packages/hiqdev/yii2-merchant)
+[![Dependency Status](https://www.versioneye.com/php/hiqdev:yii2-merchant/dev-master/badge.svg)](https://www.versioneye.com/php/hiqdev:yii2-merchant/dev-master)
 
 ## Installation
 
