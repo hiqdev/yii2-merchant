@@ -1,12 +1,22 @@
 <?php
 
+/*
+ * Payment merchants extension for Yii2
+ *
+ * @link      https://github.com/hiqdev/yii2-merchant
+ * @package   yii2-merchant
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015, HiQDev (https://hiqdev.com/)
+ */
+
 namespace hiqdev\yii2\merchant;
 
-use Yii;
 use hiqdev\php\merchant;
 
 /**
- * For example,
+ * Merchant Module stores all the available merchants.
+ *
+ * Example application configuration:
  *
  * ```php
  * 'modules' => [
@@ -53,8 +63,10 @@ class Module extends \yii\base\Module
 
     /**
      * @param string $id service id.
-     * @return Merchant merchant instance.
+     *
      * @throws InvalidParamException on non existing merchant request.
+     *
+     * @return Merchant merchant instance.
      */
     public function getMerchant($id)
     {
@@ -70,8 +82,10 @@ class Module extends \yii\base\Module
 
     /**
      * Checks if merchant exists in the hub.
+     *
      * @param string $id merchant id.
-     * @return boolean whether merchant exist.
+     *
+     * @return bool whether merchant exist.
      */
     public function hasMerchant($id)
     {
@@ -80,8 +94,10 @@ class Module extends \yii\base\Module
 
     /**
      * Creates merchant instance from its array configuration.
-     * @param string $id merchant id.
-     * @param array $config merchant instance configuration.
+     *
+     * @param string $id     merchant id.
+     * @param array  $config merchant instance configuration.
+     *
      * @return Merchant merchant instance.
      */
     protected function createMerchant($id, $config)
