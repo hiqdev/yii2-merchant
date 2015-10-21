@@ -1,0 +1,11 @@
+package:
+    name:           yii2-merchant
+    namespace:      hiqdev\yii2\merchant
+    title:          Payment merchants extension for Yii2
+    type:           library
+    keywords:       yii2, merchant, PayPal, WebMoney, Yandex.Money, eCoin, Paxum, OKpay, Qiwi
+    description:    Payment merchants extension for Yii2
+
+require:
+    hiqdev/hidev-config:        "*"
+    hiqdev/hidev-config-php:    "*"
