@@ -12,6 +12,7 @@
 namespace hiqdev\yii2\merchant;
 
 use hiqdev\php\merchant;
+use yii\base\InvalidParamException;
 
 /**
  * Merchant Module stores all the available merchants.
@@ -53,12 +54,11 @@ class Module extends \yii\base\Module
      */
     public function getMerchants()
     {
-        $merchants = [];
         foreach ($this->_merchants as $id => $merchant) {
-            $merchants[$id] = $this->getMerchant($id);
+            $this->_loadMerchant($id);
         }
 
-        return $merchants;
+        return $this->_merchants;
     }
 
     /**
@@ -70,14 +70,22 @@ class Module extends \yii\base\Module
      */
     public function getMerchant($id)
     {
-        if (!array_key_exists($id, $this->_merchants)) {
+        if (!$this->hasMerchant($id)) {
             throw new InvalidParamException("Unknown merchant '{$id}'.");
         }
+        $this->_loadMerchant($id);
+
+        return $this->_merchants[$id];
+    }
+
+    /**
+     * @param string $id service id.
+     */
+    protected function _loadMerchant($id)
+    {
         if (!is_object($this->_merchants[$id])) {
             $this->_merchants[$id] = $this->createMerchant($id, $this->_merchants[$id]);
         }
-
-        return $this->_merchants[$id];
     }
 
     /**
