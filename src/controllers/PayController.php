@@ -11,6 +11,9 @@
 
 namespace hiqdev\yii2\merchant\controllers;
 
+use hiqdev\yii2\merchant\models\Deposit;
+use Yii;
+
 class PayController extends \yii\web\Controller
 {
     public function actions()
@@ -26,5 +29,12 @@ class PayController extends \yii\web\Controller
                 'class' => 'hiqdev\yii2\merchant\actions\FailureAction',
             ],
         ];
+    }
+
+    public function actionDeposit()
+    {
+        $model = new Deposit();
+        $view = $model->load(Yii::$app->request->post()) ? 'proceed-deposit' : 'deposit';
+        return $this->render($view, compact('model'));
     }
 }

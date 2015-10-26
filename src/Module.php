@@ -11,7 +11,7 @@
 
 namespace hiqdev\yii2\merchant;
 
-use hiqdev\php\merchant;
+use hiqdev\php\merchant\Merchant;
 use yii\base\InvalidParamException;
 
 /**
