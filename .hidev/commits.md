@@ -4,6 +4,7 @@ hiqdev/yii2-merchant commits history
 ## Under development
 
 - Added basics
+    - 961f39d 2015-10-30 fixed composer type to yii2-extension (sol@hiqdev.com)
     - 66b9ec7 2015-10-30 fixed composer type to yii2-extension; adding translations (sol@hiqdev.com)
     - 124f377 2015-10-26 adding deposit views, model and action (sol@hiqdev.com)
     - 234edfc 2015-10-26 + pay button rendering with merchant (sol@hiqdev.com)
