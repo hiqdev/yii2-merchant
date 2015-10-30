@@ -6,7 +6,6 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 
 $this->title                   = Yii::t('app', 'Recharge account');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Bills'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>

@@ -6,6 +6,8 @@ use Yii;
 
 class Deposit extends \yii\base\Model
 {
+    public $sum;
+
     /**
      * @inheritdoc
      */
@@ -16,13 +18,18 @@ class Deposit extends \yii\base\Model
         ];
     }
 
+    public function attributes()
+    {
+        return ['sum'];
+    }
+
     /**
      * @inheritdoc
      */
     public function attributeLabels()
     {
-        return $this->mergeAttributeLabels([
-            'sum' => Yii::t('app', 'Sum'),
-        ]);
+        return [
+            'sum' => Yii::t('merchant', 'Sum'),
+        ];
     }
 }

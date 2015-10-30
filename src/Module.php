@@ -11,6 +11,8 @@
 
 namespace hiqdev\yii2\merchant;
 
+use Yii;
+use Closure;
 use hiqdev\php\merchant\Merchant;
 use yii\base\InvalidParamException;
 
@@ -39,12 +41,30 @@ use yii\base\InvalidParamException;
  */
 class Module extends \yii\base\Module
 {
+    public function init()
+    {
+        parent::init();
+        $this->registerTranslations();
+    }
+
+    public function registerTranslations()
+    {
+        Yii::$app->i18n->translations['merchant'] = [
+            'class'          => 'yii\i18n\PhpMessageSource',
+            'sourceLanguage' => 'en-US',
+            'basePath'       => '@hiqdev/yii2/merchant/messages',
+            'fileMap'        => [
+                'merchant' => 'merchant.php',
+            ],
+        ];
+    }
+
     protected $_merchants = [];
 
     /**
-     * @param array $merchants list of merchants
+     * @param array|Closure $merchants list of merchants or callback
      */
-    public function setMerchants(array $merchants)
+    public function setMerchants($merchants)
     {
         $this->_merchants = $merchants;
     }
@@ -54,11 +74,19 @@ class Module extends \yii\base\Module
      */
     public function getMerchants()
     {
+        $this->fetchMerchants();
         foreach ($this->_merchants as $id => $merchant) {
             $this->_loadMerchant($id);
         }
 
         return $this->_merchants;
+    }
+
+    public function fetchMerchants($params = [])
+    {
+        if ($this->_merchants instanceof Closure) {
+            $this->_merchants = call_user_func($this->_merchants, $params);
+        }
     }
 
     /**
@@ -70,6 +98,7 @@ class Module extends \yii\base\Module
      */
     public function getMerchant($id)
     {
+        $this->fetchMerchants();
         if (!$this->hasMerchant($id)) {
             throw new InvalidParamException("Unknown merchant '{$id}'.");
         }

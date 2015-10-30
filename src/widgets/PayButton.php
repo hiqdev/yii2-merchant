@@ -11,7 +11,7 @@
 
 namespace hiqdev\yii2\merchant\widgets;
 
-use yii\helpers\Html;
+use Yii;
 
 class PayButton extends \yii\base\Widget
 {
@@ -21,16 +21,17 @@ class PayButton extends \yii\base\Widget
 
     public function run() {
         parent::run();
-        $this->merchant->mset($this->model);
+        if ($this->model) {
+            $this->merchant->mset($this->model);
+        }
         print $this->renderButton();
     }
 
     public function renderButton()
     {
-        return Html::tag('button', $this->renderLabel() . $this->renderForm(), [
-            'class' => 'btn-block',
-            'type'  => 'submit',
-            'form'  => $this->merchant->formId,
+        return $this->render('pay-button', [
+            'widget'   => $this,
+            'merchant' => $this->merchant,
         ]);
     }
 
@@ -42,5 +43,10 @@ class PayButton extends \yii\base\Widget
     public function renderForm()
     {
         return $this->merchant->renderForm();
+    }
+
+    public function formatMoney($sum)
+    {
+        return Yii::$app->formatter->format($sum, ['currency', $this->merchant->currency]);
     }
 }

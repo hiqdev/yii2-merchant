@@ -34,7 +34,11 @@ class PayController extends \yii\web\Controller
     public function actionDeposit()
     {
         $model = new Deposit();
-        $view = $model->load(Yii::$app->request->post()) ? 'proceed-deposit' : 'deposit';
+        $load  = $model->load(Yii::$app->request->post());
+        $view  = $load ? 'proceed-deposit' : 'deposit';
+        if ($load) {
+            $this->module->fetchMerchants($model->getAttributes());
+        }
         return $this->render($view, compact('model'));
     }
 }
