@@ -6,7 +6,7 @@
  * @link      https://github.com/hiqdev/yii2-merchant
  * @package   yii2-merchant
  * @license   BSD-3-Clause
- * @copyright Copyright (c) 2015, HiQDev (https://hiqdev.com/)
+ * @copyright Copyright (c) 2015, HiQDev (http://hiqdev.com/)
  */
 
 namespace hiqdev\yii2\merchant\widgets;
@@ -19,7 +19,8 @@ class PayButton extends \yii\base\Widget
 
     public $merchant;
 
-    public function run() {
+    public function run()
+    {
         parent::run();
         if ($this->model) {
             $this->merchant->mset($this->model);

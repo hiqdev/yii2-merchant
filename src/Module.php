@@ -6,14 +6,14 @@
  * @link      https://github.com/hiqdev/yii2-merchant
  * @package   yii2-merchant
  * @license   BSD-3-Clause
- * @copyright Copyright (c) 2015, HiQDev (https://hiqdev.com/)
+ * @copyright Copyright (c) 2015, HiQDev (http://hiqdev.com/)
  */
 
 namespace hiqdev\yii2\merchant;
 
-use Yii;
 use Closure;
 use hiqdev\php\merchant\Merchant;
+use Yii;
 use yii\base\InvalidParamException;
 
 /**

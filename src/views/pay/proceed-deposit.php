@@ -1,7 +1,5 @@
 <?php
 
-use hipanel\modules\finance\grid\BillGridView;
-use yii\helpers\Html;
 use hiqdev\yii2\merchant\widgets\PayButton;
 
 $this->title                   = Yii::t('merchant', 'Select payment method');

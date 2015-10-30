@@ -1,12 +1,12 @@
 <?php
 
 /*
- * Finance Plugin for HiPanel
+ * Payment merchants extension for Yii2
  *
- * @link      https://github.com/hiqdev/hipanel-module-finance
- * @package   hipanel-module-finance
+ * @link      https://github.com/hiqdev/yii2-merchant
+ * @package   yii2-merchant
  * @license   BSD-3-Clause
- * @copyright Copyright (c) 2014-2015, HiQDev (https://hiqdev.com/)
+ * @copyright Copyright (c) 2015, HiQDev (http://hiqdev.com/)
  */
 
 namespace hiqdev\yii2\merchant\models;

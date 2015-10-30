@@ -1,8 +1,5 @@
 <?php
 
-use yii\helpers\Html;
-
-use hiqdev\yii2\merchant\MerchantAsset;
 
 $asset = Yii::createObject([
     'class'      => 'hiqdev\yii2\merchant\MerchantAsset',
@@ -18,7 +15,7 @@ $logo = $asset->getPublishedUrl('logo.png');
 <button class="btn btn-default btn-block" type="submit" form="<?= $merchant->formId ?>" style="text-align:left;background: url(<?= $logo ?>) no-repeat right">
 
     <?= Yii::t('merchant', 'pay') ?>  <b><?= $widget->formatMoney($merchant->total) ?></b>
-    <? /*
+    <?php /*
         <?= Yii::t('merchant', 'with') ?> <b><?= $merchant->label ?></b>
     */ ?>
     <br/>
