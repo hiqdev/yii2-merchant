@@ -4,7 +4,7 @@ use hipanel\modules\finance\grid\BillGridView;
 use yii\helpers\Html;
 use hiqdev\yii2\merchant\widgets\PayButton;
 
-$this->title                   = Yii::t('app', 'Select payment method');
+$this->title                   = Yii::t('merchant', 'Select payment method');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Recharge account'), 'url' => ['deposit']];
 $this->params['breadcrumbs'][] = $this->title;
 

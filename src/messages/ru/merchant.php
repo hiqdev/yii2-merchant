@@ -17,5 +17,10 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
-    'sum' => 'Сумма',
+    'Sum' => 'Сумма',
+    'pay' => 'оплатить',
+    'including commission' => 'включая комиссию',
+    'Proceed' => 'Продолжить',
+    'Recharge account' => 'Пополнить счёт',
+    'Select payment method' => 'Выбрать способ оплаты',
 ];
