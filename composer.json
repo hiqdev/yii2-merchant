@@ -1,6 +1,6 @@
 {
     "name": "hiqdev/yii2-merchant",
-    "type": "library",
+    "type": "yii2-extension",
     "description": "Payment merchants extension for Yii2",
     "keywords": [
         "yii2",
