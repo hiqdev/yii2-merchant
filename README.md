@@ -1,5 +1,5 @@
 Payment merchants extension for Yii2
-------------------------------------
+====================================
 
 Payment merchants extension for Yii2
 
@@ -9,7 +9,7 @@ Payment merchants extension for Yii2
 
 ## Installation
 
-The preferred way to install this library is through [composer](http://getcomposer.org/download/).
+The preferred way to install this yii2-extension is through [composer](http://getcomposer.org/download/).
 
 Either run
 

@@ -11,7 +11,9 @@
         "eCoin",
         "Paxum",
         "OKpay",
-        "Qiwi"
+        "Qiwi",
+        "InterKassa",
+        "RoboKassa"
     ],
     "homepage": "https://github.com/hiqdev/yii2-merchant",
     "license": "BSD-3-Clause",
