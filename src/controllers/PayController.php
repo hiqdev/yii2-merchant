@@ -16,6 +16,19 @@ use Yii;
 
 class PayController extends \yii\web\Controller
 {
+    /**
+     * Disable CSRF validation for POST requests we receive from outside.
+     */
+    public function beforeAction()
+    {
+        if (in_array($this->action->id, ['confirm', 'success', 'failure'])) {
+            Yii::$app->controller->enableCsrfValidation = false;
+        }
+
+        return true;
+    }
+
+    /*
     public function actions()
     {
         return [
@@ -30,16 +43,34 @@ class PayController extends \yii\web\Controller
             ],
         ];
     }
+    */
+
+    public function actionFailure()
+    {
+        $back = $this->module->previousUrl();
+        $this->redirect($back ?: ['deposit']);
+    }
+
+    public function actionSuccess()
+    {
+        $back = $this->module->previousUrl();
+        $this->redirect($back ?: ['deposit']);
+    }
 
     public function actionDeposit()
     {
         $model = new Deposit();
+        $back  = Yii::$app->request->get('back');
         $load  = $model->load(Yii::$app->request->post());
         $view  = $load ? 'proceed-deposit' : 'deposit';
         if ($load) {
             $this->module->fetchMerchants($model->getAttributes());
         }
+        if ($back) {
+            $this->module->rememberUrl($back);
+        }
 
         return $this->render($view, compact('model'));
     }
+
 }

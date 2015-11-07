@@ -4,6 +4,7 @@ hiqdev/yii2-merchant commits history
 ## Under development
 
 - Added basics
+    - cf31f89 2015-10-30 php-cs-fixed (sol@hiqdev.com)
     - 1b82630 2015-10-30 finished translation (sol@hiqdev.com)
     - 961f39d 2015-10-30 fixed composer type to yii2-extension (sol@hiqdev.com)
     - 66b9ec7 2015-10-30 fixed composer type to yii2-extension; adding translations (sol@hiqdev.com)

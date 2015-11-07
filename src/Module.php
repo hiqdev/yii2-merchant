@@ -11,10 +11,11 @@
 
 namespace hiqdev\yii2\merchant;
 
+use Yii;
 use Closure;
 use hiqdev\php\merchant\Merchant;
-use Yii;
 use yii\base\InvalidParamException;
+use yii\helpers\Url;
 
 /**
  * Merchant Module stores all the available merchants.
@@ -25,6 +26,9 @@ use yii\base\InvalidParamException;
  * 'modules' => [
  *     'merchant' => [
  *         'class'     => 'hiqdev\merchant\Module',
+ *         'defaults'  => [
+ *             'confirmPage' => '/other/confirm/page',
+ *         ],
  *         'merchants' => [
  *             'paypal' => [
  *                 'purse'  => $params['paypal_purse'],  /// DON'T keep this info in source control
@@ -57,6 +61,18 @@ class Module extends \yii\base\Module
                 'merchant' => 'merchant.php',
             ],
         ];
+    }
+
+    const URL_PREFIX = 'merchant_url_';
+
+    public function rememberUrl($url, $name = 'back')
+    {
+        Url::remember($url, URL_PREFIX . $name);
+    }
+
+    public function previousUrl($name = 'back')
+    {
+        return Url::previous(URL_PREFIX . $name);
     }
 
     protected $_merchants = [];
@@ -129,6 +145,12 @@ class Module extends \yii\base\Module
         return array_key_exists($id, $this->_merchants);
     }
 
+
+    /**
+     * Defaults for all merchants.
+     */
+    public $defaults = [];
+
     /**
      * Creates merchant instance from its array configuration.
      *
@@ -139,7 +161,7 @@ class Module extends \yii\base\Module
      */
     protected function createMerchant($id, $config)
     {
-        $config['id'] = $id;
+        $config = array_merge((array)$this->defaults, $config, compact('id'));
 
         return Merchant::create($config);
     }
