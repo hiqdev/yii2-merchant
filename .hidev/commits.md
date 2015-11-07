@@ -3,7 +3,9 @@ hiqdev/yii2-merchant commits history
 
 ## Under development
 
+- Chnaged: redone to 'yii2-omnipay'
 - Added basics
+    - ce5afe7 2015-11-07 added basics (sol@hiqdev.com)
     - cf31f89 2015-10-30 php-cs-fixed (sol@hiqdev.com)
     - 1b82630 2015-10-30 finished translation (sol@hiqdev.com)
     - 961f39d 2015-10-30 fixed composer type to yii2-extension (sol@hiqdev.com)
