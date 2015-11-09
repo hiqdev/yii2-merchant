@@ -1,11 +1,14 @@
-Payment merchants extension for Yii2
-====================================
+Yii2 Merchant
+=============
+
+**Yii2 extension for payment processing with Omnipay, Payum and more later**
 
 [![Latest Stable Version](https://poser.pugx.org/hiqdev/yii2-merchant/v/stable)](//packagist.org/packages/hiqdev/yii2-merchant)
 [![Total Downloads](https://poser.pugx.org/hiqdev/yii2-merchant/downloads)](//packagist.org/packages/hiqdev/yii2-merchant)
 [![Dependency Status](https://www.versioneye.com/php/hiqdev:yii2-merchant/dev-master/badge.svg)](https://www.versioneye.com/php/hiqdev:yii2-merchant/dev-master)
 
-Payment merchants extension for Yii2
+This [Yii2](http://yiiframework.com/) extension provides payment gateways integration with use of
+[Omnipay](http://omnipay.thephpleague.com/) and [Payum](http://payum.org/) payment processing libraries.
 
 ## Installation
 
