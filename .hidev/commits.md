@@ -3,7 +3,8 @@ hiqdev/yii2-merchant commits history
 
 ## Under development
 
-- Chnaged: redone to 'yii2-omnipay'
+- Chnaged: redone with Omnipay
+    - 67aa249 2015-11-09 improved package description (sol@hiqdev.com)
 - Added basics
     - ce5afe7 2015-11-07 added basics (sol@hiqdev.com)
     - cf31f89 2015-10-30 php-cs-fixed (sol@hiqdev.com)
