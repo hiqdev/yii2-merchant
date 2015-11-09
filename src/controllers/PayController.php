@@ -63,9 +63,9 @@ class PayController extends \yii\web\Controller
         $back  = Yii::$app->request->get('back');
         $load  = $model->load(Yii::$app->request->post());
         $view  = $load ? 'proceed-deposit' : 'deposit';
-        if ($load) {
+        /* if ($load) {
             $this->module->fetchMerchants($model->getAttributes());
-        }
+        } */
         if ($back) {
             $this->module->rememberUrl($back);
         }

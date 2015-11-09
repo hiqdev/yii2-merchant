@@ -13,12 +13,11 @@ namespace hiqdev\yii2\merchant;
 
 use Yii;
 use Closure;
-use hiqdev\php\merchant\Merchant;
 use yii\base\InvalidParamException;
 use yii\helpers\Url;
 
 /**
- * Merchant Module stores all the available merchants.
+ * Merchant Module.
  *
  * Example application configuration:
  *
@@ -27,12 +26,12 @@ use yii\helpers\Url;
  *     'merchant' => [
  *         'class'     => 'hiqdev\merchant\Module',
  *         'defaults'  => [
- *             'confirmPage' => '/other/confirm/page',
+ *             'confirmPage' => '/my/confirm/page',
  *         ],
  *         'merchants' => [
- *             'paypal' => [
- *                 'purse'  => $params['paypal_purse'],  /// DON'T keep this info in source control
- *                 'secret' => $params['paypal_secret'], /// DON'T keep this info in source control
+ *             'PayPal' => [
+ *                 'purse'  => $params['paypal_purse'],    /// DON'T keep this info in source control
+ *                 'secret' => $params['paypal_secret'],   /// DON'T keep this info in source control
  *             ],
  *             'webmoney' => [
  *                 'purse'  => $params['webmoney_purse'],  /// DON'T keep this info in source control
@@ -45,6 +44,12 @@ use yii\helpers\Url;
  */
 class Module extends \yii\base\Module
 {
+    /**
+     * Default merchant collection to use. Other can be specified.
+     */
+    public $collectionClass = 'hiqdev\yii2\merchant\Collection';
+    public $merchantClass = 'hiqdev\yii2\merchant\OmnipayMerchant';
+
     public function init()
     {
         parent::init();
@@ -90,9 +95,12 @@ class Module extends \yii\base\Module
      */
     public function getMerchants()
     {
-        $this->fetchMerchants();
-        foreach ($this->_merchants as $id => $merchant) {
-            $this->_loadMerchant($id);
+        if (!is_object($this->_merchants)) {
+            $this->fetchMerchants();
+            Yii::createObject([
+                'class' => $this->collectionClass,
+                'items' => $this->_merchants,
+            ]);
         }
 
         return $this->_merchants;
@@ -108,19 +116,11 @@ class Module extends \yii\base\Module
     /**
      * @param string $id service id.
      *
-     * @throws InvalidParamException on non existing merchant request.
-     *
      * @return Merchant merchant instance.
      */
     public function getMerchant($id)
     {
-        $this->fetchMerchants();
-        if (!$this->hasMerchant($id)) {
-            throw new InvalidParamException("Unknown merchant '{$id}'.");
-        }
-        $this->_loadMerchant($id);
-
-        return $this->_merchants[$id];
+        return $this->getMerchants->get($id);
     }
 
     /**
@@ -142,7 +142,7 @@ class Module extends \yii\base\Module
      */
     public function hasMerchant($id)
     {
-        return array_key_exists($id, $this->_merchants);
+        $this->getMerchants()->has($id);
     }
 
 
@@ -154,15 +154,12 @@ class Module extends \yii\base\Module
     /**
      * Creates merchant instance from its array configuration.
      *
-     * @param string $id     merchant id.
      * @param array  $config merchant instance configuration.
      *
      * @return Merchant merchant instance.
      */
-    protected function createMerchant($id, $config)
+    protected function createMerchant($config)
     {
-        $config = array_merge((array)$this->defaults, $config, compact('id'));
-
-        return Merchant::create($config);
+        return Yii::createObject(array_merge(['class' => $this->merchantClass], (array)$this->defaults, $config));
     }
 }
