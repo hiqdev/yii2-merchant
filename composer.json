@@ -45,7 +45,7 @@
         }
     ],
     "require": {
-        "hiqdev/php-merchant": "*@dev"
+        "hiqdev/yii2-collection": "*"
     },
     "autoload": {
         "psr-4": {
