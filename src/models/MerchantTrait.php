@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Payment merchants extension for Yii2
+ * Yii2 extension for payment processing with Omnipay, Payum and more later
  *
  * @link      https://github.com/hiqdev/yii2-merchant
  * @package   yii2-merchant

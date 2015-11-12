@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Payment merchants extension for Yii2
+ * Yii2 extension for payment processing with Omnipay, Payum and more later
  *
  * @link      https://github.com/hiqdev/yii2-merchant
  * @package   yii2-merchant
@@ -13,8 +13,8 @@ namespace hiqdev\yii2\merchant\controllers;
 
 use hiqdev\yii2\merchant\models\Deposit;
 use Yii;
-use yii\helpers\Json;
 use yii\base\UserException;
+use yii\helpers\Json;
 
 class PayController extends \yii\web\Controller
 {
@@ -23,7 +23,7 @@ class PayController extends \yii\web\Controller
      */
     public function beforeAction()
     {
-        if (in_array($this->action->id, ['notify', 'return', 'cancel'])) {
+        if (in_array($this->action->id, ['notify', 'return', 'cancel'], true)) {
             Yii::$app->controller->enableCsrfValidation = false;
         }
 

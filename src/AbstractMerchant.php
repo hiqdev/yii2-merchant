@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * Yii2 extension for payment processing with Omnipay, Payum and more later
+ *
+ * @link      https://github.com/hiqdev/yii2-merchant
+ * @package   yii2-merchant
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015, HiQDev (http://hiqdev.com/)
+ */
+
 namespace hiqdev\yii2\merchant;
 
 use Yii;
@@ -9,12 +18,12 @@ abstract class AbstractMerchant extends \yii\base\Object implements MerchantInte
     public $module;
 
     /**
-     * Unique merchant identificator. E.g. paypal, webmoney_usd, webmoney_rub
+     * Unique merchant identificator. E.g. paypal, webmoney_usd, webmoney_rub.
      */
     public $id;
 
     /**
-     * Gateway name, corresponding to Omnipay namespace. E.g. PayPal, WebMoney, YandexMoney
+     * Gateway name, corresponding to Omnipay namespace. E.g. PayPal, WebMoney, YandexMoney.
      */
     public $gateway;
 
@@ -27,7 +36,7 @@ abstract class AbstractMerchant extends \yii\base\Object implements MerchantInte
 
     public function getAssetDir()
     {
-        return null;
+        return;
     }
 
     public function request($type, $data)
@@ -36,7 +45,7 @@ abstract class AbstractMerchant extends \yii\base\Object implements MerchantInte
             'class'     => $this->requestClass,
             'merchant'  => $this,
             'type'      => $type,
-            'data'      => array_merge((array)$this->data, (array)$data),
+            'data'      => array_merge((array) $this->data, (array) $data),
         ]);
     }
 

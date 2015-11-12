@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * Yii2 extension for payment processing with Omnipay, Payum and more later
+ *
+ * @link      https://github.com/hiqdev/yii2-merchant
+ * @package   yii2-merchant
+ * @license   BSD-3-Clause
+ * @copyright Copyright (c) 2015, HiQDev (http://hiqdev.com/)
+ */
+
 namespace hiqdev\yii2\merchant;
 
 use yii\helpers\Inflector;
@@ -54,6 +63,6 @@ class AbstractRequest extends \yii\base\Object implements RequestInterface
             'notifyUrl' => $this->merchant->module->buildUrl('notify'),
             'returnUrl' => $this->merchant->module->buildUrl('return'),
             'cancelUrl' => $this->merchant->module->buildUrl('cancel'),
-        ], (array)$this->data);
+        ], (array) $this->data);
     }
 }

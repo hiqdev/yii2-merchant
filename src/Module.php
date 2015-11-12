@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Payment merchants extension for Yii2
+ * Yii2 extension for payment processing with Omnipay, Payum and more later
  *
  * @link      https://github.com/hiqdev/yii2-merchant
  * @package   yii2-merchant
@@ -11,9 +11,8 @@
 
 namespace hiqdev\yii2\merchant;
 
-use Yii;
 use Closure;
-use yii\base\InvalidParamException;
+use Yii;
 use yii\helpers\Url;
 
 /**
@@ -87,8 +86,9 @@ class Module extends \yii\base\Module
     }
 
     /**
-     * @return Merchant[] list of merchants.
      * @param array $params parameters for collection
+     *
+     * @return Merchant[] list of merchants.
      */
     public function getCollection(array $params = [])
     {
@@ -97,15 +97,15 @@ class Module extends \yii\base\Module
                 'class'  => $this->collectionClass,
                 'module' => $this,
                 'params' => $params,
-            ], (array)$this->_collection));
+            ], (array) $this->_collection));
         }
 
         return $this->_collection;
     }
 
     /**
-     * @param string $id service id.
-     * @param array $params parameters for collection
+     * @param string $id     service id.
+     * @param array  $params parameters for collection
      *
      * @return Merchant merchant instance.
      */
@@ -134,7 +134,7 @@ class Module extends \yii\base\Module
     /**
      * Creates merchant instance from its array configuration.
      *
-     * @param array  $config merchant instance configuration.
+     * @param array $config merchant instance configuration.
      *
      * @return Merchant merchant instance.
      */
@@ -144,7 +144,7 @@ class Module extends \yii\base\Module
             'class'     => $this->merchantClass,
             'module'    => $this,
             'id'        => $id,
-        ], (array)$this->defaults, $config));
+        ], (array) $this->defaults, $config));
     }
 
     const URL_PREFIX = 'merchant_url_';
@@ -169,7 +169,8 @@ class Module extends \yii\base\Module
         $page = array_merge([
             'merchant' => $this->id,
             'username' => Yii::$app->user->identity->username,
-        ], (array)($this->hasProperty($name) ? $this->{$name} : [$dest]));
+        ], (array) ($this->hasProperty($name) ? $this->{$name} : [$dest]));
+
         return Url::to($page, true);
     }
 }
