@@ -24,18 +24,17 @@ use yii\helpers\Url;
  * ```php
  * 'modules' => [
  *     'merchant' => [
- *         'class'     => 'hiqdev\merchant\Module',
- *         'defaults'  => [
- *             'confirmPage' => '/my/confirm/page',
- *         ],
- *         'merchants' => [
+ *         'class'         => 'hiqdev\merchant\Module',
+ *         'confirmPage'   => '/my/confirm/page',
+ *         'collection'    => [
  *             'PayPal' => [
- *                 'purse'  => $params['paypal_purse'],    /// DON'T keep this info in source control
- *                 'secret' => $params['paypal_secret'],   /// DON'T keep this info in source control
+ *                 'purse'     => $params['paypal_purse'],
+ *                 'secret'    => $params['paypal_secret'],   /// NEVER keep secret in source control
  *             ],
- *             'webmoney' => [
- *                 'purse'  => $params['webmoney_purse'],  /// DON'T keep this info in source control
- *                 'secret' => $params['webmoney_secret'], /// DON'T keep this info in source control
+ *             'webmoney_usd' => [
+ *                 'gateway'   => 'WebMoney',
+ *                 'purse'     => $params['webmoney_purse'],
+ *                 'secret'    => $params['webmoney_secret'], /// NEVER keep secret in source control
  *             ],
  *         ],
  *     ],
@@ -48,7 +47,16 @@ class Module extends \yii\base\Module
      * Default merchant collection to use. Other can be specified.
      */
     public $collectionClass = 'hiqdev\yii2\merchant\Collection';
+
+    /**
+     * Default merchant to use is OmnipayMerchant.
+     */
     public $merchantClass = 'hiqdev\yii2\merchant\OmnipayMerchant';
+
+    /**
+     * Deposit model class.
+     */
+    public $depositClass = 'hiqdev\yii2\merchant\models\Deposit';
 
     public function init()
     {
@@ -68,69 +76,42 @@ class Module extends \yii\base\Module
         ];
     }
 
-    const URL_PREFIX = 'merchant_url_';
-
-    public function rememberUrl($url, $name = 'back')
-    {
-        Url::remember($url, URL_PREFIX . $name);
-    }
-
-    public function previousUrl($name = 'back')
-    {
-        return Url::previous(URL_PREFIX . $name);
-    }
-
-    protected $_merchants = [];
+    protected $_collection = [];
 
     /**
-     * @param array|Closure $merchants list of merchants or callback
+     * @param array|Closure $collection list of merchants or callback
      */
-    public function setMerchants($merchants)
+    public function setCollection($collection)
     {
-        $this->_merchants = $merchants;
+        $this->_collection = $collection;
     }
 
     /**
      * @return Merchant[] list of merchants.
+     * @param array $params parameters for collection
      */
-    public function getMerchants()
+    public function getCollection(array $params = [])
     {
-        if (!is_object($this->_merchants)) {
-            $this->fetchMerchants();
-            Yii::createObject([
-                'class' => $this->collectionClass,
-                'items' => $this->_merchants,
-            ]);
+        if (!is_object($this->_collection)) {
+            $this->_collection = Yii::createObject(array_merge([
+                'class'  => $this->collectionClass,
+                'module' => $this,
+                'params' => $params,
+            ], (array)$this->_collection));
         }
 
-        return $this->_merchants;
-    }
-
-    public function fetchMerchants($params = [])
-    {
-        if ($this->_merchants instanceof Closure) {
-            $this->_merchants = call_user_func($this->_merchants, $params);
-        }
+        return $this->_collection;
     }
 
     /**
      * @param string $id service id.
+     * @param array $params parameters for collection
      *
      * @return Merchant merchant instance.
      */
-    public function getMerchant($id)
+    public function getMerchant($id, array $params = [])
     {
-        return $this->getMerchants->get($id);
-    }
-
-    /**
-     * @param string $id service id.
-     */
-    protected function _loadMerchant($id)
-    {
-        if (!is_object($this->_merchants[$id])) {
-            $this->_merchants[$id] = $this->createMerchant($id, $this->_merchants[$id]);
-        }
+        return $this->getCollection($params)->get($id);
     }
 
     /**
@@ -142,9 +123,8 @@ class Module extends \yii\base\Module
      */
     public function hasMerchant($id)
     {
-        $this->getMerchants()->has($id);
+        $this->getCollection()->has($id);
     }
-
 
     /**
      * Defaults for all merchants.
@@ -158,8 +138,38 @@ class Module extends \yii\base\Module
      *
      * @return Merchant merchant instance.
      */
-    protected function createMerchant($config)
+    public function createMerchant($id, $config)
     {
-        return Yii::createObject(array_merge(['class' => $this->merchantClass], (array)$this->defaults, $config));
+        return Yii::createObject(array_merge([
+            'class'     => $this->merchantClass,
+            'module'    => $this,
+            'id'        => $id,
+        ], (array)$this->defaults, $config));
+    }
+
+    const URL_PREFIX = 'merchant_url_';
+
+    public function rememberUrl($url, $name = 'back')
+    {
+        Url::remember($url, URL_PREFIX . $name);
+    }
+
+    public function previousUrl($name = 'back')
+    {
+        return Url::previous(URL_PREFIX . $name);
+    }
+
+    public $notifyPage = ['notify'];
+    public $returnPage = ['return'];
+    public $cancelPage = ['cancel'];
+
+    public function buildUrl($dest)
+    {
+        $name = $dest . 'Page';
+        $page = array_merge([
+            'merchant' => $this->id,
+            'username' => Yii::$app->user->identity->username,
+        ], (array)($this->hasProperty($name) ? $this->{$name} : [$dest]));
+        return Url::to($page, true);
     }
 }

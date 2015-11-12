@@ -1,0 +1,59 @@
+<?php
+
+namespace hiqdev\yii2\merchant;
+
+use yii\helpers\Inflector;
+
+/**
+ * AbstractRequest class.
+ */
+class AbstractRequest extends \yii\base\Object implements RequestInterface
+{
+    public $merchant;
+
+    public $type;
+
+    public $data = [];
+
+    public function getAmount()
+    {
+        return $this->data['amount'];
+    }
+
+    public function getFee()
+    {
+        return $this->data['fee'] ?: 0;
+    }
+
+    public function getSum()
+    {
+        return $this->data['sum'] ?: $this->getAmount() - $this->getFee();
+    }
+
+    public function getCurrency()
+    {
+        return $this->data['currency'];
+    }
+
+    public function send()
+    {
+        return $this->merchant->response($this);
+    }
+
+    /**
+     * Concrete requests can build type in other way.
+     */
+    public function getType()
+    {
+        return Inflector::id2camel($this->type);
+    }
+
+    public function getData()
+    {
+        return array_merge([
+            'notifyUrl' => $this->merchant->module->buildUrl('notify'),
+            'returnUrl' => $this->merchant->module->buildUrl('return'),
+            'cancelUrl' => $this->merchant->module->buildUrl('cancel'),
+        ], (array)$this->data);
+    }
+}

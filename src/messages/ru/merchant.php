@@ -29,6 +29,7 @@
 return [
     'Sum'                   => 'Сумма',
     'pay'                   => 'оплатить',
+    'with'                  => 'через',
     'including commission'  => 'включая комиссию',
     'Proceed'               => 'Продолжить',
     'Recharge account'      => 'Пополнить счёт',

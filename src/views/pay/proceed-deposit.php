@@ -10,8 +10,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <div class="row">
     <div class="col-md-4">
-        <?php foreach (Yii::$app->getModule('merchant')->merchants as $merchant) { ?>
-            <?= PayButton::widget(compact('merchant', 'model')) ?>
+        <?php foreach ($requests as $request) { ?>
+            <?= PayButton::widget(compact('request')) ?>
         <?php } ?>
     </div>
 </div>

@@ -16,4 +16,12 @@ namespace hiqdev\yii2\merchant;
  */
 class Collection extends \hiqdev\collection\Manager
 {
+    public $params = [];
+
+    public $module;
+
+    protected function createItem($id, array $config = [])
+    {
+        return $this->module->createMerchant($id, $config);
+    }
 }

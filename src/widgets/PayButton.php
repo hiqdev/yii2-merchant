@@ -15,39 +15,26 @@ use Yii;
 
 class PayButton extends \yii\base\Widget
 {
-    public $model;
-
-    public $merchant;
+    public $request;
 
     public function run()
     {
         parent::run();
-        if ($this->model) {
-            $this->merchant->mset($this->model);
-        }
         print $this->renderButton();
     }
 
     public function renderButton()
     {
         return $this->render('pay-button', [
-            'widget'   => $this,
-            'merchant' => $this->merchant,
+            'widget'  => $this,
+            'request' => $this->request,
         ]);
     }
 
-    public function renderLabel()
-    {
-        return $this->merchant->label;
-    }
-
-    public function renderForm()
-    {
-        return $this->merchant->renderForm();
-    }
+    public $action = ['request'];
 
     public function formatMoney($sum)
     {
-        return Yii::$app->formatter->format($sum, ['currency', $this->merchant->currency]);
+        return Yii::$app->formatter->format($sum, ['currency', $this->request->currency]);
     }
 }

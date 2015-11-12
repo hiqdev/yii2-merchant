@@ -13,6 +13,8 @@ namespace hiqdev\yii2\merchant\controllers;
 
 use hiqdev\yii2\merchant\models\Deposit;
 use Yii;
+use yii\helpers\Json;
+use yii\base\UserException;
 
 class PayController extends \yii\web\Controller
 {
@@ -21,56 +23,63 @@ class PayController extends \yii\web\Controller
      */
     public function beforeAction()
     {
-        if (in_array($this->action->id, ['confirm', 'success', 'failure'])) {
+        if (in_array($this->action->id, ['notify', 'return', 'cancel'])) {
             Yii::$app->controller->enableCsrfValidation = false;
         }
 
         return true;
     }
 
-    /*
-    public function actions()
+    public function actionCancel()
     {
-        return [
-            'confirm' => [
-                'class' => 'hiqdev\yii2\merchant\actions\ConfirmAction',
-            ],
-            'success' => [
-                'class' => 'hiqdev\yii2\merchant\actions\SuccessAction',
-            ],
-            'failure' => [
-                'class' => 'hiqdev\yii2\merchant\actions\FailureAction',
-            ],
-        ];
-    }
-    */
-
-    public function actionFailure()
-    {
+        Yii::$app->session->addFlash('error', Yii::t('merchant', 'Payment failed or cancelled'));
         $back = $this->module->previousUrl();
         $this->redirect($back ?: ['deposit']);
     }
 
-    public function actionSuccess()
+    public function actionReturn()
     {
+        Yii::$app->session->addFlash('success', Yii::t('merchant', 'Payment performed successfully'));
         $back = $this->module->previousUrl();
         $this->redirect($back ?: ['deposit']);
     }
 
     public function actionDeposit()
     {
-        $model = new Deposit();
+        $model = Yii::createObject($this->module->depositClass);
         $back  = Yii::$app->request->get('back');
         $load  = $model->load(Yii::$app->request->post());
         $view  = $load ? 'proceed-deposit' : 'deposit';
-        /* if ($load) {
-            $this->module->fetchMerchants($model->getAttributes());
-        } */
+        if ($load) {
+            $params = array_merge([
+                'description' => Yii::$app->request->getServerName() . ' deposit: ' . Yii::$app->user->identity->username,
+            ], $model->getAttributes());
+            $merchants = $this->module->getCollection($params)->getItems();
+            $requests = [];
+            foreach ($merchants as $id => $merchant) {
+                $requests[$id] = $merchant->request('purchase', $params);
+            }
+        }
         if ($back) {
             $this->module->rememberUrl($back);
         }
 
-        return $this->render($view, compact('model'));
+        return $this->render($view, compact('requests', 'model', 'params'));
     }
 
+    public function actionRequest()
+    {
+        $merchant   = Yii::$app->request->post('merchant');
+        $data       = Json::decode(Yii::$app->request->post('data'));
+        $merchant   = $this->module->getMerchant($merchant, $data);
+        $request    = $merchant->request('purchase', $data);
+        $response   = $request->send();
+        if ($response->isSuccessful()) {
+            $merchant->registerMoney($response);
+        } elseif ($response->isRedirect()) {
+            $response->redirect();
+        } else {
+            throw new UserException('merchant request failed');
+        };
+    }
 }

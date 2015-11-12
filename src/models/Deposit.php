@@ -15,7 +15,7 @@ use Yii;
 
 class Deposit extends \yii\base\Model
 {
-    public $sum;
+    public $amount;
 
     /**
      * {@inheritdoc}
@@ -23,13 +23,13 @@ class Deposit extends \yii\base\Model
     public function rules()
     {
         return [
-            [['sum'], 'number'],
+            [['amount'], 'number'],
         ];
     }
 
     public function attributes()
     {
-        return ['sum'];
+        return ['amount'];
     }
 
     /**
@@ -38,7 +38,7 @@ class Deposit extends \yii\base\Model
     public function attributeLabels()
     {
         return [
-            'sum' => Yii::t('merchant', 'Sum'),
+            'amount' => Yii::t('merchant', 'Amount'),
         ];
     }
 }

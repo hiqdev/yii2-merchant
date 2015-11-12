@@ -1,27 +1,32 @@
 <?php
 
+use yii\helpers\Html;
+use yii\helpers\Json;
+use yii\widgets\ActiveForm;
 
 $asset = Yii::createObject([
     'class'      => 'hiqdev\yii2\merchant\MerchantAsset',
-    'sourcePath' => '@vendor/hiqdev/php-merchant-' . $merchant->system . '/src/assets',
+    'sourcePath' => $request->merchant->getAssetDir(),
 ]);
 
 $asset->publish($this->getAssetManager());
 $logo = $asset->getPublishedUrl('logo.png');
 
 ?>
+<?php $form = ActiveForm::begin(['action' => $widget->action]) ?>
+    <?= Html::hiddenInput('merchant',   $request->merchant->id) ?>
+    <?= Html::hiddenInput('type',       $request->type) ?>
+    <?= Html::hiddenInput('data',       Json::encode($request->data)) ?>
 
-<?= $widget->renderForm() ?>
-<button class="btn btn-default btn-block" type="submit" form="<?= $merchant->formId ?>" style="text-align:left;background: url(<?= $logo ?>) no-repeat right">
+    <button class="btn btn-default btn-block" type="submit" style="text-align:left;background: url(<?= $logo ?>) no-repeat right">
+        <?= Yii::t('merchant', 'pay') ?>  <b><?= $widget->formatMoney($request->amount) ?></b>
+        <?= Yii::t('merchant', 'with') ?> <b><?= $request->merchant->label ?></b>
+        <br/>
 
-    <?= Yii::t('merchant', 'pay') ?>  <b><?= $widget->formatMoney($merchant->total) ?></b>
-    <?php /*
-        <?= Yii::t('merchant', 'with') ?> <b><?= $merchant->label ?></b>
-    */ ?>
-    <br/>
+        <?php if ($request->fee > 0) { ?>
+            (<?= Yii::t('merchant', 'including commission') ?> <b><?= $widget->formatMoney($request->fee) ?></b>)
+        <?php } ?>
+        <br/>
+    </button><br/>
 
-    <?php if ($merchant->fee > 0) { ?>
-        (<?= Yii::t('merchant', 'including commission') ?> <b><?= $widget->formatMoney($merchant->fee) ?></b>)
-    <?php } ?>
-    <br/>
-</button><br/>
+<?php $form::end() ?>
