@@ -3,10 +3,12 @@ hiqdev/yii2-merchant commits history
 
 ## Under development
 
+- Chnaged: redone with Omnipay
+    - b6400ea 2015-11-12 php-cs-fixed (sol@hiqdev.com)
+    - ef52743 2015-11-12 php-cs-fixed (sol@hiqdev.com)
     - 024f9a1 2015-11-12 still redoing to omnipay (sol@hiqdev.com)
     - b941ed3 2015-11-09 + require yii2-collection (sol@hiqdev.com)
     - 1d6f98b 2015-11-09 started redoing to omnipay (sol@hiqdev.com)
-- Chnaged: redone with Omnipay
     - 67aa249 2015-11-09 improved package description (sol@hiqdev.com)
 - Added basics
     - ce5afe7 2015-11-07 added basics (sol@hiqdev.com)
