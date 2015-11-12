@@ -12,9 +12,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <div class="col-md-4">
         <?php $form = ActiveForm::begin() ?>
-            <?php foreach ($model->attributes() as $attr) { ?>
+            <?php foreach ($model->attributes() as $attr): ?>
                 <?= $form->field($model, $attr) ?>
-            <?php } ?>
+            <?php endforeach ?>
             <?= Html::submitButton(Yii::t('merchant', 'Proceed'), ['class' => 'btn btn-primary']) ?>
         <?php $form::end() ?>
     </div>

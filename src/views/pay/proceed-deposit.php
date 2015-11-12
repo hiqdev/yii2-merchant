@@ -10,8 +10,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <div class="row">
     <div class="col-md-4">
-        <?php foreach ($requests as $request) { ?>
+        <?php foreach ($requests as $request): ?>
             <?= PayButton::widget(compact('request')) ?>
-        <?php } ?>
+        <?php endforeach ?>
     </div>
 </div>

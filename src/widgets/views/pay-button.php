@@ -23,9 +23,9 @@ $logo = $asset->getPublishedUrl('logo.png');
         <?= Yii::t('merchant', 'with') ?> <b><?= $request->merchant->label ?></b>
         <br/>
 
-        <?php if ($request->fee > 0) { ?>
+        <?php if ($request->fee > 0) : ?>
             (<?= Yii::t('merchant', 'including commission') ?> <b><?= $widget->formatMoney($request->fee) ?></b>)
-        <?php } ?>
+        <?php endif ?>
         <br/>
     </button><br/>
 
