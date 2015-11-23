@@ -14,10 +14,16 @@ namespace hiqdev\yii2\merchant;
 /**
  * Merchants Collection.
  */
-class Collection extends \hiqdev\collection\Manager
+class Collection extends \hiqdev\yii2\collection\Manager
 {
+    /**
+     * @var array
+     */
     public $params = [];
 
+    /**
+     * @var Module
+     */
     public $module;
 
     protected function createItem($id, array $config = [])
