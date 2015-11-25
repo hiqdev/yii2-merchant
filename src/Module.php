@@ -14,6 +14,7 @@ namespace hiqdev\yii2\merchant;
 use Closure;
 use Yii;
 use yii\helpers\Url;
+use hiqdev\php\collection\ArrayHelper;
 
 /**
  * Merchant Module.
@@ -23,8 +24,8 @@ use yii\helpers\Url;
  * ```php
  * 'modules' => [
  *     'merchant' => [
- *         'class'         => 'hiqdev\merchant\Module',
- *         'confirmPage'   => '/my/confirm/page',
+ *         'class'         => 'hiqdev\yii2\merchant\Module',
+ *         'notifyPage'    => '/my/notify/page',
  *         'collection'    => [
  *             'PayPal' => [
  *                 'purse'     => $params['paypal_purse'],
@@ -126,10 +127,6 @@ class Module extends \yii\base\Module
         $this->getCollection()->has($id);
     }
 
-    /**
-     * Defaults for all merchants.
-     */
-    public $defaults = [];
 
     /**
      * Creates merchant instance from its array configuration.
@@ -138,13 +135,18 @@ class Module extends \yii\base\Module
      *
      * @return Merchant merchant instance.
      */
-    public function createMerchant($id, $config)
+    public function createMerchant($id, array $config)
     {
-        return Yii::createObject(array_merge([
+        $data = $config;
+        unset($data['gateway'], $data['data']);
+        $defaults = [
             'class'     => $this->merchantClass,
             'module'    => $this,
             'id'        => $id,
-        ], (array) $this->defaults, $config));
+            'gateway'   => $id,
+            'data'      => $data,
+        ];
+        return Yii::createObject(ArrayHelper::merge($defaults, ArrayHelper::getItems($config, array_keys($defaults))));
     }
 
     const URL_PREFIX = 'merchant_url_';

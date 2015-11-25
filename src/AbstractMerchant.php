@@ -36,7 +36,7 @@ abstract class AbstractMerchant extends \yii\base\Object implements MerchantInte
 
     public function getAssetDir()
     {
-        return;
+        return null;
     }
 
     public function request($type, $data)
