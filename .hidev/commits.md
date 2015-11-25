@@ -4,6 +4,7 @@ hiqdev/yii2-merchant commits history
 ## Under development
 
 - Chnaged: redone with Omnipay
+    - bf5d311 2015-11-23 Changed namespace to yii2-collection (d.naumenko.a@gmail.com)
     - b6400ea 2015-11-12 php-cs-fixed (sol@hiqdev.com)
     - ef52743 2015-11-12 php-cs-fixed (sol@hiqdev.com)
     - 024f9a1 2015-11-12 still redoing to omnipay (sol@hiqdev.com)
@@ -18,7 +19,7 @@ hiqdev/yii2-merchant commits history
     - 66b9ec7 2015-10-30 fixed composer type to yii2-extension; adding translations (sol@hiqdev.com)
     - 124f377 2015-10-26 adding deposit views, model and action (sol@hiqdev.com)
     - 234edfc 2015-10-26 + pay button rendering with merchant (sol@hiqdev.com)
-    - 0614bd9 2015-10-22 improved with _loadMerchant (sol@hiqdev.com)
+    - 0614bd9 2015-10-22 improved with `_loadMerchant` (sol@hiqdev.com)
     - 26d44b4 2015-10-21 php-cs-fixed (sol@hiqdev.com)
     - f538d37 2015-10-21 hideved (sol@hiqdev.com)
     - dfadf30 2015-10-21 inited (sol@hiqdev.com)
