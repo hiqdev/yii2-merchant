@@ -3,6 +3,9 @@ hiqdev/yii2-merchant commits history
 
 ## Under development
 
+- Added tests and Travis CI
+    - 4f3ceb1 2015-11-25 added tests and Travis CI (sol@hiqdev.com)
+    - 277f5e6 2015-11-25 fixed Module::createMerchant to properly pass data (sol@hiqdev.com)
 - Chnaged: redone with Omnipay
     - bf5d311 2015-11-23 Changed namespace to yii2-collection (d.naumenko.a@gmail.com)
     - b6400ea 2015-11-12 php-cs-fixed (sol@hiqdev.com)
