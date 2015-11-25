@@ -12,9 +12,9 @@
 namespace hiqdev\yii2\merchant;
 
 use Closure;
+use hiqdev\php\collection\ArrayHelper;
 use Yii;
 use yii\helpers\Url;
-use hiqdev\php\collection\ArrayHelper;
 
 /**
  * Merchant Module.
@@ -126,7 +126,6 @@ class Module extends \yii\base\Module
     {
         $this->getCollection()->has($id);
     }
-
 
     /**
      * Creates merchant instance from its array configuration.

@@ -47,6 +47,10 @@
     "require": {
         "hiqdev/yii2-collection": "*"
     },
+    "require-dev": {
+        "omnipay/stripe": "*",
+        "hiqdev/omnipay-webmoney": "*@dev"
+    },
     "autoload": {
         "psr-4": {
             "hiqdev\\yii2\\merchant\\": "src"
