@@ -35,9 +35,4 @@ class OmnipayMerchant extends AbstractMerchant
 
         return $this->_worker;
     }
-
-    public function getAssetDir()
-    {
-        return method_exists($this->getWorker(), 'getAssetDir') ? $this->getWorker()->getAssetDir() : null;
-    }
 }
