@@ -34,9 +34,9 @@ abstract class AbstractMerchant extends \yii\base\Object implements MerchantInte
         return $this->gateway;
     }
 
-    public function getAssetDir()
+    public function getSimpleName()
     {
-        return null;
+        return preg_replace('/[^a-z0-9]+/', '', strtolower($this->gateway));
     }
 
     public function request($type, $data)

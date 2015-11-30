@@ -12,10 +12,17 @@
 namespace hiqdev\yii2\merchant\widgets;
 
 use Yii;
+use hiqdev\paymenticons\yii2\PaymentIconsAsset;
 
 class PayButton extends \yii\base\Widget
 {
     public $request;
+
+    public function init()
+    {
+        parent::init();
+        PaymentIconsAsset::register(Yii::$app->getView());
+    }
 
     public function run()
     {

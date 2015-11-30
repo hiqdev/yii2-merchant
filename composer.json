@@ -45,11 +45,12 @@
         }
     ],
     "require": {
-        "hiqdev/yii2-collection": "*"
+        "hiqdev/yii2-collection": "*",
+        "hiqdev/payment-icons": "*"
     },
     "require-dev": {
         "omnipay/stripe": "*",
-        "hiqdev/omnipay-webmoney": "*@dev"
+        "dercoder/omnipay-webmoney": "*@dev"
     },
     "autoload": {
         "psr-4": {
