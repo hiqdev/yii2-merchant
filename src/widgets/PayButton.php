@@ -11,8 +11,8 @@
 
 namespace hiqdev\yii2\merchant\widgets;
 
-use Yii;
 use hiqdev\paymenticons\yii2\PaymentIconsAsset;
+use Yii;
 
 class PayButton extends \yii\base\Widget
 {
