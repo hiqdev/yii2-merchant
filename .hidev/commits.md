@@ -6,6 +6,7 @@ hiqdev/yii2-merchant commits history
 - Added use of Payment Icons
     - 79c0ce8 2015-11-30 used Payment Icons (sol@hiqdev.com)
 - Added tests and Travis CI
+    - 995394c 2015-11-30 improved tests (sol@hiqdev.com)
     - 4f3ceb1 2015-11-25 added tests and Travis CI (sol@hiqdev.com)
     - 277f5e6 2015-11-25 fixed Module::createMerchant to properly pass data (sol@hiqdev.com)
 - Chnaged: redone with Omnipay
