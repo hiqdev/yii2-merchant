@@ -3,6 +3,8 @@ hiqdev/yii2-merchant commits history
 
 ## Under development
 
+- Added `renderDeposit` facility
+    - c366ba7 2015-12-01 + `renderDeposit` facility (sol@hiqdev.com)
 - Added use of Payment Icons
     - 79c0ce8 2015-11-30 used Payment Icons (sol@hiqdev.com)
 - Added tests and Travis CI
