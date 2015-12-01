@@ -48,7 +48,7 @@ class PayController extends \yii\web\Controller
     {
         $model   = Yii::createObject($this->module->depositClass);
         $request = Yii::$app->request;
-        if (! $model->load($request->isPost ? $request->post() : $request->get())) {
+        if (!$model->load($request->isPost ? $request->post() : $request->get())) {
             return $this->render('deposit-form', compact('model'));
         }
         $params = array_merge($model->getAttributes(), ['back' => $request->get('back')]);
@@ -58,7 +58,9 @@ class PayController extends \yii\web\Controller
 
     /**
      * Renders depositing buttons for given params.
+     *
      * @param array $params array of supported params: sum, currency, back
+     *
      * @return \yii\web\Response
      */
     public function renderDeposit(array $params)
