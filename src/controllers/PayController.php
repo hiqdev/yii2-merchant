@@ -46,25 +46,34 @@ class PayController extends \yii\web\Controller
 
     public function actionDeposit()
     {
-        $model = Yii::createObject($this->module->depositClass);
-        $back  = Yii::$app->request->get('back');
-        $load  = $model->load(Yii::$app->request->post());
-        $view  = $load ? 'proceed-deposit' : 'deposit';
-        if ($load) {
-            $params = array_merge([
-                'description' => Yii::$app->request->getServerName() . ' deposit: ' . Yii::$app->user->identity->username,
-            ], $model->getAttributes());
-            $merchants = $this->module->getCollection($params)->getItems();
-            $requests = [];
-            foreach ($merchants as $id => $merchant) {
-                $requests[$id] = $merchant->request('purchase', $params);
-            }
+        $model   = Yii::createObject($this->module->depositClass);
+        $request = Yii::$app->request;
+        if (! $model->load($request->isPost ? $request->post() : $request->get())) {
+            return $this->render('deposit-form', compact('model'));
         }
-        if ($back) {
-            $this->module->rememberUrl($back);
+        $params = array_merge($model->getAttributes(), ['back' => $request->get('back')]);
+
+        return $this->renderDeposit($params);
+    }
+
+    /**
+     * Renders depositing buttons for given params.
+     * @param array $params array of supported params: sum, currency, back
+     * @return \yii\web\Response
+     */
+    public function renderDeposit(array $params)
+    {
+        if ($params['back']) {
+            $this->module->rememberUrl($params['back']);
+        }
+        $params['description'] = Yii::$app->request->getServerName() . ' deposit: ' . Yii::$app->user->identity->username;
+        $merchants = $this->module->getCollection($params)->getItems();
+        $requests = [];
+        foreach ($merchants as $id => $merchant) {
+            $requests[$id] = $merchant->request('purchase', $params);
         }
 
-        return $this->render($view, compact('requests', 'model', 'params'));
+        return $this->render('deposit', compact('requests'));
     }
 
     public function actionRequest()

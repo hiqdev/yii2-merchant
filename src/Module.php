@@ -174,4 +174,9 @@ class Module extends \yii\base\Module
 
         return Url::to($page, true);
     }
+
+    public function renderDeposit(array $params)
+    {
+        return $this->createControllerById('pay')->renderDeposit($params);
+    }
 }
