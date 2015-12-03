@@ -38,7 +38,7 @@ class PayButton extends \yii\base\Widget
         ]);
     }
 
-    public $action = ['request'];
+    public $action = ['/merchant/pay/request'];
 
     public function formatMoney($sum)
     {

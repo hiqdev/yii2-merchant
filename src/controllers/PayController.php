@@ -68,7 +68,8 @@ class PayController extends \yii\web\Controller
         if ($params['back']) {
             $this->module->rememberUrl($params['back']);
         }
-        $params['description'] = Yii::$app->request->getServerName() . ' deposit: ' . Yii::$app->user->identity->username;
+        $params['description']   = Yii::$app->request->getServerName() . ' deposit: ' . Yii::$app->user->identity->username;
+        $params['transactionId'] = Yii::$app->user->identity->username . ':' . $params['sum'];
         $merchants = $this->module->getCollection($params)->getItems();
         $requests = [];
         foreach ($merchants as $id => $merchant) {
