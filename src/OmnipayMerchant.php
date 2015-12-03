@@ -30,9 +30,27 @@ class OmnipayMerchant extends AbstractMerchant
     public function getWorker()
     {
         if ($this->_worker === null) {
-            $this->_worker = Omnipay::create($this->gateway)->initialize($this->data);
+            $this->_worker = Omnipay::create($this->gateway)->initialize($this->prepareData($this->data));
         }
 
         return $this->_worker;
+    }
+
+    protected $_prepareTable = [
+        'WebMoney' => [
+            'purse' => 'merchantPurse',
+        ],
+    ];
+
+    public function prepareData(array $data)
+    {
+        $table = $this->_prepareTable[$this->gateway];
+        if ($table) {
+            foreach ($table as $name => $rename) {
+                $data[$rename] = $data[$name];
+            }
+        }
+
+        return $data;
     }
 }
