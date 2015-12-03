@@ -12,5 +12,8 @@
 error_reporting(-1);
 
 require_once __DIR__ . '/../vendor/autoload.php';
+if (!class_exists('Yii')) {
+    require_once __DIR__ . '/../vendor/yiisoft/yii2/Yii.php';
+}
 Yii::setAlias('@hiqdev/yii2/merchant', dirname(__DIR__));
 Yii::setAlias('@hiqdev/yii2/merchant/tests', __DIR__);
