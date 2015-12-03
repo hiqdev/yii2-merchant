@@ -3,6 +3,7 @@ hiqdev/yii2-merchant commits history
 
 ## Under development
 
+    - 294da33 2015-12-03 fixed tests (sol@hiqdev.com)
 - Fixed redirection to payment systems
     - 2befc31 2015-12-03 fixed tests (sol@hiqdev.com)
     - bc7177c 2015-12-03 fixed redirection to payment systems (sol@hiqdev.com)
