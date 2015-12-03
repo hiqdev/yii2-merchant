@@ -44,9 +44,8 @@ class OmnipayMerchant extends AbstractMerchant
 
     public function prepareData(array $data)
     {
-        $table = $this->_prepareTable[$this->gateway];
-        if ($table) {
-            foreach ($table as $name => $rename) {
+        if (isset($this->_prepareTable[$this->gateway])) {
+            foreach ($this->_prepareTable[$this->gateway] as $name => $rename) {
                 $data[$rename] = $data[$name];
             }
         }

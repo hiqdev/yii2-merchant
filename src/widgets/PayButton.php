@@ -27,7 +27,7 @@ class PayButton extends \yii\base\Widget
     public function run()
     {
         parent::run();
-        print $this->renderButton();
+        echo $this->renderButton();
     }
 
     public function renderButton()
