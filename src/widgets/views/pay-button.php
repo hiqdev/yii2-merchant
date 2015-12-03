@@ -11,18 +11,17 @@ use yii\widgets\ActiveForm;
     <?= Html::hiddenInput('data',       Json::encode($request->data)) ?>
 
     <button class="btn btn-default btn-block" type="submit" style="text-align:left">
-        <div style="width=100%" class="payment-icon-sm <?= $request->merchant->simpleName ?>">
-            <br/>
-            <?= Yii::t('merchant', 'pay') ?>  <b><?= $widget->formatMoney($request->amount) ?></b>
-            <?= Yii::t('merchant', 'with') ?> <b><?= $request->merchant->label ?></b>
-            <br/>
+        <i class="pi pi-sm pi-<?= $request->merchant->simpleName ?>" style="float:right"></i>
+        <br/>
+        <?= Yii::t('merchant', 'pay') ?>  <b><?= $widget->formatMoney($request->amount) ?></b>
+        <?= Yii::t('merchant', 'with') ?> <b><?= $request->merchant->label ?></b>
+        <br/>
 
-            <?php if ($request->fee > 0) : ?>
-                (<?= Yii::t('merchant', 'including commission') ?> <b><?= $widget->formatMoney($request->fee) ?></b>)
-            <?php endif ?>
-            <br/>
-            <br/>
-        </div>
+        <?php if ($request->fee > 0) : ?>
+            (<?= Yii::t('merchant', 'including commission') ?> <b><?= $widget->formatMoney($request->fee) ?></b>)
+        <?php endif ?>
+        <br/>
+        <br/>
     </button><br/>
 
 <?php $form::end() ?>
