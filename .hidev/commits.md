@@ -3,8 +3,9 @@ hiqdev/yii2-merchant commits history
 
 ## Under development
 
-    - 294da33 2015-12-03 fixed tests (sol@hiqdev.com)
 - Fixed redirection to payment systems
+    - a2b0337 2015-12-04 fixed bulidUrl to pass proper merchant (sol@hiqdev.com)
+    - 294da33 2015-12-03 fixed tests (sol@hiqdev.com)
     - 2befc31 2015-12-03 fixed tests (sol@hiqdev.com)
     - bc7177c 2015-12-03 fixed redirection to payment systems (sol@hiqdev.com)
     - 9379eb2 2015-12-03 + preparing data for Omnipay merchant unification (sol@hiqdev.com)
