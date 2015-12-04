@@ -60,9 +60,9 @@ class AbstractRequest extends \yii\base\Object implements RequestInterface
     public function getData()
     {
         return array_merge([
-            'notifyUrl' => $this->merchant->module->buildUrl('notify'),
-            'returnUrl' => $this->merchant->module->buildUrl('return'),
-            'cancelUrl' => $this->merchant->module->buildUrl('cancel'),
+            'notifyUrl' => $this->merchant->buildUrl('notify'),
+            'returnUrl' => $this->merchant->buildUrl('return'),
+            'cancelUrl' => $this->merchant->buildUrl('cancel'),
         ], (array) $this->data);
     }
 }

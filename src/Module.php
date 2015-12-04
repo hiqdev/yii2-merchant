@@ -160,17 +160,17 @@ class Module extends \yii\base\Module
         return Url::previous(URL_PREFIX . $name);
     }
 
-    public $notifyPage = ['notify'];
-    public $returnPage = ['return'];
-    public $cancelPage = ['cancel'];
+    public $notifyPage = 'notify';
+    public $returnPage = 'return';
+    public $cancelPage = 'cancel';
 
-    public function buildUrl($dest)
+    public function buildUrl($dest, $merchant)
     {
         $name = $dest . 'Page';
         $page = array_merge([
-            'merchant' => $this->id,
+            'merchant' => $merchant,
             'username' => Yii::$app->user->identity->username,
-        ], (array) ($this->hasProperty($name) ? $this->{$name} : [$dest]));
+        ], (array) ($this->hasProperty($name) ? $this->{$name} : $dest));
 
         return Url::to($page, true);
     }

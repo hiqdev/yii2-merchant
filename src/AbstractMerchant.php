@@ -57,4 +57,9 @@ abstract class AbstractMerchant extends \yii\base\Object implements MerchantInte
             'request'   => $request,
         ]);
     }
+
+    public function buildUrl($dest)
+    {
+        return $this->module->buildUrl($dest, $this->id);
+    }
 }
