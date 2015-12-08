@@ -12,7 +12,6 @@
 namespace hiqdev\yii2\merchant;
 
 use Closure;
-use hiqdev\php\collection\ArrayHelper;
 use hiqdev\php\merchant\MerchantManager;
 use Yii;
 use yii\helpers\Url;
@@ -137,21 +136,56 @@ class Module extends \yii\base\Module
      */
     public function createMerchant($id, array $config)
     {
-        $data = isset($config['data']) ? $config['data'] : $config;
-        unset($data['gateway'], $data['library']);
-        $data = array_merge([
-            'notifyUrl' => $this->buildUrl('notify', $id),
-            'returnUrl' => $this->buildUrl('return', $id),
-            'cancelUrl' => $this->buildUrl('cancel', $id),
-        ], $data);
-        $defaults = [
+        return MerchantManager::create(array_merge([
             'library'   => $this->merchantLibrary,
             'gateway'   => $id,
             'id'        => $id,
-            'data'      => $data,
-        ];
+            'data'      => $this->prepareMerchantData($id, isset($config['data']) ? $config['data'] : $config),
+        ], $config));
+    }
 
-        return MerchantManager::create(ArrayHelper::merge($defaults, $config));
+    public function prepareMerchantData($id, $data)
+    {
+        unset($data['library'], $data['gateway']);
+        return $data;
+    }
+
+    public function prepareRequestData($id, $data)
+    {
+        return array_merge([
+            'notifyUrl'     => $this->buildUrl('notify', $id),
+            'returnUrl'     => $this->buildUrl('return', $id),
+            'cancelUrl'     => $this->buildUrl('cancel', $id),
+            'description'   => Yii::$app->request->getServerName() . ' deposit: ' . $this->username,
+            'transactionId' => $this->username . '-' . ($data['amount'] ?: $data['sum']),
+        ], $data);
+    }
+
+    protected $_username;
+
+    public function setUsername($value)
+    {
+        $this->_username = $value;
+    }
+
+    public function getUsername()
+    {
+        return isset($this->_username) ? $this->_username : Yii::$app->user->identity->username;
+    }
+
+    public $notifyPage = 'notify';
+    public $returnPage = 'return';
+    public $cancelPage = 'cancel';
+
+    public function buildUrl($dest, $merchant)
+    {
+        $name = $dest . 'Page';
+        $page = array_merge([
+            'merchant' => $merchant,
+            'username' => $this->username,
+        ], (array) ($this->hasProperty($name) ? $this->{$name} : $dest));
+
+        return Url::to($page, true);
     }
 
     const URL_PREFIX = 'merchant_url_';
@@ -164,23 +198,6 @@ class Module extends \yii\base\Module
     public function previousUrl($name = 'back')
     {
         return Url::previous(URL_PREFIX . $name);
-    }
-
-    public $notifyPage = 'notify';
-    public $returnPage = 'return';
-    public $cancelPage = 'cancel';
-
-    public $username;
-
-    public function buildUrl($dest, $merchant)
-    {
-        $name = $dest . 'Page';
-        $page = array_merge([
-            'merchant' => $merchant,
-            'username' => $this->username ?: Yii::$app->user->identity->username,
-        ], (array) ($this->hasProperty($name) ? $this->{$name} : $dest));
-
-        return Url::to($page, true);
     }
 
     public function renderDeposit(array $params)

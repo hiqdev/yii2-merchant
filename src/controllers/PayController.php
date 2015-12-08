@@ -51,29 +51,28 @@ class PayController extends \yii\web\Controller
         if (!$model->load($request->isPost ? $request->post() : $request->get())) {
             return $this->render('deposit-form', compact('model'));
         }
-        $params = array_merge($model->getAttributes(), ['back' => $request->get('back')]);
+        $data = array_merge($model->getAttributes(), ['back' => $request->get('back')]);
 
-        return $this->renderDeposit($params);
+        return $this->renderDeposit($data);
     }
 
     /**
-     * Renders depositing buttons for given params.
+     * Renders depositing buttons for given request data.
      *
-     * @param array $params array of supported params: sum, currency, back
+     * @param array $data request data: sum, currency, back
      *
      * @return \yii\web\Response
      */
-    public function renderDeposit(array $params)
+    public function renderDeposit(array $data)
     {
-        if ($params['back']) {
-            $this->module->rememberUrl($params['back']);
+        if ($data['back']) {
+            $this->module->rememberUrl($data['back']);
         }
-        $params['description']   = Yii::$app->request->getServerName() . ' deposit: ' . Yii::$app->user->identity->username;
-        $params['transactionId'] = Yii::$app->user->identity->username . ':' . $params['sum'];
-        $merchants = $this->module->getCollection($params)->getItems();
+        
+        $merchants = $this->module->getCollection($data)->getItems();
         $requests = [];
         foreach ($merchants as $id => $merchant) {
-            $requests[$id] = $merchant->request('purchase', $params);
+            $requests[$id] = $merchant->request('purchase', $this->module->prepareRequestData($id, $data));
         }
 
         return $this->render('deposit', compact('requests'));
