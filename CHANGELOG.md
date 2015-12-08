@@ -3,6 +3,7 @@ hiqdev/yii2-merchant changelog
 
 ## Under development
 
+- Changed: redone with `php-merchant`
 - Fixed redirection to payment systems
 - Added `renderDeposit` facility
 - Added use of Payment Icons

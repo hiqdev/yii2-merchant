@@ -3,6 +3,8 @@ hiqdev/yii2-merchant commits history
 
 ## Under development
 
+- Changed: redone with `php-merchant`
+    - ff73135 2015-12-08 redone with php-merchant (sol@hiqdev.com)
 - Fixed redirection to payment systems
     - a2b0337 2015-12-04 fixed bulidUrl to pass proper merchant (sol@hiqdev.com)
     - 294da33 2015-12-03 fixed tests (sol@hiqdev.com)
