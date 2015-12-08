@@ -12,6 +12,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="col-md-4">
         <?php foreach ($requests as $request): ?>
             <?= PayButton::widget(compact('request')) ?>
+            <br/>
         <?php endforeach ?>
     </div>
 </div>

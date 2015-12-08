@@ -13,7 +13,7 @@ namespace hiqdev\yii2\merchant\tests\unit;
 
 use Yii;
 
-class FakeMerchant extends \hiqdev\yii2\merchant\AbstractMerchant
+class FakeMerchant extends \hiqdev\php\merchant\AbstractMerchant
 {
     public $requestClass = 'hiqdev\yii2\merchant\tests\unit\FakeRequest';
 
@@ -28,7 +28,7 @@ class FakeMerchant extends \hiqdev\yii2\merchant\AbstractMerchant
     {
         if ($this->_worker === null) {
             $this->_worker = Yii::createObject([
-                'class'   => FakeGateway::className(),
+                'class'   => FakeGateway::class,
                 'gateway' => $this->gateway,
                 'data'    => $this->data,
             ]);

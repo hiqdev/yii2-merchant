@@ -13,8 +13,9 @@ namespace hiqdev\yii2\merchant\tests\unit;
 
 use hiqdev\yii2\merchant\Collection;
 use hiqdev\yii2\merchant\Module;
-use hiqdev\yii2\merchant\OmnipayMerchant;
+use hiqdev\php\merchant\OmnipayMerchant;
 use Yii;
+use yii\web\Application;
 
 /**
  * Module test suite.
@@ -24,7 +25,7 @@ class ModuleTest extends \PHPUnit_Framework_TestCase
     /**
      * @var Module
      */
-    protected $object;
+    protected $module;
 
     protected $gateways = [
         'Stripe' => [
@@ -45,27 +46,44 @@ class ModuleTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->object = Yii::createObject([
-            'class'         => Module::className(),
-            'notifyPage'    => '/my/notify/page',
-            'collection'    => $this->gateways,
-        ], ['fake']);
+        $application = new Application([
+            'id'       => 'fake',
+            'basePath' => dirname(dirname(__DIR__)),
+            'modules'  => [
+                'merchant' => [
+                    'class'      => Module::className(),
+                    'username'   => 'fake',
+                    'notifyPage' => '/my/notify/page',
+                    'returnPage' => '/merchant/pay/return',
+                    'cancelPage' => '/merchant/pay/cancel',
+                    'collection' => $this->gateways,
+                ],
+            ],
+        ]);
+        $this->module = Yii::$app->getModule('merchant');
     }
 
     protected function tearDown()
     {
     }
 
-    public function testInit()
+    public function testGetCollection()
     {
-        $collection = $this->object->collection;
-        $this->assertInstanceOf(Collection::className(), $collection);
-        $this->assertInstanceOf(FakeMerchant::className(), $collection->fake);
-        $this->assertInstanceOf(OmnipayMerchant::className(), $collection->wmusd);
-        $this->assertSame($this->gateways['wmusd']['purse'], $collection->wmusd->data['purse']);
-        $this->assertSame($this->gateways['fake']['secret'], $collection->fake->data['secret']);
-        $this->assertInstanceOf(FakeGateway::className(), $collection->fake->worker);
-        $this->assertInstanceOf('Omnipay\Stripe\Gateway', $collection->Stripe->worker);
-        $this->assertInstanceOf('Omnipay\WebMoney\Gateway', $collection->wmusd->worker);
+        $this->assertInstanceOf(Collection::class, $this->module->collection);
+    }
+
+    public function testGetMerchant()
+    {
+        $this->assertInstanceOf(FakeMerchant::class, $this->module->collection->fake);
+        $this->assertInstanceOf(OmnipayMerchant::class, $this->module->collection->wmusd);
+        $this->assertSame($this->gateways['wmusd']['purse'], $this->module->collection->wmusd->data['purse']);
+        $this->assertSame($this->gateways['fake']['secret'], $this->module->collection->fake->data['secret']);
+    }
+
+    public function testGetWorker()
+    {
+        $this->assertInstanceOf(FakeGateway::class, $this->module->collection->fake->getWorker());
+        $this->assertInstanceOf('Omnipay\Stripe\Gateway', $this->module->collection->Stripe->getWorker());
+        $this->assertInstanceOf('Omnipay\WebMoney\Gateway', $this->module->collection->wmusd->getWorker());
     }
 }

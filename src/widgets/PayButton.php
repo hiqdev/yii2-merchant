@@ -42,6 +42,6 @@ class PayButton extends \yii\base\Widget
 
     public function formatMoney($sum)
     {
-        return Yii::$app->formatter->format($sum, ['currency', $this->request->currency]);
+        return Yii::$app->formatter->format($sum, ['currency', $this->request->getCurrency()]);
     }
 }

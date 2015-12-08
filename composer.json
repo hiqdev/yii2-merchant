@@ -46,9 +46,11 @@
     ],
     "require": {
         "hiqdev/yii2-collection": "*",
-        "hiqdev/payment-icons": "*"
+        "hiqdev/payment-icons": "*",
+        "hiqdev/php-merchant": "*"
     },
     "require-dev": {
+        "hiqdev/php-merchant": "*@dev",
         "omnipay/stripe": "*",
         "dercoder/omnipay-webmoney": "*@dev"
     },

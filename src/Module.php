@@ -13,6 +13,7 @@ namespace hiqdev\yii2\merchant;
 
 use Closure;
 use hiqdev\php\collection\ArrayHelper;
+use hiqdev\php\merchant\MerchantManager;
 use Yii;
 use yii\helpers\Url;
 
@@ -44,14 +45,14 @@ use yii\helpers\Url;
 class Module extends \yii\base\Module
 {
     /**
+     * Default merchant library to use is Omnipay.
+     */
+    public $merchantLibrary = 'Omnipay';
+
+    /**
      * Default merchant collection to use. Other can be specified.
      */
     public $collectionClass = 'hiqdev\yii2\merchant\Collection';
-
-    /**
-     * Default merchant to use is OmnipayMerchant.
-     */
-    public $merchantClass = 'hiqdev\yii2\merchant\OmnipayMerchant';
 
     /**
      * Deposit model class.
@@ -136,16 +137,21 @@ class Module extends \yii\base\Module
      */
     public function createMerchant($id, array $config)
     {
-        $data = $config;
-        unset($data['gateway'], $data['data']);
+        $data = isset($config['data']) ? $config['data'] : $config;
+        unset($data['gateway'], $data['library']);
+        $data = array_merge([
+            'notifyUrl' => $this->buildUrl('notify', $id),
+            'returnUrl' => $this->buildUrl('return', $id),
+            'cancelUrl' => $this->buildUrl('cancel', $id),
+        ], $data);
         $defaults = [
-            'class'     => $this->merchantClass,
-            'module'    => $this,
-            'id'        => $id,
+            'library'   => $this->merchantLibrary,
             'gateway'   => $id,
+            'id'        => $id,
             'data'      => $data,
         ];
-        return Yii::createObject(ArrayHelper::merge($defaults, ArrayHelper::getItems($config, array_keys($defaults))));
+
+        return MerchantManager::create(ArrayHelper::merge($defaults, $config));
     }
 
     const URL_PREFIX = 'merchant_url_';
@@ -164,12 +170,14 @@ class Module extends \yii\base\Module
     public $returnPage = 'return';
     public $cancelPage = 'cancel';
 
+    public $username;
+
     public function buildUrl($dest, $merchant)
     {
         $name = $dest . 'Page';
         $page = array_merge([
             'merchant' => $merchant,
-            'username' => Yii::$app->user->identity->username,
+            'username' => $this->username ?: Yii::$app->user->identity->username,
         ], (array) ($this->hasProperty($name) ? $this->{$name} : $dest));
 
         return Url::to($page, true);
