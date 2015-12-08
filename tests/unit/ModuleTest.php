@@ -11,9 +11,9 @@
 
 namespace hiqdev\yii2\merchant\tests\unit;
 
+use hiqdev\php\merchant\OmnipayMerchant;
 use hiqdev\yii2\merchant\Collection;
 use hiqdev\yii2\merchant\Module;
-use hiqdev\php\merchant\OmnipayMerchant;
 use Yii;
 use yii\web\Application;
 

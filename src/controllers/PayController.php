@@ -68,7 +68,7 @@ class PayController extends \yii\web\Controller
         if ($data['back']) {
             $this->module->rememberUrl($data['back']);
         }
-        
+
         $merchants = $this->module->getCollection($data)->getItems();
         $requests = [];
         foreach ($merchants as $id => $merchant) {
