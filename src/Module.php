@@ -140,14 +140,7 @@ class Module extends \yii\base\Module
             'library'   => $this->merchantLibrary,
             'gateway'   => $id,
             'id'        => $id,
-            'data'      => $this->prepareMerchantData($id, isset($config['data']) ? $config['data'] : $config),
         ], $config));
-    }
-
-    public function prepareMerchantData($id, $data)
-    {
-        unset($data['library'], $data['gateway']);
-        return $data;
     }
 
     public function prepareRequestData($id, $data)
