@@ -12,8 +12,10 @@
 namespace hiqdev\yii2\merchant;
 
 use Closure;
-use hiqdev\php\merchant\MerchantManager;
+use hiqdev\php\merchant\Helper;
 use Yii;
+use yii\helpers\FileHelper;
+use yii\helpers\Json;
 use yii\helpers\Url;
 
 /**
@@ -105,7 +107,7 @@ class Module extends \yii\base\Module
     }
 
     /**
-     * @param string $id     service id.
+     * @param string $id     merchant id.
      * @param array  $params parameters for collection
      *
      * @return Merchant merchant instance.
@@ -124,7 +126,7 @@ class Module extends \yii\base\Module
      */
     public function hasMerchant($id)
     {
-        $this->getCollection()->has($id);
+        return $this->getCollection()->has($id);
     }
 
     /**
@@ -136,21 +138,23 @@ class Module extends \yii\base\Module
      */
     public function createMerchant($id, array $config)
     {
-        return MerchantManager::create(array_merge([
+        return Helper::create(array_merge([
             'library'   => $this->merchantLibrary,
             'gateway'   => $id,
             'id'        => $id,
         ], $config));
     }
 
-    public function prepareRequestData($id, $data)
+    public function prepareRequestData($merchant, $data)
     {
+        $internalid = uniqid();
+
         return array_merge([
-            'notifyUrl'     => $this->buildUrl('notify', $id),
-            'returnUrl'     => $this->buildUrl('return', $id),
-            'cancelUrl'     => $this->buildUrl('cancel', $id),
+            'notifyUrl'     => $this->buildUrl('notify', $merchant, $internalid),
+            'returnUrl'     => $this->buildUrl('return', $merchant, $internalid),
+            'cancelUrl'     => $this->buildUrl('cancel', $merchant, $internalid),
             'description'   => Yii::$app->request->getServerName() . ' deposit: ' . $this->username,
-            'transactionId' => $this->username . '-' . ($data['amount'] ?: $data['sum']),
+            'transactionId' => $internalid,
         ], $data);
     }
 
@@ -170,12 +174,13 @@ class Module extends \yii\base\Module
     public $returnPage = 'return';
     public $cancelPage = 'cancel';
 
-    public function buildUrl($dest, $merchant)
+    public function buildUrl($dest, $merchant, $internalid)
     {
         $name = $dest . 'Page';
         $page = array_merge([
-            'merchant' => $merchant,
-            'username' => $this->username,
+            'merchant'   => $merchant,
+            'username'   => $this->username,
+            'internalid' => $internalid,
         ], (array) ($this->hasProperty($name) ? $this->{$name} : $dest));
 
         return Url::to($page, true);
@@ -193,8 +198,47 @@ class Module extends \yii\base\Module
         return Url::previous(URL_PREFIX . $name);
     }
 
+    protected $_payController;
+
+    public function getPayController()
+    {
+        if ($this->_payController === null) {
+            $this->_payController = $this->createControllerById('pay');
+        }
+
+        return $this->_payController;
+    }
+
+    public function renderNotify(array $params)
+    {
+        return $this->getPayController()->renderNotify($params);
+    }
+
     public function renderDeposit(array $params)
     {
-        return $this->createControllerById('pay')->renderDeposit($params);
+        return $this->getPayController()->renderDeposit($params);
+    }
+
+    public function updateHistory($internalid, array $data)
+    {
+        $this->writeHistory($internalid, array_merge($this->readHistory($internalid), $data));
+    }
+
+    public function writeHistory($internalid, array $data)
+    {
+        $path = $this->getHistoryPath($internalid);
+        FileHelper::createDirectory(dirname($path));
+        file_put_contents($path, Json::encode($data));
+    }
+
+    public function readHistory($internalid)
+    {
+        $path = $this->getHistoryPath($internalid);
+        return file_exists($path) ? Json::decode(file_get_contents($path)) : [];
+    }
+
+    public function getHistoryPath($internalid)
+    {
+        return Yii::getAlias('@runtime/merchant/') . substr($internalid, 0 ,2) . DIRECTORY_SEPARATOR . $internalid . '.json';
     }
 }

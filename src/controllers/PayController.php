@@ -11,10 +11,13 @@
 
 namespace hiqdev\yii2\merchant\controllers;
 
+use hipanel\base\Err;
 use hiqdev\yii2\merchant\models\Deposit;
 use Yii;
 use yii\base\UserException;
 use yii\helpers\Json;
+use yii\helpers\Url;
+use yii\web\Response;
 
 class PayController extends \yii\web\Controller
 {
@@ -33,15 +36,39 @@ class PayController extends \yii\web\Controller
     public function actionCancel()
     {
         Yii::$app->session->addFlash('error', Yii::t('merchant', 'Payment failed or cancelled'));
-        $back = $this->module->previousUrl();
-        $this->redirect($back ?: ['deposit']);
+
+        return $this->redirect($this->module->previousUrl() ?: ['deposit']);
     }
 
-    public function actionReturn()
+    public function actionReturn($internalid = null)
     {
-        Yii::$app->session->addFlash('success', Yii::t('merchant', 'Payment performed successfully'));
-        $back = $this->module->previousUrl();
-        $this->redirect($back ?: ['deposit']);
+        return $this->render('return', [
+            'internalid' => $internalid,
+            'back'       => $this->module->previousUrl(),
+        ]);
+    }
+
+    public function actionCheckReturn($internalid)
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $data = $this->module->readHistory($internalid);
+        $data = $data['username'] == Yii::$app->user->identity->username ? $data : [];
+
+        return ['COMPLETED' => $data['COMPLETED']];
+    }
+
+    public function actionNotify()
+    {
+        return $this->renderNotify($_REQUEST);
+    }
+
+    public function renderNotify(array $params)
+    {
+        $params['COMPLETED'] = Err::not($params) && $params['id'];
+        $this->module->updateHistory($params['internalid'], $params);
+        Yii::$app->getResponse()->headers->set('Content-Type', 'text/plain');
+
+        return Err::is($params) ? Err::get($params) : 'OK';
     }
 
     public function actionDeposit()
@@ -78,6 +105,9 @@ class PayController extends \yii\web\Controller
         return $this->render('deposit', compact('requests'));
     }
 
+    /**
+     * Performs purchase request.
+     */
     public function actionRequest()
     {
         $merchant   = Yii::$app->request->post('merchant');
