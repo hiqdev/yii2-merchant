@@ -39,18 +39,18 @@ class PayController extends \yii\web\Controller
         return $this->redirect($this->module->previousUrl() ?: ['deposit']);
     }
 
-    public function actionReturn($internalid = null)
+    public function actionReturn($transactionId = null)
     {
         return $this->render('return', [
-            'internalid' => $internalid,
-            'back'       => $this->module->previousUrl(),
+            'transactionId' => $transactionId,
+            'back'          => $this->module->previousUrl(),
         ]);
     }
 
-    public function actionCheckReturn($internalid)
+    public function actionCheckReturn($transactionId)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        $data = $this->module->readHistory($internalid);
+        $data = $this->module->readHistory($transactionId);
         $data = $data['username'] === Yii::$app->user->identity->username ? $data : [];
 
         return ['COMPLETED' => $data['COMPLETED']];
@@ -64,7 +64,7 @@ class PayController extends \yii\web\Controller
     public function renderNotify(array $params)
     {
         $params['COMPLETED'] = Err::not($params) && $params['id'];
-        $this->module->updateHistory($params['internalid'], $params);
+        $this->module->updateHistory($params['transactionId'], $params);
         Yii::$app->getResponse()->headers->set('Content-Type', 'text/plain');
 
         return Err::is($params) ? Err::get($params) : 'OK';
@@ -113,6 +113,7 @@ class PayController extends \yii\web\Controller
         $data       = Json::decode(Yii::$app->request->post('data'));
         $merchant   = $this->module->getMerchant($merchant, $data);
         $request    = $merchant->request('purchase', $data);
+        $this->module->writeHistory($data['transactionId'], $data);
         $response   = $request->send();
         if ($response->isSuccessful()) {
             $merchant->registerMoney($response);

@@ -147,14 +147,16 @@ class Module extends \yii\base\Module
 
     public function prepareRequestData($merchant, $data)
     {
-        $internalid = uniqid();
+        $data = array_merge([
+            'merchant'      => $merchant,
+            'description'   => Yii::$app->request->getServerName() . ' deposit: ' . $this->username,
+            'transactionId' => uniqid(),
+        ], $data);
 
         return array_merge([
-            'notifyUrl'     => $this->buildUrl('notify', $merchant, $internalid),
-            'returnUrl'     => $this->buildUrl('return', $merchant, $internalid),
-            'cancelUrl'     => $this->buildUrl('cancel', $merchant, $internalid),
-            'description'   => Yii::$app->request->getServerName() . ' deposit: ' . $this->username,
-            'transactionId' => $internalid,
+            'notifyUrl'     => $this->buildUrl('notify', $data),
+            'returnUrl'     => $this->buildUrl('return', $data),
+            'cancelUrl'     => $this->buildUrl('cancel', $data),
         ], $data);
     }
 
@@ -174,13 +176,13 @@ class Module extends \yii\base\Module
     public $returnPage = 'return';
     public $cancelPage = 'cancel';
 
-    public function buildUrl($dest, $merchant, $internalid)
+    public function buildUrl($dest, $data)
     {
         $name = $dest . 'Page';
         $page = array_merge([
-            'merchant'   => $merchant,
-            'username'   => $this->username,
-            'internalid' => $internalid,
+            'username'      => $this->username,
+            'merchant'      => $data['merchant'],
+            'transactionId' => $data['transactionId'],
         ], (array) ($this->hasProperty($name) ? $this->{$name} : $dest));
 
         return Url::to($page, true);
@@ -219,26 +221,26 @@ class Module extends \yii\base\Module
         return $this->getPayController()->renderDeposit($params);
     }
 
-    public function updateHistory($internalid, array $data)
+    public function updateHistory($transactionId, array $data)
     {
-        $this->writeHistory($internalid, array_merge($this->readHistory($internalid), $data));
+        $this->writeHistory($transactionId, array_merge($this->readHistory($transactionId), $data));
     }
 
-    public function writeHistory($internalid, array $data)
+    public function writeHistory($transactionId, array $data)
     {
-        $path = $this->getHistoryPath($internalid);
+        $path = $this->getHistoryPath($transactionId);
         FileHelper::createDirectory(dirname($path));
         file_put_contents($path, Json::encode($data));
     }
 
-    public function readHistory($internalid)
+    public function readHistory($transactionId)
     {
-        $path = $this->getHistoryPath($internalid);
+        $path = $this->getHistoryPath($transactionId);
         return file_exists($path) ? Json::decode(file_get_contents($path)) : [];
     }
 
-    public function getHistoryPath($internalid)
+    public function getHistoryPath($transactionId)
     {
-        return Yii::getAlias('@runtime/merchant/') . substr($internalid, 0, 2) . DIRECTORY_SEPARATOR . $internalid . '.json';
+        return Yii::getAlias('@runtime/merchant/') . substr($transactionId, -2) . DIRECTORY_SEPARATOR . $transactionId . '.json';
     }
 }
