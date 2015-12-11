@@ -16,7 +16,6 @@ use hiqdev\yii2\merchant\models\Deposit;
 use Yii;
 use yii\base\UserException;
 use yii\helpers\Json;
-use yii\helpers\Url;
 use yii\web\Response;
 
 class PayController extends \yii\web\Controller
@@ -52,7 +51,7 @@ class PayController extends \yii\web\Controller
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $data = $this->module->readHistory($internalid);
-        $data = $data['username'] == Yii::$app->user->identity->username ? $data : [];
+        $data = $data['username'] === Yii::$app->user->identity->username ? $data : [];
 
         return ['COMPLETED' => $data['COMPLETED']];
     }

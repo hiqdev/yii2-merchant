@@ -239,6 +239,6 @@ class Module extends \yii\base\Module
 
     public function getHistoryPath($internalid)
     {
-        return Yii::getAlias('@runtime/merchant/') . substr($internalid, 0 ,2) . DIRECTORY_SEPARATOR . $internalid . '.json';
+        return Yii::getAlias('@runtime/merchant/') . substr($internalid, 0, 2) . DIRECTORY_SEPARATOR . $internalid . '.json';
     }
 }
