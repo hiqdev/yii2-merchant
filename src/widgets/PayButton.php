@@ -18,6 +18,8 @@ class PayButton extends \yii\base\Widget
 {
     public $request;
 
+    public $action = ['/merchant/pay/request'];
+
     public function init()
     {
         parent::init();
@@ -37,8 +39,6 @@ class PayButton extends \yii\base\Widget
             'request' => $this->request,
         ]);
     }
-
-    public $action = ['/merchant/pay/request'];
 
     public function formatMoney($sum)
     {

@@ -3,7 +3,7 @@
 use hiqdev\yii2\merchant\widgets\PayButton;
 
 $this->title                   = Yii::t('merchant', 'Select payment method');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Recharge account'), 'url' => ['deposit']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('merchant', 'Recharge account'), 'url' => ['deposit']];
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>
