@@ -4,6 +4,8 @@ hiqdev/yii2-merchant commits history
 ## Under development
 
 - Changed: redone with `php-merchant`
+    - 278543e 2015-12-11 + internalid and history (sol@hiqdev.com)
+    - 957f3aa 2015-12-09 simplified merchant creating (sol@hiqdev.com)
     - fce8fd4 2015-12-08 finishing redoing to php-merchant (sol@hiqdev.com)
     - ff73135 2015-12-08 redone with php-merchant (sol@hiqdev.com)
 - Fixed redirection to payment systems
