@@ -157,6 +157,8 @@ class Module extends \yii\base\Module
             'notifyUrl'     => $this->buildUrl('notify', $data),
             'returnUrl'     => $this->buildUrl('return', $data),
             'cancelUrl'     => $this->buildUrl('cancel', $data),
+            'returnMethod'  => 'POST',
+            'cancelMethod'  => 'POST',
         ], $data);
     }
 
