@@ -49,7 +49,7 @@ use yii\helpers\Url;
 class Module extends \yii\base\Module
 {
     /**
-     * The URL prefix that will be used as a key to save current URL in the session
+     * The URL prefix that will be used as a key to save current URL in the session.
      *
      * @see rememberUrl()
      * @see previousUrl()
@@ -74,7 +74,7 @@ class Module extends \yii\base\Module
     public $depositClass = 'hiqdev\yii2\merchant\models\Deposit';
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function init()
     {
@@ -83,7 +83,7 @@ class Module extends \yii\base\Module
     }
 
     /**
-     * Registers message sources for Merchant module
+     * Registers message sources for Merchant module.
      *
      * @void
      */
@@ -156,8 +156,9 @@ class Module extends \yii\base\Module
     /**
      * Creates merchant instance from its array configuration.
      *
-     * @param string $id ID
-     * @param array $config merchant instance configuration.
+     * @param string $id     ID
+     * @param array  $config merchant instance configuration.
+     *
      * @return AbstractMerchant merchant instance.
      */
     public function createMerchant($id, array $config)
@@ -173,7 +174,8 @@ class Module extends \yii\base\Module
      * Method builds data for merchant request.
      *
      * @param string $merchant
-     * @param array $data request data
+     * @param array  $data     request data
+     *
      * @return array
      */
     public function prepareRequestData($merchant, array $data)
@@ -199,7 +201,7 @@ class Module extends \yii\base\Module
     protected $_username;
 
     /**
-     * Sets [[_username]]
+     * Sets [[_username]].
      *
      * @param $username
      */
@@ -210,14 +212,16 @@ class Module extends \yii\base\Module
 
     /**
      * Gets [[_username]] when defined, otherwise - `Yii::$app->user->identity->username`,
-     * otherwise `Yii::$app->user->identity->getId()`
-     * @return string
+     * otherwise `Yii::$app->user->identity->getId()`.
+     *
      * @throws InvalidConfigException
+     *
+     * @return string
      */
     public function getUsername()
     {
         if (isset($this->_username)) {
-           return $this->_username;
+            return $this->_username;
         } elseif (($identity = Yii::$app->user->identity) !== null) {
             if ($identity->hasProperty('username')) {
                 return $identity->username;
@@ -230,17 +234,17 @@ class Module extends \yii\base\Module
 
     /**
      * @var string|array the URL that will be used for payment system notifications.
-     * Will be passed through [[Url::to()]]
+     *                   Will be passed through [[Url::to()]]
      */
     public $notifyPage = 'notify';
     /**
      * @var string|array the URL that will be used to redirect client from the merchant after the success payment.
-     * Will be passed through [[Url::to()]]
+     *                   Will be passed through [[Url::to()]]
      */
     public $returnPage = 'return';
     /**
      * @var string|array the URL that will be used to redirect client from the merchant after the failed payment.
-     * Will be passed through [[Url::to()]]
+     *                   Will be passed through [[Url::to()]]
      */
     public $cancelPage = 'cancel';
 
@@ -248,8 +252,9 @@ class Module extends \yii\base\Module
      * Builds URLs that will be passed in the request to the merchant.
      *
      * @param string $destination: `notify`, `return`, `cancel`
-     * @param array $data data, that will be used to build URL. Only `merchant` and `transactionId` keys
-     * will be used from the array
+     * @param array  $data         data, that will be used to build URL. Only `merchant` and `transactionId` keys
+     *                             will be used from the array
+     *
      * @return string URL
      */
     public function buildUrl($destination, array $data)
@@ -265,10 +270,10 @@ class Module extends \yii\base\Module
     }
 
     /**
-     * Saves the $url to session with [[URL_PREFIX]] key, trailed with $name
+     * Saves the $url to session with [[URL_PREFIX]] key, trailed with $name.
      *
      * @param array|string $url
-     * @param string $name the trailing part for the URL save key. Defaults to `back`
+     * @param string       $name the trailing part for the URL save key. Defaults to `back`
      * @void
      */
     public function rememberUrl($url, $name = 'back')
@@ -277,9 +282,10 @@ class Module extends \yii\base\Module
     }
 
     /**
-     * Extracts the URL from session storage, saved with [[URL_PREFIX]] key, trailed with $name
+     * Extracts the URL from session storage, saved with [[URL_PREFIX]] key, trailed with $name.
      *
      * @param string $name the trailing part for the URL save key. Defaults to `back`
+     *
      * @return string
      */
     public function previousUrl($name = 'back')
@@ -293,8 +299,9 @@ class Module extends \yii\base\Module
     protected $_payController;
 
     /**
-     * @return PayController
      * @throws InvalidConfigException
+     *
+     * @return PayController
      */
     public function getPayController()
     {
@@ -307,9 +314,10 @@ class Module extends \yii\base\Module
 
     /**
      * Renders the response for the payment system on its notify request.
-     * Should be implemented in `PayController`
+     * Should be implemented in `PayController`.
      *
      * @param array $params
+     *
      * @return mixed
      */
     public function renderNotify(array $params)
@@ -319,9 +327,10 @@ class Module extends \yii\base\Module
 
     /**
      * Renders page, that contains list of payment systems, that might be choosen by user.
-     * Should be implemented in `PayController`
+     * Should be implemented in `PayController`.
      *
      * @param array $params
+     *
      * @return \yii\web\Response
      */
     public function renderDeposit(array $params)
@@ -330,10 +339,11 @@ class Module extends \yii\base\Module
     }
 
     /**
-     * Merges the existing history of $transactionId with the $data
+     * Merges the existing history of $transactionId with the $data.
      *
      * @param $transactionId
      * @param array $data
+     *
      * @return int The function returns the number of bytes that were written to the file, or false on failure.
      */
     public function updateHistory($transactionId, array $data)
@@ -342,11 +352,11 @@ class Module extends \yii\base\Module
     }
 
     /**
-     *
-     *
      * @param $transactionId
      * @param array $data
+     *
      * @throws \yii\base\Exception
+     *
      * @return int The function returns the number of bytes that were written to the file, or false on failure.
      */
     public function writeHistory($transactionId, array $data)
@@ -357,9 +367,10 @@ class Module extends \yii\base\Module
     }
 
     /**
-     * Reads history of $transactionId
+     * Reads history of $transactionId.
      *
      * @param string $transactionId
+     *
      * @return array
      */
     public function readHistory($transactionId)
@@ -369,9 +380,10 @@ class Module extends \yii\base\Module
     }
 
     /**
-     * Returns path for the transaction log depending on $transactionId
+     * Returns path for the transaction log depending on $transactionId.
      *
      * @param string $transactionId the transaction ID
+     *
      * @return bool|string Path to the transaction log
      */
     protected function getHistoryPath($transactionId)

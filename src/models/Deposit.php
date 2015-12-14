@@ -15,13 +15,12 @@ use Yii;
 use yii\base\Model;
 
 /**
- * Class Deposit
- * @package hiqdev\yii2\merchant\models
+ * Class Deposit.
  */
 class Deposit extends Model
 {
     /**
-     * @var double the amount of money
+     * @var float the amount of money
      */
     public $amount;
 

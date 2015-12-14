@@ -27,7 +27,7 @@ class Collection extends \hiqdev\yii2\collection\Manager
     public $module;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function createItem($id, array $config = [])
     {

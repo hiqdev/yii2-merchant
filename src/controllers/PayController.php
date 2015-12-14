@@ -23,7 +23,7 @@ class PayController extends \yii\web\Controller
 {
     /**
      * @var Module
-     * {@inheritdoc}
+     *             {@inheritdoc}
      */
     public $module;
     /**
@@ -51,6 +51,7 @@ class PayController extends \yii\web\Controller
 
     /**
      * @param string $transactionId
+     *
      * @return string
      */
     public function actionReturn($transactionId = null)

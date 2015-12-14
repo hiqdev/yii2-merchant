@@ -6,7 +6,7 @@ use yii\helpers\Html;
 use yii\helpers\Json;
 use yii\widgets\ActiveForm;
 
-/**
+/*
  * @var PayButton $widget
  * @var AbstractRequest $request
  */
@@ -21,13 +21,13 @@ use yii\widgets\ActiveForm;
         <br/>
         <?= Yii::t('merchant', 'Pay {amount} with {merchantLabel}', [
             'amount' => Html::tag('b', $widget->formatMoney($request->getAmount())),
-            'merchantLabel' => Html::tag('b', $request->merchant->getLabel())
+            'merchantLabel' => Html::tag('b', $request->merchant->getLabel()),
         ]); ?>
         <br/>
 
         <?php if ($request->getFee() > 0) : ?>
             (<?= Yii::t('merchant', 'including commission {commission}', [
-                'commission' => Html::tag('b', $widget->formatMoney($request->getFee()))
+                'commission' => Html::tag('b', $widget->formatMoney($request->getFee())),
             ]) ?>)
         <?php endif ?>
         <br/>

@@ -16,8 +16,7 @@ use hiqdev\php\merchant\AbstractRequest;
 use Yii;
 
 /**
- * Class PayButton
- * @package hiqdev\yii2\merchant\widgets
+ * Class PayButton.
  */
 class PayButton extends \yii\base\Widget
 {
@@ -32,7 +31,7 @@ class PayButton extends \yii\base\Widget
     public $action = ['/merchant/pay/request'];
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function init()
     {
@@ -41,7 +40,7 @@ class PayButton extends \yii\base\Widget
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function run()
     {
@@ -50,7 +49,8 @@ class PayButton extends \yii\base\Widget
     }
 
     /**
-     * Renders the payment button
+     * Renders the payment button.
+     *
      * @return string
      */
     public function renderButton()

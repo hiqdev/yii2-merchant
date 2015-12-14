@@ -14,8 +14,7 @@ namespace hiqdev\yii2\merchant\models;
 use Yii;
 
 /**
- * Class MerchantTrait
- * @package hiqdev\yii2\merchant\models
+ * Class MerchantTrait.
  */
 trait MerchantTrait
 {
