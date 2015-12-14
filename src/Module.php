@@ -12,8 +12,8 @@
 namespace hiqdev\yii2\merchant;
 
 use Closure;
+use hiqdev\php\merchant\AbstractMerchant;
 use hiqdev\php\merchant\Helper;
-use hiqdev\php\merchant\MerchantInterface;
 use hiqdev\yii2\merchant\controllers\PayController;
 use Yii;
 use yii\base\InvalidConfigException;
@@ -115,7 +115,7 @@ class Module extends \yii\base\Module
     /**
      * @param array $params parameters for collection
      *
-     * @return MerchantInterface[] list of merchants.
+     * @return AbstractMerchant[] list of merchants.
      */
     public function getCollection(array $params = [])
     {
@@ -134,7 +134,7 @@ class Module extends \yii\base\Module
      * @param string $id     merchant id.
      * @param array  $params parameters for collection
      *
-     * @return MerchantInterface merchant instance.
+     * @return AbstractMerchant merchant instance.
      */
     public function getMerchant($id, array $params = [])
     {
@@ -156,9 +156,9 @@ class Module extends \yii\base\Module
     /**
      * Creates merchant instance from its array configuration.
      *
-     * @param $id Merchant ID
+     * @param string $id ID
      * @param array $config merchant instance configuration.
-     * @return MerchantInterface merchant instance.
+     * @return AbstractMerchant merchant instance.
      */
     public function createMerchant($id, array $config)
     {

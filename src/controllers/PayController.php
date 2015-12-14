@@ -13,6 +13,7 @@ namespace hiqdev\yii2\merchant\controllers;
 
 use hipanel\base\Err;
 use hiqdev\yii2\merchant\models\Deposit;
+use hiqdev\yii2\merchant\Module;
 use Yii;
 use yii\base\UserException;
 use yii\helpers\Json;
@@ -21,17 +22,26 @@ use yii\web\Response;
 class PayController extends \yii\web\Controller
 {
     /**
-     * Disable CSRF validation for POST requests we receive from outside.
+     * @var Module
+     * {@inheritdoc}
      */
-    public function beforeAction()
+    public $module;
+    /**
+     * Disable CSRF validation for POST requests we receive from outside
+     * {@inheritdoc}
+     */
+    public function beforeAction($action)
     {
         if (in_array($this->action->id, ['notify', 'return', 'cancel'], true)) {
             Yii::$app->controller->enableCsrfValidation = false;
         }
 
-        return true;
+        return parent::beforeAction($action);
     }
 
+    /**
+     * @return Response
+     */
     public function actionCancel()
     {
         Yii::$app->session->addFlash('error', Yii::t('merchant', 'Payment failed or cancelled'));
@@ -39,6 +49,10 @@ class PayController extends \yii\web\Controller
         return $this->redirect($this->module->previousUrl() ?: ['deposit']);
     }
 
+    /**
+     * @param string $transactionId
+     * @return string
+     */
     public function actionReturn($transactionId = null)
     {
         return $this->render('return', [

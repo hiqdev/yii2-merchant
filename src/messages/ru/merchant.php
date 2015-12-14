@@ -27,11 +27,9 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
-    'Sum'                   => 'Сумма',
-    'pay'                   => 'оплатить',
-    'with'                  => 'через',
-    'including commission'  => 'включая комиссию',
-    'Proceed'               => 'Продолжить',
-    'Recharge account'      => 'Пополнить счёт',
+    'Sum' => 'Сумма',
+    'Pay {amount} with {merchantLabel}' => 'Оплатить {amount} через {merchantLabel}',
+    'Proceed' => 'Продолжить',
+    'Recharge account' => 'Пополнить счёт',
     'Select payment method' => 'Выбрать способ оплаты',
 ];

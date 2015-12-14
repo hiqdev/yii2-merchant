@@ -12,26 +12,47 @@
 namespace hiqdev\yii2\merchant\widgets;
 
 use hiqdev\paymenticons\yii2\PaymentIconsAsset;
+use hiqdev\php\merchant\AbstractRequest;
 use Yii;
 
+/**
+ * Class PayButton
+ * @package hiqdev\yii2\merchant\widgets
+ */
 class PayButton extends \yii\base\Widget
 {
+    /**
+     * @var AbstractRequest
+     */
     public $request;
 
+    /**
+     * @var array|string the URL for action
+     */
     public $action = ['/merchant/pay/request'];
 
+    /**
+     * @inheritdoc
+     */
     public function init()
     {
         parent::init();
         PaymentIconsAsset::register(Yii::$app->getView());
     }
 
+    /**
+     * @inheritdoc
+     */
     public function run()
     {
         parent::run();
         echo $this->renderButton();
     }
 
+    /**
+     * Renders the payment button
+     * @return string
+     */
     public function renderButton()
     {
         return $this->render('pay-button', [

@@ -13,8 +13,15 @@ namespace hiqdev\yii2\merchant\models;
 
 use Yii;
 
+/**
+ * Class Deposit
+ * @package hiqdev\yii2\merchant\models
+ */
 class Deposit extends \yii\base\Model
 {
+    /**
+     * @var double the amount of money
+     */
     public $amount;
 
     /**

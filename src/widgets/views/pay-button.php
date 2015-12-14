@@ -1,9 +1,15 @@
 <?php
 
+use hiqdev\php\merchant\AbstractRequest;
+use hiqdev\yii2\merchant\widgets\PayButton;
 use yii\helpers\Html;
 use yii\helpers\Json;
 use yii\widgets\ActiveForm;
 
+/**
+ * @var PayButton $widget
+ * @var AbstractRequest $request
+ */
 ?>
 <?php $form = ActiveForm::begin(['action' => $widget->action]) ?>
     <?= Html::hiddenInput('merchant',   $request->merchant->id) ?>
@@ -13,12 +19,16 @@ use yii\widgets\ActiveForm;
     <button class="btn btn-default btn-block" type="submit" style="text-align:left">
         <i class="pi pi-sm pi-<?= $request->merchant->getSimpleName() ?>" style="float:right"></i>
         <br/>
-        <?= Yii::t('merchant', 'pay') ?>  <b><?= $widget->formatMoney($request->getAmount()) ?></b>
-        <?= Yii::t('merchant', 'with') ?> <b><?= $request->merchant->getLabel() ?></b>
+        <?= Yii::t('merchant', 'Pay {amount} with {merchantLabel}', [
+            'amount' => Html::tag('b', $widget->formatMoney($request->getAmount())),
+            'merchantLabel' => Html::tag('b', $request->merchant->getLabel())
+        ]); ?>
         <br/>
 
         <?php if ($request->getFee() > 0) : ?>
-            (<?= Yii::t('merchant', 'including commission') ?> <b><?= $widget->formatMoney($request->getFee()) ?></b>)
+            (<?= Yii::t('merchant', 'including commission {commission}', [
+                'commission' => Html::tag('b', $widget->formatMoney($request->getFee()))
+            ]) ?>)
         <?php endif ?>
         <br/>
         <br/>

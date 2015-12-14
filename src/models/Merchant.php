@@ -11,6 +11,10 @@
 
 namespace hiqdev\yii2\merchant\models;
 
+/**
+ * Class Merchant
+ * @package hiqdev\yii2\merchant\models
+ */
 class Merchant extends \yii\base\Model
 {
     use MerchantTrait;
