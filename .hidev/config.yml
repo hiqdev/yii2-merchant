@@ -10,5 +10,5 @@ package:
         [Omnipay](http://omnipay.thephpleague.com/) and [Payum](http://payum.org/) payment processing libraries.
 
 require:
+    hiqdev/hidev-vendor: "*"
     hiqdev/hidev-php:    "*"
-    hiqdev/hidev-hiqdev: "*"
