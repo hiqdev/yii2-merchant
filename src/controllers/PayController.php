@@ -79,7 +79,7 @@ class PayController extends \yii\web\Controller
         if ($data['_isCompleted']) {
             return [
                 'isCompleted' => true,
-                'url' => $this->module->previousUrl()
+                'url' => $this->module->previousUrl(),
             ];
         }
 
@@ -97,6 +97,7 @@ class PayController extends \yii\web\Controller
 
     /**
      * @param array $params
+     *
      * @return null|string
      */
     public function renderNotify(array $params)
@@ -143,7 +144,8 @@ class PayController extends \yii\web\Controller
     }
 
     /**
-     * Performs purchase request
+     * Performs purchase request.
+     *
      * @void
      */
     public function actionRequest()
