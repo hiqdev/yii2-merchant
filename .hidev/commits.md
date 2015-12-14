@@ -3,6 +3,9 @@ hiqdev/yii2-merchant commits history
 
 ## Under development
 
+- Fixed Travis build
+    - f1ecb98 2015-12-14 fixed travis: dont build 5.4, dont allow fail 7 (sol@hiqdev.com)
+    - 72c57a8 2015-12-14 trying hidev.phar (sol@hiqdev.com)
 - Changed: redone with `php-merchant`
     - eb568af 2015-12-14 php-cs-fixed (sol@hiqdev.com)
     - e3e8e2a 2015-12-14 Deposit - added validation rules for sum attribute (d.naumenko.a@gmail.com)
