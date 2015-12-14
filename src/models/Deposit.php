@@ -12,12 +12,13 @@
 namespace hiqdev\yii2\merchant\models;
 
 use Yii;
+use yii\base\Model;
 
 /**
  * Class Deposit
  * @package hiqdev\yii2\merchant\models
  */
-class Deposit extends \yii\base\Model
+class Deposit extends Model
 {
     /**
      * @var double the amount of money
@@ -31,6 +32,8 @@ class Deposit extends \yii\base\Model
     {
         return [
             [['amount'], 'number'],
+            [['amount'], 'required'],
+            [['amount'], 'compare', 'operator' => '>', 'compareValue' => 0],
         ];
     }
 

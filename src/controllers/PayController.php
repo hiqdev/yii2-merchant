@@ -88,12 +88,11 @@ class PayController extends \yii\web\Controller
     {
         $model   = Yii::createObject($this->module->depositClass);
         $request = Yii::$app->request;
-        if (!$model->load($request->isPost ? $request->post() : $request->get())) {
-            return $this->render('deposit-form', compact('model'));
+        if ($model->load($request->isPost ? $request->post() : $request->get()) && $model->validate()) {
+            $data = array_merge($model->getAttributes(), ['back' => $request->get('back')]);
+            return $this->renderDeposit($data);
         }
-        $data = array_merge($model->getAttributes(), ['back' => $request->get('back')]);
-
-        return $this->renderDeposit($data);
+        return $this->render('deposit-form', compact('model'));
     }
 
     /**
