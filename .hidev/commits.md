@@ -4,6 +4,12 @@ hiqdev/yii2-merchant commits history
 ## Under development
 
 - Changed: redone with `php-merchant`
+    - eb568af 2015-12-14 php-cs-fixed (sol@hiqdev.com)
+    - e3e8e2a 2015-12-14 Deposit - added validation rules for sum attribute (d.naumenko.a@gmail.com)
+    - 15dc2d9 2015-12-14 Module tidied up more (d.naumenko.a@gmail.com)
+    - 25703a6 2015-12-14 Module tidied up (d.naumenko.a@gmail.com)
+    - d66f028 2015-12-11 + return/cancel method set to POST (sol@hiqdev.com)
+    - b57d0fb 2015-12-11 renamed `transactionId` <- `internalid` (sol@hiqdev.com)
     - 1d0f00e 2015-12-11 + return/cancel method set to POST (sol@hiqdev.com)
     - cbba2e2 2015-12-11 renamed `transactionId` <- `internalid` (sol@hiqdev.com)
     - 278543e 2015-12-11 + internalid and history (sol@hiqdev.com)
