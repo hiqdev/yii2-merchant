@@ -1,7 +1,52 @@
 <?php
 
+/**
+ * @var View $this
+ */
+
+use hipanel\helpers\Url;
+use yii\web\View;
+
+$this->title = Yii::t('merchant', 'Payment result');
 
 ?>
-<h2><?= Yii::t('merchant', 'Waiting for confirmation from payment system...') ?></h2>
-url to check: /merchant/pay/check-return
-url to rederect when checkReturn['COMPLETED'] == true
+<h1 class="text-center">
+    <i class="fa fa-refresh fa-spin"></i>
+    <?= Yii::t('merchant', 'Waiting for confirmation from the payment system...') ?>
+</h1>
+
+<?php
+$options = \yii\helpers\Json::encode([
+    'url' => Url::to('check-return'),
+    'data' => [
+        'transactionId' => $transactionId
+    ]
+]);
+$this->registerJs(<<<JS
+    function checkPaymentStatus(options) {
+        $.ajax({
+            type: 'get',
+            dataType: 'json',
+            url: options.url,
+            data: options.data,
+            success: function (result) {
+                if (result.isCompleted) {
+                    window.location = result.url;
+                }
+                setTimeout(function() {
+                    checkPaymentStatus(options);
+                }, 1000);
+            },
+            error: function (result) {
+                // TODO: error redirect
+                console.log('oops', result);
+            }
+        });
+    }
+
+    var options = $options;
+    checkPaymentStatus(options);
+JS
+);
+
+?>

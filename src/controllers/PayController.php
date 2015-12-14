@@ -15,9 +15,12 @@ use hipanel\base\Err;
 use hiqdev\yii2\merchant\models\Deposit;
 use hiqdev\yii2\merchant\Module;
 use Yii;
+use yii\base\InvalidCallException;
 use yii\base\UserException;
 use yii\helpers\Json;
+use yii\web\BadRequestHttpException;
 use yii\web\Response;
+use yii\web\Session;
 
 class PayController extends \yii\web\Controller
 {
@@ -65,22 +68,42 @@ class PayController extends \yii\web\Controller
     public function actionCheckReturn($transactionId)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        $data = $this->module->readHistory($transactionId);
-        $data = $data['username'] === Yii::$app->user->identity->username ? $data : [];
 
-        return ['COMPLETED' => $data['COMPLETED']];
+        if (empty($data = $this->module->readHistory($transactionId))) {
+            return [];
+        }
+        if ($data['username'] !== Yii::$app->user->identity->username) {
+            throw new BadRequestHttpException('Access denied', 403);
+        }
+
+        if ($data['_isCompleted']) {
+            return [
+                'isCompleted' => true,
+                'url' => $this->module->previousUrl()
+            ];
+        }
+
+        return ['isCompleted' => false];
     }
 
+    /**
+     * @return null|string
+     */
     public function actionNotify()
     {
+        // TODO: implement request check and proper handling
         return $this->renderNotify($_REQUEST);
     }
 
+    /**
+     * @param array $params
+     * @return null|string
+     */
     public function renderNotify(array $params)
     {
-        $params['COMPLETED'] = Err::not($params) && $params['id'];
+        Yii::$app->response->format = Response::FORMAT_RAW;
+        $params['_isCompleted'] = Err::not($params) && $params['id'];
         $this->module->updateHistory($params['transactionId'], $params);
-        Yii::$app->getResponse()->headers->set('Content-Type', 'text/plain');
 
         return Err::is($params) ? Err::get($params) : 'OK';
     }
@@ -105,6 +128,7 @@ class PayController extends \yii\web\Controller
      */
     public function renderDeposit(array $data)
     {
+        // TODO: vulnerable. Delete
         if ($data['back']) {
             $this->module->rememberUrl($data['back']);
         }
@@ -119,22 +143,30 @@ class PayController extends \yii\web\Controller
     }
 
     /**
-     * Performs purchase request.
+     * Performs purchase request
+     * @void
      */
     public function actionRequest()
     {
         $merchant   = Yii::$app->request->post('merchant');
-        $data       = Json::decode(Yii::$app->request->post('data'));
+        $data       = Json::decode(Yii::$app->request->post('data', '{}'));
         $merchant   = $this->module->getMerchant($merchant, $data);
         $request    = $merchant->request('purchase', $data);
-        $this->module->writeHistory($data['transactionId'], $data);
+
+        $this->module->writeHistory(
+            $data['transactionId'],
+            array_merge($data, ['username' => Yii::$app->user->identity->username])
+        );
+
         $response   = $request->send();
+
         if ($response->isSuccessful()) {
-            $merchant->registerMoney($response);
+            throw new InvalidCallException('Instant payment is not implemented yet');
+//            $merchant->registerMoney($response);
         } elseif ($response->isRedirect()) {
             $response->redirect();
         } else {
-            throw new UserException('merchant request failed');
-        };
+            throw new UserException('Merchant request failed');
+        }
     }
 }
