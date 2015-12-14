@@ -13,7 +13,10 @@ namespace hiqdev\yii2\merchant;
 
 use Closure;
 use hiqdev\php\merchant\Helper;
+use hiqdev\php\merchant\MerchantInterface;
+use hiqdev\yii2\merchant\controllers\PayController;
 use Yii;
+use yii\base\InvalidConfigException;
 use yii\helpers\FileHelper;
 use yii\helpers\Json;
 use yii\helpers\Url;
@@ -46,26 +49,44 @@ use yii\helpers\Url;
 class Module extends \yii\base\Module
 {
     /**
-     * Default merchant library to use is Omnipay.
+     * The URL prefix that will be used as a key to save current URL in the session
+     *
+     * @see rememberUrl()
+     * @see previousUrl()
+     * @see \yii\helpers\BaseUrl::remember()
+     * @see \yii\helpers\BaseUrl::previous()
+     */
+    const URL_PREFIX = 'merchant_url_';
+
+    /**
+     * @var string merchant library name. Defaults to `Omnipay`
      */
     public $merchantLibrary = 'Omnipay';
 
     /**
-     * Default merchant collection to use. Other can be specified.
+     * @var string merchant collection class name. Defaults to [[hiqdev\yii2\merchant\Collection]]
      */
     public $collectionClass = 'hiqdev\yii2\merchant\Collection';
 
     /**
-     * Deposit model class.
+     * @var string Deposit model class name. Defaults to [[hiqdev\yii2\merchant\models\Deposit]]
      */
     public $depositClass = 'hiqdev\yii2\merchant\models\Deposit';
 
+    /**
+     * @inheritdoc
+     */
     public function init()
     {
         parent::init();
         $this->registerTranslations();
     }
 
+    /**
+     * Registers message sources for Merchant module
+     *
+     * @void
+     */
     public function registerTranslations()
     {
         Yii::$app->i18n->translations['merchant'] = [
@@ -78,6 +99,9 @@ class Module extends \yii\base\Module
         ];
     }
 
+    /**
+     * @var array|Closure list of merchants
+     */
     protected $_collection = [];
 
     /**
@@ -91,7 +115,7 @@ class Module extends \yii\base\Module
     /**
      * @param array $params parameters for collection
      *
-     * @return Merchant[] list of merchants.
+     * @return MerchantInterface[] list of merchants.
      */
     public function getCollection(array $params = [])
     {
@@ -110,7 +134,7 @@ class Module extends \yii\base\Module
      * @param string $id     merchant id.
      * @param array  $params parameters for collection
      *
-     * @return Merchant merchant instance.
+     * @return MerchantInterface merchant instance.
      */
     public function getMerchant($id, array $params = [])
     {
@@ -132,9 +156,9 @@ class Module extends \yii\base\Module
     /**
      * Creates merchant instance from its array configuration.
      *
+     * @param $id Merchant ID
      * @param array $config merchant instance configuration.
-     *
-     * @return Merchant merchant instance.
+     * @return MerchantInterface merchant instance.
      */
     public function createMerchant($id, array $config)
     {
@@ -145,7 +169,14 @@ class Module extends \yii\base\Module
         ], $config));
     }
 
-    public function prepareRequestData($merchant, $data)
+    /**
+     * Method builds data for merchant request.
+     *
+     * @param string $merchant
+     * @param array $data request data
+     * @return array
+     */
+    public function prepareRequestData($merchant, array $data)
     {
         $data = array_merge([
             'merchant'      => $merchant,
@@ -162,48 +193,109 @@ class Module extends \yii\base\Module
         ], $data);
     }
 
+    /**
+     * @var string client login
+     */
     protected $_username;
 
-    public function setUsername($value)
+    /**
+     * Sets [[_username]]
+     *
+     * @param $username
+     */
+    public function setUsername($username)
     {
-        $this->_username = $value;
+        $this->_username = $username;
     }
 
+    /**
+     * Gets [[_username]] when defined, otherwise - `Yii::$app->user->identity->username`,
+     * otherwise `Yii::$app->user->identity->getId()`
+     * @return string
+     * @throws InvalidConfigException
+     */
     public function getUsername()
     {
-        return isset($this->_username) ? $this->_username : Yii::$app->user->identity->username;
+        if (isset($this->_username)) {
+           return $this->_username;
+        } elseif (($identity = Yii::$app->user->identity) !== null) {
+            if ($identity->hasProperty('username')) {
+                return $identity->username;
+            } else {
+                return $identity->getId();
+            }
+        }
+        throw new InvalidConfigException('Unable to determine username');
     }
 
+    /**
+     * @var string|array the URL that will be used for payment system notifications.
+     * Will be passed through [[Url::to()]]
+     */
     public $notifyPage = 'notify';
+    /**
+     * @var string|array the URL that will be used to redirect client from the merchant after the success payment.
+     * Will be passed through [[Url::to()]]
+     */
     public $returnPage = 'return';
+    /**
+     * @var string|array the URL that will be used to redirect client from the merchant after the failed payment.
+     * Will be passed through [[Url::to()]]
+     */
     public $cancelPage = 'cancel';
 
-    public function buildUrl($dest, $data)
+    /**
+     * Builds URLs that will be passed in the request to the merchant.
+     *
+     * @param string $destination: `notify`, `return`, `cancel`
+     * @param array $data data, that will be used to build URL. Only `merchant` and `transactionId` keys
+     * will be used from the array
+     * @return string URL
+     */
+    public function buildUrl($destination, array $data)
     {
-        $name = $dest . 'Page';
+        $name = $destination . 'Page';
         $page = array_merge([
             'username'      => $this->username,
             'merchant'      => $data['merchant'],
             'transactionId' => $data['transactionId'],
-        ], (array) ($this->hasProperty($name) ? $this->{$name} : $dest));
+        ], (array) ($this->hasProperty($name) ? $this->{$name} : $destination));
 
         return Url::to($page, true);
     }
 
-    const URL_PREFIX = 'merchant_url_';
-
+    /**
+     * Saves the $url to session with [[URL_PREFIX]] key, trailed with $name
+     *
+     * @param array|string $url
+     * @param string $name the trailing part for the URL save key. Defaults to `back`
+     * @void
+     */
     public function rememberUrl($url, $name = 'back')
     {
-        Url::remember($url, URL_PREFIX . $name);
+        Url::remember($url, static::URL_PREFIX . $name);
     }
 
+    /**
+     * Extracts the URL from session storage, saved with [[URL_PREFIX]] key, trailed with $name
+     *
+     * @param string $name the trailing part for the URL save key. Defaults to `back`
+     * @return string
+     */
     public function previousUrl($name = 'back')
     {
-        return Url::previous(URL_PREFIX . $name);
+        return Url::previous(static::URL_PREFIX . $name);
     }
 
+    /**
+     * @var PayController The Payment controller
+     */
     protected $_payController;
 
+    /**
+     * @return PayController
+     * @throws InvalidConfigException
+     */
     public function getPayController()
     {
         if ($this->_payController === null) {
@@ -213,36 +305,77 @@ class Module extends \yii\base\Module
         return $this->_payController;
     }
 
+    /**
+     * Renders the response for the payment system on its notify request.
+     * Should be implemented in `PayController`
+     *
+     * @param array $params
+     * @return mixed
+     */
     public function renderNotify(array $params)
     {
         return $this->getPayController()->renderNotify($params);
     }
 
+    /**
+     * Renders page, that contains list of payment systems, that might be choosen by user.
+     * Should be implemented in `PayController`
+     *
+     * @param array $params
+     * @return \yii\web\Response
+     */
     public function renderDeposit(array $params)
     {
         return $this->getPayController()->renderDeposit($params);
     }
 
+    /**
+     * Merges the existing history of $transactionId with the $data
+     *
+     * @param $transactionId
+     * @param array $data
+     * @return int The function returns the number of bytes that were written to the file, or false on failure.
+     */
     public function updateHistory($transactionId, array $data)
     {
-        $this->writeHistory($transactionId, array_merge($this->readHistory($transactionId), $data));
+        return $this->writeHistory($transactionId, array_merge($this->readHistory($transactionId), $data));
     }
 
+    /**
+     *
+     *
+     * @param $transactionId
+     * @param array $data
+     * @throws \yii\base\Exception
+     * @return int The function returns the number of bytes that were written to the file, or false on failure.
+     */
     public function writeHistory($transactionId, array $data)
     {
         $path = $this->getHistoryPath($transactionId);
         FileHelper::createDirectory(dirname($path));
-        file_put_contents($path, Json::encode($data));
+        return file_put_contents($path, Json::encode($data));
     }
 
+    /**
+     * Reads history of $transactionId
+     *
+     * @param string $transactionId
+     * @return array
+     */
     public function readHistory($transactionId)
     {
         $path = $this->getHistoryPath($transactionId);
         return file_exists($path) ? Json::decode(file_get_contents($path)) : [];
     }
 
-    public function getHistoryPath($transactionId)
+    /**
+     * Returns path for the transaction log depending on $transactionId
+     *
+     * @param string $transactionId the transaction ID
+     * @return bool|string Path to the transaction log
+     */
+    protected function getHistoryPath($transactionId)
     {
-        return Yii::getAlias('@runtime/merchant/') . substr($transactionId, -2) . DIRECTORY_SEPARATOR . $transactionId . '.json';
+        return Yii::getAlias('@runtime/merchant/' . substr(md5($transactionId), 0, 2) . '/' . $transactionId . '.json');
     }
 }
