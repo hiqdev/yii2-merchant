@@ -50,7 +50,6 @@
         "hiqdev/php-merchant": "*"
     },
     "require-dev": {
-        "hiqdev/php-merchant": "*@dev",
         "omnipay/stripe": "*",
         "dercoder/omnipay-webmoney": "*@dev"
     },
