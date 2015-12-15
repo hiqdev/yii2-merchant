@@ -4,6 +4,7 @@ hiqdev/yii2-merchant commits history
 ## Under development
 
 - Fixed Travis build
+    - f394b3a 2015-12-15 fixed tests (sol@hiqdev.com)
     - f1ecb98 2015-12-14 fixed travis: dont build 5.4, dont allow fail 7 (sol@hiqdev.com)
     - 72c57a8 2015-12-14 trying hidev.phar (sol@hiqdev.com)
 - Changed: redone with `php-merchant`
