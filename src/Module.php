@@ -208,8 +208,8 @@ class Module extends \yii\base\Module
     /**
      * Gets [[_username]] when defined, otherwise - `Yii::$app->user->identity->username`,
      * otherwise `Yii::$app->user->identity->getId()`.
-     * @return string
      * @throws InvalidConfigException
+     * @return string
      */
     public function getUsername()
     {
