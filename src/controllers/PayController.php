@@ -56,7 +56,7 @@ class PayController extends \yii\web\Controller
      * @param string $transactionId
      * @return string
      */
-    public function actionReturn($transactionId = null)
+    public function actionReturn($transactionId)
     {
         return $this->render('return', [
             'transactionId' => $transactionId,
@@ -66,7 +66,7 @@ class PayController extends \yii\web\Controller
 
     public function actionCheckReturn($transactionId)
     {
-        $result = ['status' => false];
+        $result = ['status' => null];
         Yii::$app->response->format = Response::FORMAT_JSON;
 
         if (empty($data = $this->module->readHistory($transactionId))) {
@@ -122,12 +122,12 @@ class PayController extends \yii\web\Controller
      * @param array $data request data:
      *  - `sum` - the amount of payment without fees
      *  - `currency` - the currency of transaction
-     *  - `returnPage` - the URL for user redirect after the payment
+     *  - `finishPage` - the URL for user redirect after the payment
      * @return \yii\web\Response
      */
     public function renderDeposit(array $data)
     {
-        $this->module->rememberUrl(isset($data['returnPage']) ? $data['returnPage'] : $this->module->returnPage);
+        $this->module->rememberUrl(isset($data['finishPage']) ? $data['finishPage'] : $this->module->finishPage);
 
         $merchants = $this->module->getCollection($data)->getItems();
         $requests = [];

@@ -239,6 +239,11 @@ class Module extends \yii\base\Module
      * Will be passed through [[Url::to()]]
      */
     public $cancelPage = 'cancel';
+    /**
+     * @var string|array the URL that might be used to redirect used from the success or error page to the finish page.
+     * Will be passed through [[Url::to()]]
+     */
+    public $finishPage = 'finish';
 
     /**
      * Builds URLs that will be passed in the request to the merchant.
