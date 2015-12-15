@@ -26,7 +26,7 @@ class PayController extends \yii\web\Controller
 {
     /**
      * @var Module
-     *             {@inheritdoc}
+     * {@inheritdoc}
      */
     public $module;
     /**
@@ -54,7 +54,6 @@ class PayController extends \yii\web\Controller
 
     /**
      * @param string $transactionId
-     *
      * @return string
      */
     public function actionReturn($transactionId = null)
@@ -67,6 +66,7 @@ class PayController extends \yii\web\Controller
 
     public function actionCheckReturn($transactionId)
     {
+        $result = ['status' => false];
         Yii::$app->response->format = Response::FORMAT_JSON;
 
         if (empty($data = $this->module->readHistory($transactionId))) {
@@ -77,13 +77,11 @@ class PayController extends \yii\web\Controller
         }
 
         if ($data['_isCompleted']) {
-            return [
-                'isCompleted' => true,
-                'url' => $this->module->previousUrl(),
-            ];
+            $result['status'] = true;
+            $result['url'] = $this->module->previousUrl();
         }
 
-        return ['isCompleted' => false];
+        return $result;
     }
 
     /**
@@ -97,7 +95,6 @@ class PayController extends \yii\web\Controller
 
     /**
      * @param array $params
-     *
      * @return null|string
      */
     public function renderNotify(array $params)
@@ -114,8 +111,7 @@ class PayController extends \yii\web\Controller
         $model   = Yii::createObject($this->module->depositClass);
         $request = Yii::$app->request;
         if ($model->load($request->isPost ? $request->post() : $request->get()) && $model->validate()) {
-            $data = array_merge($model->getAttributes(), ['back' => $request->get('back')]);
-            return $this->renderDeposit($data);
+            return $this->renderDeposit($model->getAttributes());
         }
         return $this->render('deposit-form', compact('model'));
     }
@@ -123,16 +119,15 @@ class PayController extends \yii\web\Controller
     /**
      * Renders depositing buttons for given request data.
      *
-     * @param array $data request data: sum, currency, back
-     *
+     * @param array $data request data:
+     *  - `sum` - the amount of payment without fees
+     *  - `currency` - the currency of transaction
+     *  - `returnPage` - the URL for user redirect after the payment
      * @return \yii\web\Response
      */
     public function renderDeposit(array $data)
     {
-        // TODO: vulnerable. Delete
-        if ($data['back']) {
-            $this->module->rememberUrl($data['back']);
-        }
+        $this->module->rememberUrl(isset($data['returnPage']) ? $data['returnPage'] : $this->module->returnPage);
 
         $merchants = $this->module->getCollection($data)->getItems();
         $requests = [];
@@ -145,7 +140,6 @@ class PayController extends \yii\web\Controller
 
     /**
      * Performs purchase request.
-     *
      * @void
      */
     public function actionRequest()

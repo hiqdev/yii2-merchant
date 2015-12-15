@@ -29,7 +29,7 @@ $this->registerJs(<<<JS
             url: options.url,
             data: options.data,
             success: function (result) {
-                if (result.isCompleted) {
+                if (result.status) {
                     window.location = result.url;
                 }
                 setTimeout(function() {
