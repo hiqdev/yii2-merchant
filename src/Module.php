@@ -46,7 +46,7 @@ use yii\helpers\Url;
  * ],
  * ```
  *
- * @var string $username returns username for usage in merchant
+ * @var string returns username for usage in merchant
  */
 class Module extends \yii\base\Module
 {
