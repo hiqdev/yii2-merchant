@@ -72,7 +72,7 @@ class PayController extends \yii\web\Controller
         if (empty($data = $this->module->readHistory($transactionId))) {
             return [];
         }
-        if ($data['username'] !== Yii::$app->user->identity->username) {
+        if ($data['username'] !== $this->module->username) {
             throw new BadRequestHttpException('Access denied', 403);
         }
 
@@ -151,7 +151,7 @@ class PayController extends \yii\web\Controller
 
         $this->module->writeHistory(
             $data['transactionId'],
-            array_merge($data, ['username' => Yii::$app->user->identity->username])
+            array_merge($data, ['username' => $this->module->username])
         );
 
         $response   = $request->send();

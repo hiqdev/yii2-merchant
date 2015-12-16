@@ -45,6 +45,8 @@ use yii\helpers\Url;
  *     ],
  * ],
  * ```
+ *
+ * @var string $username returns username for usage in merchant
  */
 class Module extends \yii\base\Module
 {
@@ -217,10 +219,11 @@ class Module extends \yii\base\Module
             return $this->_username;
         } elseif (($identity = Yii::$app->user->identity) !== null) {
             if ($identity->hasProperty('username')) {
-                return $identity->username;
+                $this->_username = $identity->username;
             } else {
-                return $identity->getId();
+                $this->_username = $identity->getId();
             }
+            return $this->_username;
         }
         throw new InvalidConfigException('Unable to determine username');
     }

@@ -31,10 +31,11 @@ $this->registerJs(<<<JS
             success: function (result) {
                 if (result.status !== null) {
                     window.location = result.url;
+                } else {
+                    setTimeout(function() {
+                        checkPaymentStatus(options);
+                    }, 1000);
                 }
-                setTimeout(function() {
-                    checkPaymentStatus(options);
-                }, 1000);
             },
             error: function (result) {
                 // TODO: error redirect
