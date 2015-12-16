@@ -60,28 +60,27 @@ class PayController extends \yii\web\Controller
     {
         return $this->render('return', [
             'transactionId' => $transactionId,
-            'back'          => $this->module->previousUrl(),
         ]);
     }
 
+    /**
+     * @param string $transactionId
+     * @throws BadRequestHttpException
+     * @return array
+     */
     public function actionCheckReturn($transactionId)
     {
-        $result = ['status' => null];
         Yii::$app->response->format = Response::FORMAT_JSON;
+        $data = $this->module->readHistory($transactionId);
 
-        if (empty($data = $this->module->readHistory($transactionId))) {
-            return [];
-        }
         if ($data['username'] !== $this->module->username) {
             throw new BadRequestHttpException('Access denied', 403);
         }
 
-        if ($data['_isCompleted']) {
-            $result['status'] = true;
-            $result['url'] = $this->module->previousUrl();
-        }
-
-        return $result;
+        return [
+            'status' => $data['_isCompleted'],
+            'url'    => $data['_isCompleted'] ? $data['finishUrl'] : $data['cancelUrl'],
+        ];
     }
 
     /**
@@ -122,13 +121,14 @@ class PayController extends \yii\web\Controller
      * @param array $data request data:
      *  - `sum` - the amount of payment without fees
      *  - `currency` - the currency of transaction
-     *  - `finishPage` - the URL for user redirect after the payment
+     *  - `finishPage/Url` - page or URL to redirect user after the payment
+     *  - `returnPage/Url` - page or URL to return user from payment system on success
+     *  - `cancelPage/Url` - page or URL to return user from payment system on fail
+     *  - `notifyPage/Url` - page or URL used by payment system to notify us on successful payment
      * @return \yii\web\Response
      */
     public function renderDeposit(array $data)
     {
-        $this->module->rememberUrl(isset($data['finishPage']) ? $data['finishPage'] : $this->module->finishPage);
-
         $merchants = $this->module->getCollection($data)->getItems();
         $requests = [];
         foreach ($merchants as $id => $merchant) {

@@ -187,6 +187,7 @@ class Module extends \yii\base\Module
             'notifyUrl'     => $this->buildUrl('notify', $data),
             'returnUrl'     => $this->buildUrl('return', $data),
             'cancelUrl'     => $this->buildUrl('cancel', $data),
+            'finishUrl'     => $this->buildUrl('finish', $data),
             'returnMethod'  => 'POST',
             'cancelMethod'  => 'POST',
         ], $data);
@@ -258,14 +259,23 @@ class Module extends \yii\base\Module
      */
     public function buildUrl($destination, array $data)
     {
-        $name = $destination . 'Page';
         $page = array_merge([
             'username'      => $this->username,
             'merchant'      => $data['merchant'],
             'transactionId' => $data['transactionId'],
-        ], (array) ($this->hasProperty($name) ? $this->{$name} : $destination));
+        ], (array) $this->getPage($destination, $data));
 
         return Url::to($page, true);
+    }
+
+    public function getPage($destination, array $data)
+    {
+        $name = $destination . 'Page';
+        if (isset($data[$name])) {
+            return $data[$name];
+        }
+
+        return $this->hasProperty($name) ? $this->{$name} : $destination;
     }
 
     /**
