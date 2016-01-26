@@ -4,6 +4,7 @@ hiqdev/yii2-merchant commits history
 ## Under development
 
 - Fixed Travis build
+    - f8fa4aa 2016-01-26 rehideved (sol@hiqdev.com)
     - 2616a6e 2015-12-15 php-cs-fixed (sol@hiqdev.com)
     - cae2de5 2015-12-15 PayController - back ~> returnUrl, PHPDoc updated (d.naumenko.a@gmail.com)
     - f394b3a 2015-12-15 fixed tests (sol@hiqdev.com)
