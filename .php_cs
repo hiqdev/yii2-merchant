@@ -6,7 +6,7 @@ Yii2 extension for payment processing with Omnipay, Payum and more later
 @link      https://github.com/hiqdev/yii2-merchant
 @package   yii2-merchant
 @license   BSD-3-Clause
-@copyright Copyright (c) 2015, HiQDev (http://hiqdev.com/)
+@copyright Copyright (c) 2015-2016, HiQDev (http://hiqdev.com/)
 EOF;
 
 Symfony\CS\Fixer\Contrib\HeaderCommentFixer::setHeader($header);
@@ -27,6 +27,7 @@ return Symfony\CS\Config\Config::create()
         '-empty_return',                         /// A return statement wishing to return nothing should be simply "return".
         '-return',                               /// An empty line feed should precede a return statement.
         '-phpdoc_params',                        /// All items of the @param, @throws, @return, @var, and @type phpdoc tags must be aligned vertically.
+        '-phpdoc_scalar',                        /// Scalar types should always be written in the same form. "int", not "integer"; "bool", not "boolean".
         '-phpdoc_separation',                    /// Annotations of a different type are separated by a single blank line.
         'header_comment',                        /// Add, replace or remove header comment.
         'concat_with_spaces',                    /// Concatenation should be used with at least one whitespace around.
