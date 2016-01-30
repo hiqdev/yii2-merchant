@@ -1,14 +1,14 @@
 package:
+    type:           yii2-extension
     name:           yii2-merchant
     namespace:      hiqdev\yii2\merchant
     headline:       Yii2 Merchant
     title:          Yii2 extension for payment processing with Omnipay, Payum and more later
-    type:           yii2-extension
     keywords:       yii2, merchant, payment, omnipay, payum
     description:    |
         This [Yii2](http://yiiframework.com/) extension provides payment gateways integration with use of
         [Omnipay](http://omnipay.thephpleague.com/) and [Payum](http://payum.org/) payment processing libraries.
 
 require:
-    hiqdev/hidev-vendor: "*"
     hiqdev/hidev-php:    "*"
+    hiqdev/hidev-vendor: "*"

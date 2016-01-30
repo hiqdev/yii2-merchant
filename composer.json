@@ -50,12 +50,19 @@
         "hiqdev/php-merchant": "*"
     },
     "require-dev": {
+        "minii/web": "*@dev",
+        "minii/i18n": "*@dev",
         "omnipay/stripe": "*",
         "dercoder/omnipay-webmoney": "*@dev"
     },
     "autoload": {
         "psr-4": {
             "hiqdev\\yii2\\merchant\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "hiqdev\\yii2\\merchant\\tests\\": "tests"
         }
     }
 }
