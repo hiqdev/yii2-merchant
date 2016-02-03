@@ -265,7 +265,23 @@ class Module extends \yii\base\Module
             'transactionId' => $data['transactionId'],
         ], (array) $this->getPage($destination, $data));
 
+        if (is_array($page)) {
+            $page[0] = $this->localizePage($page[0]);
+        } else {
+            $page = $this->localizePage($page);
+        }
+
         return Url::to($page, true);
+    }
+
+    /**
+     * Builds url to `this_module/pay/$page` if page is not /full/page.
+     * @param mixed $page
+     * @return mixed
+     */
+    public function localizePage($page)
+    {
+        return is_string($page) && $page[0]!=='/' ? ('/' . $this->id . '/pay/' . $page) : $page;
     }
 
     public function getPage($destination, array $data)
