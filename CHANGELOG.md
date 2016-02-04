@@ -3,6 +3,7 @@ hiqdev/yii2-merchant changelog
 
 ## Under development
 
+- Fixed minor issues
 - Fixed Travis build
 - Changed: redone with `php-merchant`
 - Fixed redirection to payment systems

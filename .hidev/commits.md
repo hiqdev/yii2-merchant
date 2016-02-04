@@ -3,6 +3,10 @@ hiqdev/yii2-merchant commits history
 
 ## Under development
 
+- Fixed minor issues
+    - 4254b94 2016-02-04 phpcsfixed (sol@hiqdev.com)
+    - c66c63c 2016-02-03 + localizePage to build proper url to /merchant/pay/return (sol@hiqdev.com)
+    - bca7393 2016-02-03 pay/deposit - added the message for a case when no payments methods available (d.naumenko.a@gmail.com)
 - Fixed Travis build
     - 10c6932 2016-01-30 fixed tests (sol@hiqdev.com)
     - f8fa4aa 2016-01-26 rehideved (sol@hiqdev.com)
