@@ -281,7 +281,7 @@ class Module extends \yii\base\Module
      */
     public function localizePage($page)
     {
-        return is_string($page) && $page[0]!=='/' ? ('/' . $this->id . '/pay/' . $page) : $page;
+        return is_string($page) && $page[0] !== '/' ? ('/' . $this->id . '/pay/' . $page) : $page;
     }
 
     public function getPage($destination, array $data)
