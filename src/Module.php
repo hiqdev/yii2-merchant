@@ -351,20 +351,20 @@ class Module extends \yii\base\Module
 
     public function completeHistory(array $data)
     {
-        if (!$this->readHistory($data)['_isCompleted']) {
-            $data['_isCompleted'] = Err::not($data) && $data['id'];
-            $this->updateHistory($data);
+        $history = $this->readHistory($data);
+        if (isset($history['_isCompleted']) && $history['_isCompleted']) {
+            return $history;
         }
+        $data['_isCompleted'] = Err::not($data) && $data['id'];
 
-        return $data;
+        return $this->updateHistory($data);
     }
 
     /**
-     * Merges the existing history of $transactionId with the $data.
-     *
+     * Merges the existing history with the given $data.
      * @param array $data
-     *
-     * @return int The function returns the number of bytes that were written to the file, or false on failure.
+     * @throws \yii\base\Exception
+     * @return int data that were written to the file, or false on failure.
      */
     public function updateHistory(array $data)
     {
@@ -372,15 +372,18 @@ class Module extends \yii\base\Module
     }
 
     /**
+     * Writes given data to history.
      * @param array $data
      * @throws \yii\base\Exception
-     * @return int The function returns the number of bytes that were written to the file, or false on failure.
+     * @return int data that were written to the file, or false on failure.
      */
     public function writeHistory(array $data)
     {
         $path = $this->getHistoryPath($data);
         FileHelper::createDirectory(dirname($path));
-        return file_put_contents($path, Json::encode($data));
+        $res = file_put_contents($path, Json::encode($data));
+
+        return $res === FALSE ? $res : $data;
     }
 
     /**
