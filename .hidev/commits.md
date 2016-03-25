@@ -3,7 +3,13 @@ hiqdev/yii2-merchant commits history
 
 ## Under development
 
+- Fixed eCoin and Paxum
+    - a0213a0 2016-03-25 fixed History functions (sol@hiqdev.com)
+    - 77afc6c 2016-03-25 fixed eCoin to work, it makes no notify just return (sol@hiqdev.com)
+    - d16a1ec 2016-03-25 redone history functions: - id argument (sol@hiqdev.com)
 - Fixed minor issues
+    - 7e9b380 2016-03-11 Added translations (d.naumenko.a@gmail.com)
+    - 99618c7 2016-02-11 Minor fix. Add Box view (andreyklochok@gmail.com)
     - 4254b94 2016-02-04 phpcsfixed (sol@hiqdev.com)
     - c66c63c 2016-02-03 + localizePage to build proper url to /merchant/pay/return (sol@hiqdev.com)
     - bca7393 2016-02-03 pay/deposit - added the message for a case when no payments methods available (d.naumenko.a@gmail.com)

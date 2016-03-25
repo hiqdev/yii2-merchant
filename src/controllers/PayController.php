@@ -99,7 +99,7 @@ class PayController extends \yii\web\Controller
 
     /**
      * Check notifications.
-     * TODO: implement actual request check and proper handling
+     * TODO: implement actual request check and proper handling.
      * @return array
      */
     public function checkNotify()

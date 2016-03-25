@@ -12,10 +12,10 @@
 namespace hiqdev\yii2\merchant;
 
 use Closure;
+use hipanel\base\Err;
 use hiqdev\php\merchant\AbstractMerchant;
 use hiqdev\php\merchant\Helper;
 use hiqdev\yii2\merchant\controllers\PayController;
-use hipanel\base\Err;
 use Yii;
 use yii\base\InvalidConfigException;
 use yii\helpers\FileHelper;
@@ -383,7 +383,7 @@ class Module extends \yii\base\Module
         FileHelper::createDirectory(dirname($path));
         $res = file_put_contents($path, Json::encode($data));
 
-        return $res === FALSE ? $res : $data;
+        return $res === false ? $res : $data;
     }
 
     /**
