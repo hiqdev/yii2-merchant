@@ -11,7 +11,6 @@
 
 namespace hiqdev\yii2\merchant\controllers;
 
-use hipanel\base\Err;
 use hiqdev\yii2\merchant\models\Deposit;
 use hiqdev\yii2\merchant\Module;
 use Yii;
@@ -24,11 +23,11 @@ use yii\web\Session;
 
 class PayController extends \yii\web\Controller
 {
-    /**
-     * @var Module
-     * {@inheritdoc}
-     */
-    public $module;
+    public function getMerchantModule()
+    {
+        return $this->module;
+    }
+
     /**
      * Disable CSRF validation for POST requests we receive from outside
      * {@inheritdoc}
@@ -49,17 +48,19 @@ class PayController extends \yii\web\Controller
     {
         Yii::$app->session->addFlash('error', Yii::t('merchant', 'Payment failed or cancelled'));
 
-        return $this->redirect($this->module->previousUrl() ?: ['deposit']);
+        return $this->redirect($this->getMerchantModule()->previousUrl() ?: ['deposit']);
     }
 
     /**
      * @param string $transactionId
      * @return string
      */
-    public function actionReturn($transactionId)
+    public function actionReturn()
     {
+        $this->checkNotify();
+
         return $this->render('return', [
-            'transactionId' => $transactionId,
+            'transactionId' => Yii::$app->request->get('transactionId'),
         ]);
     }
 
@@ -71,9 +72,9 @@ class PayController extends \yii\web\Controller
     public function actionCheckReturn($transactionId)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        $data = $this->module->readHistory($transactionId);
+        $data = $this->getMerchantModule()->readHistory($transactionId);
 
-        if ($data['username'] !== $this->module->username) {
+        if ($data['username'] !== $this->getMerchantModule()->username) {
             throw new BadRequestHttpException('Access denied', 403);
         }
 
@@ -84,34 +85,37 @@ class PayController extends \yii\web\Controller
     }
 
     /**
+     * Action is designed to get the system notification from payment system,
+     * process it and report success or error for the payment system.
      * @return null|string
      */
     public function actionNotify()
     {
-        // TODO: implement request check and proper handling
-        return $this->renderNotify($_REQUEST);
+        $result = $this->checkNotify();
+        Yii::$app->response->format = Response::FORMAT_RAW;
+
+        return $result['_isCompleted'] ? 'OK' : $result['_error'];
     }
 
     /**
-     * @param array $params
-     * @return null|string
+     * Check notifications.
+     * TODO: implement actual request check and proper handling
+     * @return array
      */
-    public function renderNotify(array $params)
+    public function checkNotify()
     {
-        Yii::$app->response->format = Response::FORMAT_RAW;
-        $params['_isCompleted'] = Err::not($params) && $params['id'];
-        $this->module->updateHistory($params['transactionId'], $params);
-
-        return Err::is($params) ? Err::get($params) : 'OK';
+        $result = $_REQUEST;
+        return $this->completeHistory($result);
     }
 
     public function actionDeposit()
     {
-        $model   = Yii::createObject($this->module->depositClass);
+        $model   = Yii::createObject($this->getMerchantModule()->depositClass);
         $request = Yii::$app->request;
         if ($model->load($request->isPost ? $request->post() : $request->get()) && $model->validate()) {
             return $this->renderDeposit($model->getAttributes());
         }
+
         return $this->render('deposit-form', compact('model'));
     }
 
@@ -129,10 +133,10 @@ class PayController extends \yii\web\Controller
      */
     public function renderDeposit(array $data)
     {
-        $merchants = $this->module->getCollection($data)->getItems();
+        $merchants = $this->getMerchantModule()->getCollection($data)->getItems();
         $requests = [];
         foreach ($merchants as $id => $merchant) {
-            $requests[$id] = $merchant->request('purchase', $this->module->prepareRequestData($id, $data));
+            $requests[$id] = $merchant->request('purchase', $this->getMerchantModule()->prepareRequestData($id, $data));
         }
 
         return $this->render('deposit', compact('requests'));
@@ -146,13 +150,10 @@ class PayController extends \yii\web\Controller
     {
         $merchant   = Yii::$app->request->post('merchant');
         $data       = Json::decode(Yii::$app->request->post('data', '{}'));
-        $merchant   = $this->module->getMerchant($merchant, $data);
+        $merchant   = $this->getMerchantModule()->getMerchant($merchant, $data);
         $request    = $merchant->request('purchase', $data);
 
-        $this->module->writeHistory(
-            $data['transactionId'],
-            array_merge($data, ['username' => $this->module->username])
-        );
+        $this->getMerchantModule()->writeHistory(array_merge($data, ['username' => $this->getMerchantModule()->username]));
 
         $response   = $request->send();
 
