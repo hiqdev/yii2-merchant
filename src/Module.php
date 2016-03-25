@@ -15,6 +15,7 @@ use Closure;
 use hiqdev\php\merchant\AbstractMerchant;
 use hiqdev\php\merchant\Helper;
 use hiqdev\yii2\merchant\controllers\PayController;
+use hipanel\base\Err;
 use Yii;
 use yii\base\InvalidConfigException;
 use yii\helpers\FileHelper;
@@ -337,18 +338,6 @@ class Module extends \yii\base\Module
     }
 
     /**
-     * Renders the response for the payment system on its notify request.
-     * Should be implemented in `PayController`.
-     *
-     * @param array $params
-     * @return mixed
-     */
-    public function renderNotify(array $params)
-    {
-        return $this->getPayController()->renderNotify($params);
-    }
-
-    /**
      * Renders page, that contains list of payment systems, that might be choosen by user.
      * Should be implemented in `PayController`.
      *
@@ -360,52 +349,61 @@ class Module extends \yii\base\Module
         return $this->getPayController()->renderDeposit($params);
     }
 
+    public function completeHistory(array $data)
+    {
+        if (!$this->readHistory($data)['_isCompleted']) {
+            $data['_isCompleted'] = Err::not($data) && $data['id'];
+            $this->updateHistory($data);
+        }
+
+        return $data;
+    }
+
     /**
      * Merges the existing history of $transactionId with the $data.
      *
-     * @param $transactionId
      * @param array $data
      *
      * @return int The function returns the number of bytes that were written to the file, or false on failure.
      */
-    public function updateHistory($transactionId, array $data)
+    public function updateHistory(array $data)
     {
-        return $this->writeHistory($transactionId, array_merge($this->readHistory($transactionId), $data));
+        return $this->writeHistory(array_merge($this->readHistory($data), $data));
     }
 
     /**
-     * @param $transactionId
      * @param array $data
      * @throws \yii\base\Exception
      * @return int The function returns the number of bytes that were written to the file, or false on failure.
      */
-    public function writeHistory($transactionId, array $data)
+    public function writeHistory(array $data)
     {
-        $path = $this->getHistoryPath($transactionId);
+        $path = $this->getHistoryPath($data);
         FileHelper::createDirectory(dirname($path));
         return file_put_contents($path, Json::encode($data));
     }
 
     /**
-     * Reads history of $transactionId.
+     * Reads history.
      *
-     * @param string $transactionId
+     * @param string|array $data
      * @return array
      */
-    public function readHistory($transactionId)
+    public function readHistory($data)
     {
-        $path = $this->getHistoryPath($transactionId);
+        $path = $this->getHistoryPath($data);
         return file_exists($path) ? Json::decode(file_get_contents($path)) : [];
     }
 
     /**
      * Returns path for the transaction log depending on $transactionId.
      *
-     * @param string $transactionId the transaction ID
+     * @param string|array $data transactionId or array containing transactionId
      * @return bool|string Path to the transaction log
      */
-    protected function getHistoryPath($transactionId)
+    protected function getHistoryPath($data)
     {
+        $transactionId = is_array($data) ? $data['transactionId'] : $data;
         return Yii::getAlias('@runtime/merchant/' . substr(md5($transactionId), 0, 2) . '/' . $transactionId . '.json');
     }
 }
