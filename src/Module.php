@@ -356,6 +356,9 @@ class Module extends \yii\base\Module
             return $history;
         }
         $data['_isCompleted'] = Err::not($data) && $data['id'];
+        if ($data['_isCompleted']) {
+            $data['_error'] = null;
+        }
 
         return $this->updateHistory($data);
     }
@@ -380,6 +383,7 @@ class Module extends \yii\base\Module
     public function writeHistory(array $data)
     {
         $path = $this->getHistoryPath($data);
+
         FileHelper::createDirectory(dirname($path));
         $res = file_put_contents($path, Json::encode($data));
 
