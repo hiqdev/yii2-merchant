@@ -12,7 +12,6 @@
 namespace hiqdev\yii2\merchant;
 
 use Closure;
-use hipanel\base\Err;
 use hiqdev\php\merchant\AbstractMerchant;
 use hiqdev\php\merchant\Helper;
 use hiqdev\yii2\merchant\controllers\PayController;
@@ -355,7 +354,7 @@ class Module extends \yii\base\Module
         if (isset($history['_isCompleted']) && $history['_isCompleted']) {
             return $history;
         }
-        $data['_isCompleted'] = Err::not($data) && $data['id'];
+        $data['_isCompleted'] = !isset($data['_error']) && $data['id'];
         if ($data['_isCompleted']) {
             $data['_error'] = null;
         }
