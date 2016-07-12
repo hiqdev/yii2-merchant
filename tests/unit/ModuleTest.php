@@ -51,7 +51,7 @@ class ModuleTest extends \PHPUnit_Framework_TestCase
             'basePath' => dirname(dirname(__DIR__)),
             'modules'  => [
                 'merchant' => [
-                    'class'      => Module::className(),
+                    'class'      => Module::class,
                     'username'   => 'fake',
                     'notifyPage' => '/my/notify/page',
                     'returnPage' => '/merchant/pay/return',
