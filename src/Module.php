@@ -224,6 +224,7 @@ class Module extends \yii\base\Module
             } else {
                 $this->_username = $identity->getId();
             }
+
             return $this->_username;
         }
         throw new InvalidConfigException('Unable to determine username');
@@ -398,6 +399,7 @@ class Module extends \yii\base\Module
     public function readHistory($data)
     {
         $path = $this->getHistoryPath($data);
+
         return file_exists($path) ? Json::decode(file_get_contents($path)) : [];
     }
 
@@ -410,6 +412,7 @@ class Module extends \yii\base\Module
     protected function getHistoryPath($data)
     {
         $transactionId = is_array($data) ? $data['transactionId'] : $data;
+
         return Yii::getAlias('@runtime/merchant/' . substr(md5($transactionId), 0, 2) . '/' . $transactionId . '.json');
     }
 }

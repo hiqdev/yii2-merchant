@@ -105,6 +105,7 @@ class PayController extends \yii\web\Controller
     public function checkNotify()
     {
         $result = $_REQUEST;
+
         return $this->completeHistory($result);
     }
 
