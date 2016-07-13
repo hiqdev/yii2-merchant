@@ -9,6 +9,3 @@ package:
         This [Yii2](http://yiiframework.com/) extension provides payment gateways integration with use of
         [Omnipay](http://omnipay.thephpleague.com/) and [Payum](http://payum.org/) payment processing libraries.
 
-require:
-    hiqdev/hidev-php:    "*"
-    hiqdev/hidev-vendor: "*"

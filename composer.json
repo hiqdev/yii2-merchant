@@ -50,8 +50,9 @@
         "hiqdev/php-merchant": "*"
     },
     "require-dev": {
-        "minii/web": "*@dev",
-        "minii/i18n": "*@dev",
+        "hiqdev/hidev-php": "*",
+        "hiqdev/hidev-hiqdev": "*",
+        "yiisoft/yii2": "*@dev",
         "omnipay/stripe": "*",
         "dercoder/omnipay-webmoney": "*@dev"
     },
@@ -64,5 +65,11 @@
         "psr-4": {
             "hiqdev\\yii2\\merchant\\tests\\": "tests"
         }
-    }
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        }
+    ]
 }
