@@ -3,16 +3,17 @@ hiqdev/yii2-merchant
 
 ## [Under development]
 
+- Fixed eCoin and Paxum
     - [33e91a1] 2016-07-13 rehideved [sol@hiqdev.com]
+    - [9dc45c6] 2016-04-18 fixed comleting history [sol@hiqdev.com]
+    - [a0213a0] 2016-03-25 fixed History functions [sol@hiqdev.com]
+    - [77afc6c] 2016-03-25 fixed eCoin to work, it makes no notify just return [sol@hiqdev.com]
+- Fixed bugs
+    - [87b761f] 2016-08-05 changed bumping to use `chkipper` [sol@hiqdev.com]
     - [e4fa5f9] 2016-07-13 csfixed [sol@hiqdev.com]
     - [0be4d2e] 2016-07-12 csfixed [sol@hiqdev.com]
     - [e367e59] 2016-06-30 Removed dependency on Err class [d.naumenko.a@gmail.com]
-    - [9dc45c6] 2016-04-18 fixed comleting history [sol@hiqdev.com]
-- Fixed eCoin and Paxum
-    - [a0213a0] 2016-03-25 fixed History functions [sol@hiqdev.com]
-    - [77afc6c] 2016-03-25 fixed eCoin to work, it makes no notify just return [sol@hiqdev.com]
     - [d16a1ec] 2016-03-25 redone history functions: - id argument [sol@hiqdev.com]
-- Fixed minor issues
     - [7e9b380] 2016-03-11 Added translations [d.naumenko.a@gmail.com]
     - [99618c7] 2016-02-11 Minor fix. Add Box view [andreyklochok@gmail.com]
     - [4254b94] 2016-02-04 phpcsfixed [sol@hiqdev.com]
@@ -142,3 +143,4 @@ hiqdev/yii2-merchant
 [0be4d2e]: https://github.com/hiqdev/yii2-merchant/commit/0be4d2e
 [e367e59]: https://github.com/hiqdev/yii2-merchant/commit/e367e59
 [9dc45c6]: https://github.com/hiqdev/yii2-merchant/commit/9dc45c6
+[87b761f]: https://github.com/hiqdev/yii2-merchant/commit/87b761f

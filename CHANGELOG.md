@@ -4,7 +4,7 @@ hiqdev/yii2-merchant
 ## [Under development]
 
 - Fixed eCoin and Paxum
-- Fixed minor issues
+- Fixed bugs
 - Fixed Travis build
 - Changed: redone with `php-merchant`
 - Fixed redirection to payment systems
