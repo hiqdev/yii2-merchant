@@ -1,7 +1,7 @@
-hiqdev/yii2-merchant changelog
-------------------------------
+hiqdev/yii2-merchant
+--------------------
 
-## Under development
+## [Under development]
 
 - Fixed eCoin and Paxum
 - Fixed minor issues
@@ -14,5 +14,4 @@ hiqdev/yii2-merchant changelog
 - Chnaged: redone with Omnipay
 - Added basics
 
-## Development started 2015-10-21
-
+## [Development started] - 2015-10-21
