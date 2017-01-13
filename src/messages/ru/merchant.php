@@ -44,4 +44,5 @@ return [
     'Currency' => 'Валюта',
     'Signature' => 'Подпись',
     'Commission' => 'Комиссия',
+    'Payment failed or cancelled' => 'Платеж прошел неуспешно или был отменён',
 ];

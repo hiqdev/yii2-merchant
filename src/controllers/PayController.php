@@ -52,7 +52,6 @@ class PayController extends \yii\web\Controller
     }
 
     /**
-     * @param string $transactionId
      * @return string
      */
     public function actionReturn()
