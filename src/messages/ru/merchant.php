@@ -45,4 +45,5 @@ return [
     'Signature' => 'Подпись',
     'Commission' => 'Комиссия',
     'Payment failed or cancelled' => 'Платеж прошел неуспешно или был отменён',
+    'including commission {commission}' => 'включая комиссию {commission}'
 ];
