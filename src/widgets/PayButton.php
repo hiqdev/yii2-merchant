@@ -78,11 +78,7 @@ class PayButton extends \yii\base\Widget
      */
     public function renderButtonComment()
     {
-        $event = new Event();
-        $event->sender = $this;
-        $event->name = self::EVENT_RENDER_COMMENT;
-
-        Event::trigger(self::class, self::EVENT_RENDER_COMMENT, $event);
+        $this->trigger(self::EVENT_RENDER_COMMENT);
     }
 
     public function formatMoney($sum)
