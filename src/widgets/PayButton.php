@@ -14,12 +14,15 @@ namespace hiqdev\yii2\merchant\widgets;
 use hiqdev\paymenticons\yii2\PaymentIconsAsset;
 use hiqdev\php\merchant\AbstractRequest;
 use Yii;
+use yii\base\Event;
 
 /**
  * Class PayButton.
  */
 class PayButton extends \yii\base\Widget
 {
+    const EVENT_RENDER_COMMENT = 'renderComment';
+
     /**
      * @var AbstractRequest
      */
@@ -59,6 +62,27 @@ class PayButton extends \yii\base\Widget
             'widget'  => $this,
             'request' => $this->request,
         ]);
+    }
+
+    /**
+     * Extracts merchant name from the [[request]]
+     * @return string
+     */
+    public function getMerchantName()
+    {
+        return $this->request->merchant->id;
+    }
+
+    /**
+     * Renders the button comment. Normally triggers [[EVENT_RENDER_COMMENT]] event
+     */
+    public function renderButtonComment()
+    {
+        $event = new Event();
+        $event->sender = $this;
+        $event->name = self::EVENT_RENDER_COMMENT;
+
+        Event::trigger(self::class, self::EVENT_RENDER_COMMENT, $event);
     }
 
     public function formatMoney($sum)

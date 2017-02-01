@@ -13,7 +13,7 @@ use yii\widgets\ActiveForm;
  */
 ?>
 <?php $form = ActiveForm::begin(['action' => $widget->action]) ?>
-<?= Html::hiddenInput('merchant', $request->merchant->id) ?>
+<?= Html::hiddenInput('merchant', $widget->getMerchantName()) ?>
 <?= Html::hiddenInput('type', $request->getType()) ?>
 <?= Html::hiddenInput('data', Json::encode($request->data)) ?>
 
@@ -32,6 +32,7 @@ use yii\widgets\ActiveForm;
         ]) ?>)
     <?php endif ?>
     <br/>
+    <?php $widget->renderButtonComment() ?>
     <br/>
 </button>
 
