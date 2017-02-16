@@ -17,7 +17,7 @@ use yii\widgets\ActiveForm;
 <?= Html::hiddenInput('type', $request->getType()) ?>
 <?= Html::hiddenInput('data', Json::encode($request->data)) ?>
 
-<button class="btn btn-default btn-block" type="submit" style="text-align:left">
+<button class="btn btn-default btn-block" type="submit" style="text-align:left; white-space: normal;">
     <i class="pi pi-sm pi-<?= $request->merchant->getSimpleName() ?>" style="float:right"></i>
     <br/>
     <?= Yii::t('merchant', 'Pay {amount} with {merchantLabel}', [
