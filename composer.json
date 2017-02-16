@@ -66,6 +66,11 @@
             "hiqdev\\yii2\\merchant\\tests\\": "tests"
         }
     },
+    "extra": {
+        "config-plugin": {
+            "hisite": "src/config/hisite.php"
+        }
+    },
     "repositories": [
         {
             "type": "composer",
