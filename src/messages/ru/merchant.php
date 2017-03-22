@@ -28,6 +28,10 @@
  */
 return [
     'Sum' => 'Сумма',
+    'Important information' => 'Важная информация',
+    'Select payment methods' => 'Выберите способ оплаты',
+    'This payment systems could be automaticaly processed: {merchants}' => 'Мы принимаем к оплате в автоматическом режиме следующие платежные системы: {merchants}',
+    'Once you have paid the items, do not forget to return back to site.' => 'После того как вы платили товар, не забудьте вернутся на обратно сайт.',
     'Pay {amount} with {merchantLabel}' => 'Оплатить {amount} через {merchantLabel}',
     'Proceed' => 'Продолжить',
     'Recharge account' => 'Пополнить счёт',
