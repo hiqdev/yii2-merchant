@@ -12,6 +12,7 @@
 namespace hiqdev\yii2\merchant\controllers;
 
 use hiqdev\yii2\merchant\models\Deposit;
+use hiqdev\yii2\merchant\models\Merchant;
 use hiqdev\yii2\merchant\Module;
 use Yii;
 use yii\base\InvalidCallException;
@@ -112,11 +113,12 @@ class PayController extends \yii\web\Controller
     {
         $model   = Yii::createObject($this->getMerchantModule()->depositClass);
         $request = Yii::$app->request;
+        $availableMerchants = $this->getMerchantModule()->getCollection()->getItems();
         if ($model->load($request->isPost ? $request->post() : $request->get()) && $model->validate()) {
             return $this->renderDeposit($model->getAttributes());
         }
 
-        return $this->render('deposit-form', compact('model'));
+        return $this->render('deposit-form', compact('model', 'availableMerchants'));
     }
 
     /**
