@@ -13,6 +13,8 @@ namespace hiqdev\yii2\merchant;
 use Closure;
 use hiqdev\php\merchant\AbstractMerchant;
 use hiqdev\php\merchant\Helper;
+use hiqdev\yii2\merchant\Collection;
+use hiqdev\yii2\merchant\models\Deposit;
 use hiqdev\yii2\merchant\controllers\PayController;
 use Yii;
 use yii\base\InvalidConfigException;
@@ -65,40 +67,14 @@ class Module extends \yii\base\Module
     public $merchantLibrary = 'Omnipay';
 
     /**
-     * @var string merchant collection class name. Defaults to [[hiqdev\yii2\merchant\Collection]]
+     * @var string merchant collection class name. Defaults to [[Collection]]
      */
-    public $collectionClass = 'hiqdev\yii2\merchant\Collection';
+    public $collectionClass = Collection::class;
 
     /**
-     * @var string Deposit model class name. Defaults to [[hiqdev\yii2\merchant\models\Deposit]]
+     * @var string Deposit model class name. Defaults to [[Deposit]]
      */
-    public $depositClass = 'hiqdev\yii2\merchant\models\Deposit';
-
-    /**
-     * {@inheritdoc}
-     */
-    public function init()
-    {
-        parent::init();
-        $this->registerTranslations();
-    }
-
-    /**
-     * Registers message sources for Merchant module.
-     *
-     * @void
-     */
-    public function registerTranslations()
-    {
-        Yii::$app->i18n->translations['merchant'] = [
-            'class'          => 'yii\i18n\PhpMessageSource',
-            'sourceLanguage' => 'en-US',
-            'basePath'       => '@hiqdev/yii2/merchant/messages',
-            'fileMap'        => [
-                'merchant' => 'merchant.php',
-            ],
-        ];
-    }
+    public $depositClass = Deposit::class;
 
     /**
      * @var array|Closure list of merchants
@@ -106,28 +82,16 @@ class Module extends \yii\base\Module
     protected $_collection = [];
 
     /**
-     * @param array|Closure $collection list of merchants or callback
-     */
-    public function setCollection($collection)
-    {
-        $this->_collection = $collection;
-    }
-
-    /**
      * @param array $params parameters for collection
      * @return AbstractMerchant[] list of merchants
      */
     public function getCollection(array $params = [])
     {
-        if (!is_object($this->_collection)) {
-            $this->_collection = Yii::createObject(array_merge([
-                'class'  => $this->collectionClass,
-                'module' => $this,
-                'params' => $params,
-            ], (array) $this->_collection));
-        }
-
-        return $this->_collection;
+        return Yii::createObject(array_merge([
+            'class'  => $this->collectionClass,
+            'module' => $this,
+            'params' => $params,
+        ], (array) $this->_collection));
     }
 
     /**
