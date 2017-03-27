@@ -8,7 +8,7 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('merchant', 'Recharge accoun
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="row">
-    <div class="col-md-offset-3 col-md-6">
+    <div class="col-md-offset-2 col-md-8">
         <div class="box <?= empty($requests) ? 'box-danger' : '' ?>">
             <div class="box-header with-border">
                 <h3 class="box-title"><?= Yii::t('merchant', 'Select payment methods') ?></h3>
