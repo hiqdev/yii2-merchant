@@ -16,5 +16,14 @@ return [
                 '@hiqdev/yii2/merchant/views' => '$themedViewPaths',
             ],
         ],
+        'i18n' => [
+            'translations' => [
+                'merchant' => [
+                    'class'          => \yii\i18n\PhpMessageSource::class,
+                    'sourceLanguage' => 'en-US',
+                    'basePath'       => '@hiqdev/yii2/merchant/messages',
+                ],
+            ],
+        ],
     ],
 ];
