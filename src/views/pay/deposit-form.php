@@ -1,13 +1,25 @@
 <?php
 
-use hipanel\widgets\ArraySpoiler;
 use hiqdev\paymenticons\yii2\PaymentIconsAsset;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
+/**
+ * @var \yii\web\View $this
+ * @var \hiqdev\php\merchant\AbstractMerchant[] $availableMerchants
+ */
+
 $this->title = Yii::t('merchant', 'Recharge account');
 $this->params['breadcrumbs'][] = $this->title;
 PaymentIconsAsset::register(Yii::$app->getView());
+
+$merchantNames = [];
+foreach ($availableMerchants as $merchant) {
+    if (isset($merchantNames[$merchant->getSimpleName()])) {
+        continue;
+    }
+    $merchantNames[$merchant->getSimpleName()] = $merchant->getLabel();
+}
 
 ?>
 
@@ -23,20 +35,13 @@ PaymentIconsAsset::register(Yii::$app->getView());
                 <?php $form->end() ?>
                 <div class="text-muted">
                     <hr>
-                    <?= Yii::t('merchant', 'This payment systems could be automaticaly processed: {merchants}', [
-                        'merchants' => ArraySpoiler::widget([
-                            'data' => $availableMerchants,
-                            'visibleCount' => count($availableMerchants),
-                            'formatter' => function ($merchant) {
-                                return $merchant->getLabel();
-                            },
-                            'delimiter' => ',&nbsp; ',
-                        ]),
+                    <?= Yii::t('merchant', 'We support fully automatic account depositing with the following payment systems: {merchants}', [
+                        'merchants' => implode(',&nbsp; ', array_values($merchantNames))
                     ]) ?>
                     <br>
                     <br>
-                    <?php foreach ($availableMerchants as $merchant) : ?>
-                        <i class="pi pi-xs pi-<?= $merchant->getSimpleName() ?>"></i>
+                    <?php foreach ($merchantNames as $name => $label) : ?>
+                        <i class="pi pi-xs pi-<?= $name ?>"></i>
                     <?php endforeach; ?>
                 </div>
             </div>
@@ -45,7 +50,7 @@ PaymentIconsAsset::register(Yii::$app->getView());
     <div class="col-md-offset-3 col-md-6">
         <div class="callout callout-warning">
             <h4><?= Yii::t('merchant', 'Important information') ?></h4>
-            <p><?= Yii::t('merchant', 'Once you have paid the items, do not forget to return back to site.') ?></p>
+            <p><?= Yii::t('merchant', 'Remember to return to the site after successful payment!') ?></p>
         </div>
     </div>
 </div>

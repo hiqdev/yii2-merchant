@@ -23,6 +23,9 @@ use yii\web\Session;
 
 class PayController extends \yii\web\Controller
 {
+    /**
+     * @return Module|\yii\base\Module
+     */
     public function getMerchantModule()
     {
         return $this->module;
