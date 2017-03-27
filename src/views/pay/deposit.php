@@ -7,25 +7,6 @@ $this->title = Yii::t('merchant', 'Select payment method');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('merchant', 'Recharge account'), 'url' => ['deposit']];
 $this->params['breadcrumbs'][] = $this->title;
 $this->registerCss("
-.products-list .product-img {
-    margin-right: 15px;
-}
-
-.products-list button {
-    border: none;
-    text-align: left;
-    background: none;
-    outline: none;
-    padding: 1rem;
-}
-
-.products-list button:hover {
-    background: #f7f7f7;
-}
-
-.products-list .product-description {
-    overflow: visible;
-}
 ");
 ?>
 <div class="row">

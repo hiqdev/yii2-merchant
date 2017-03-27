@@ -40,6 +40,17 @@ class PayButton extends \yii\base\Widget
     {
         parent::init();
         PaymentIconsAsset::register(Yii::$app->getView());
+        $this->registerMerchantCss();
+    }
+
+    protected function registerMerchantCss()
+    {
+        $pathToCss = Yii::getAlias('@hiqdev/yii2/merchant/assets/css/selectPayment.css');
+        if (is_file($pathToCss)) {
+            Yii::$app->assetManager->publish($pathToCss);
+            $file = Yii::$app->assetManager->getPublishedUrl($pathToCss);
+            $this->view->registerCssFile($file);
+        }
     }
 
     /**
@@ -59,7 +70,7 @@ class PayButton extends \yii\base\Widget
     public function renderButton()
     {
         return $this->render('pay-button', [
-            'widget'  => $this,
+            'widget' => $this,
             'request' => $this->request,
         ]);
     }
