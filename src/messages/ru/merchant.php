@@ -1,12 +1,11 @@
 <?php
-
-/*
- * Yii2 extension for payment processing with Omnipay, Payum and more later
+/**
+ * Yii2 extension for payment processing with Omnipay, Payum and more later.
  *
  * @link      https://github.com/hiqdev/yii2-merchant
  * @package   yii2-merchant
  * @license   BSD-3-Clause
- * @copyright Copyright (c) 2015-2016, HiQDev (http://hiqdev.com/)
+ * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
  */
 
 /**
@@ -49,5 +48,5 @@ return [
     'Signature' => 'Подпись',
     'Commission' => 'Комиссия',
     'Payment failed or cancelled' => 'Платеж прошел неуспешно или был отменён',
-    'including commission {commission}' => 'включая комиссию {commission}'
+    'including commission {commission}' => 'включая комиссию {commission}',
 ];

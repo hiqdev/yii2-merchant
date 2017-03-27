@@ -1,12 +1,11 @@
 <?php
-
-/*
- * Yii2 extension for payment processing with Omnipay, Payum and more later
+/**
+ * Yii2 extension for payment processing with Omnipay, Payum and more later.
  *
  * @link      https://github.com/hiqdev/yii2-merchant
  * @package   yii2-merchant
  * @license   BSD-3-Clause
- * @copyright Copyright (c) 2015-2016, HiQDev (http://hiqdev.com/)
+ * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
  */
 
 namespace hiqdev\yii2\merchant;
@@ -116,7 +115,7 @@ class Module extends \yii\base\Module
 
     /**
      * @param array $params parameters for collection
-     * @return AbstractMerchant[] list of merchants.
+     * @return AbstractMerchant[] list of merchants
      */
     public function getCollection(array $params = [])
     {
@@ -132,9 +131,9 @@ class Module extends \yii\base\Module
     }
 
     /**
-     * @param string $id merchant id.
+     * @param string $id merchant id
      * @param array $params parameters for collection
-     * @return AbstractMerchant merchant instance.
+     * @return AbstractMerchant merchant instance
      */
     public function getMerchant($id, array $params = [])
     {
@@ -144,8 +143,8 @@ class Module extends \yii\base\Module
     /**
      * Checks if merchant exists in the hub.
      *
-     * @param string $id merchant id.
-     * @return bool whether merchant exist.
+     * @param string $id merchant id
+     * @return bool whether merchant exist
      */
     public function hasMerchant($id)
     {
@@ -156,8 +155,8 @@ class Module extends \yii\base\Module
      * Creates merchant instance from its array configuration.
      *
      * @param string $id     ID
-     * @param array  $config merchant instance configuration.
-     * @return AbstractMerchant merchant instance.
+     * @param array  $config merchant instance configuration
+     * @return AbstractMerchant merchant instance
      */
     public function createMerchant($id, array $config)
     {
@@ -367,7 +366,7 @@ class Module extends \yii\base\Module
      * Merges the existing history with the given $data.
      * @param array $data
      * @throws \yii\base\Exception
-     * @return int data that were written to the file, or false on failure.
+     * @return int data that were written to the file, or false on failure
      */
     public function updateHistory(array $data)
     {
@@ -378,7 +377,7 @@ class Module extends \yii\base\Module
      * Writes given data to history.
      * @param array $data
      * @throws \yii\base\Exception
-     * @return int data that were written to the file, or false on failure.
+     * @return int data that were written to the file, or false on failure
      */
     public function writeHistory(array $data)
     {

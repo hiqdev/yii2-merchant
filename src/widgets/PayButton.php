@@ -1,12 +1,11 @@
 <?php
-
-/*
- * Yii2 extension for payment processing with Omnipay, Payum and more later
+/**
+ * Yii2 extension for payment processing with Omnipay, Payum and more later.
  *
  * @link      https://github.com/hiqdev/yii2-merchant
  * @package   yii2-merchant
  * @license   BSD-3-Clause
- * @copyright Copyright (c) 2015-2016, HiQDev (http://hiqdev.com/)
+ * @copyright Copyright (c) 2015-2017, HiQDev (http://hiqdev.com/)
  */
 
 namespace hiqdev\yii2\merchant\widgets;
@@ -76,7 +75,7 @@ class PayButton extends \yii\base\Widget
     }
 
     /**
-     * Extracts merchant name from the [[request]]
+     * Extracts merchant name from the [[request]].
      * @return string
      */
     public function getMerchantName()
@@ -85,7 +84,7 @@ class PayButton extends \yii\base\Widget
     }
 
     /**
-     * Renders the button comment. Normally triggers [[EVENT_RENDER_COMMENT]] event
+     * Renders the button comment. Normally triggers [[EVENT_RENDER_COMMENT]] event.
      */
     public function renderButtonComment()
     {
