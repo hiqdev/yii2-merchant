@@ -11,7 +11,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="col-md-offset-2 col-md-8">
         <div class="box <?= empty($requests) ? 'box-danger' : '' ?>">
             <div class="box-header with-border">
-                <h3 class="box-title"><?= Yii::t('merchant', 'Select payment methods') ?></h3>
+                <h3 class="box-title"><?= $this->title ?></h3>
             </div>
             <div class="box-body">
 

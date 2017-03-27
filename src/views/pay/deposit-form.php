@@ -9,7 +9,7 @@ use yii\widgets\ActiveForm;
  * @var \hiqdev\php\merchant\AbstractMerchant[] $availableMerchants
  */
 
-$this->title = Yii::t('merchant', 'Recharge account');
+$this->title = Yii::t('merchant', 'Account recharging');
 $this->params['breadcrumbs'][] = $this->title;
 PaymentIconsAsset::register(Yii::$app->getView());
 
@@ -26,6 +26,9 @@ foreach ($availableMerchants as $merchant) {
 <div class="row">
     <div class="col-md-offset-3 col-md-6">
         <div class="box">
+            <div class="box-header with-border">
+                <h3 class="box-title"><?= $this->title ?></h3>
+            </div>
             <div class="box-body">
                 <?php $form = ActiveForm::begin() ?>
                 <?php foreach ($model->attributes() as $attr): ?>
