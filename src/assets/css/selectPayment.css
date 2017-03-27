@@ -77,3 +77,14 @@
 .products-list .product-description {
     overflow: visible;
 }
+
+@media screen and (max-device-width: 480px) and (orientation: portrait){
+    .product-info > div > span {
+        display: none;
+    }
+    .products-list .product-description {
+        overflow: auto;
+        white-space: normal;
+        text-overflow: clip;
+    }
+}
