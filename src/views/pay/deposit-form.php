@@ -15,10 +15,10 @@ PaymentIconsAsset::register(Yii::$app->getView());
 
 $merchantNames = [];
 foreach ($availableMerchants as $merchant) {
-    if (isset($merchantNames[$merchant->getSimpleName()])) {
+    if (isset($merchantNames[$merchant->getGateway()])) {
         continue;
     }
-    $merchantNames[$merchant->getSimpleName()] = $merchant->getLabel();
+    $merchantNames[$merchant->getGateway()] = $merchant->getLabel();
 }
 
 ?>

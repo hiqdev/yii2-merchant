@@ -19,7 +19,7 @@ use yii\widgets\ActiveForm;
 
 <button type="submit" class="btn-block">
     <div class="product-img">
-        <i class="pi pi-sm pi-<?= $request->merchant->getSimpleName() ?>" style="float:right"></i>
+        <i class="pi pi-sm pi-<?= strtolower($request->merchant->getGateway()) ?>" style="float:right"></i>
     </div>
     <div class="product-info">
         <div class="product-title">
