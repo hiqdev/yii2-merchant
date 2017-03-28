@@ -10,8 +10,6 @@
 
 namespace hiqdev\yii2\merchant\controllers;
 
-use hiqdev\yii2\merchant\models\Deposit;
-use hiqdev\yii2\merchant\models\Merchant;
 use hiqdev\yii2\merchant\Module;
 use Yii;
 use yii\base\InvalidCallException;
@@ -19,7 +17,6 @@ use yii\base\UserException;
 use yii\helpers\Json;
 use yii\web\BadRequestHttpException;
 use yii\web\Response;
-use yii\web\Session;
 
 class PayController extends \yii\web\Controller
 {
@@ -153,6 +150,10 @@ class PayController extends \yii\web\Controller
     public function actionRequest()
     {
         $merchant   = Yii::$app->request->post('merchant');
+        if (empty($merchant)) {
+            throw new BadRequestHttpException('Merchant is missing');
+        }
+
         $data       = Json::decode(Yii::$app->request->post('data', '{}'));
         $merchant   = $this->getMerchantModule()->getMerchant($merchant, $data);
         $request    = $merchant->request('purchase', $data);
