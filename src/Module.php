@@ -16,8 +16,12 @@ use hiqdev\php\merchant\Helper;
 use hiqdev\yii2\merchant\Collection;
 use hiqdev\yii2\merchant\models\Deposit;
 use hiqdev\yii2\merchant\controllers\PayController;
+use hiqdev\yii2\merchant\transactions\Transaction;
+use hiqdev\yii2\merchant\transactions\TransactionException;
+use hiqdev\yii2\merchant\transactions\TransactionRepositoryInterface;
 use Yii;
 use yii\base\InvalidConfigException;
+use yii\helpers\ArrayHelper;
 use yii\helpers\FileHelper;
 use yii\helpers\Json;
 use yii\helpers\Url;
@@ -80,6 +84,16 @@ class Module extends \yii\base\Module
      * @var array|Closure list of merchants
      */
     protected $_collection = [];
+    /**
+     * @var TransactionRepositoryInterface
+     */
+    protected $transactionRepository;
+
+    public function __construct($id, $parent = null, TransactionRepositoryInterface $transactionRepository, array $config = [])
+    {
+        parent::__construct($id, $parent, $config);
+        $this->transactionRepository = $transactionRepository;
+    }
 
     /**
      * @param array $params parameters for collection
@@ -312,70 +326,52 @@ class Module extends \yii\base\Module
         return $this->getPayController()->renderDeposit($params);
     }
 
-    public function completeHistory(array $data)
+    public function completeTransaction(array $data)
     {
-        $history = $this->readHistory($data);
-        if (isset($history['_isCompleted']) && $history['_isCompleted']) {
-            return $history;
-        }
-        $data['_isCompleted'] = !isset($data['_error']) && $data['id'];
-        if ($data['_isCompleted']) {
-            $data['_error'] = null;
+        $transaction = $this->transactionRepository->findById($data['id']);
+        if ($transaction->isCompleted()) {
+            return $transaction;
         }
 
-        return $this->updateHistory($data);
+        if (isset($data['_error'])) {
+            $transaction->cancel();
+            $transaction->addParameter('_error', $data['error']);
+        }
+
+        $transaction->confirm();
+        $transaction->addParameter('bill_id', $data['id']);
+
+        return $this->transactionRepository->save($transaction);
+    }
+
+    public function createTransaction($data)
+    {
+        $id = ArrayHelper::remove($data, 'transactionId', uniqid());
+        $merchant = ArrayHelper::remove($data, 'merchant');
+        if (empty($merchant)) {
+            throw new InvalidConfigException('Merchant is required to create a transaction');
+        }
+
+        return $this->transactionRepository->create($id, $merchant, $data);
+    }
+
+    public function insertTransaction($data)
+    {
+        $transaction = $this->createTransaction($data);
+
+        return $this->transactionRepository->insert($transaction);
     }
 
     /**
-     * Merges the existing history with the given $data.
-     * @param array $data
-     * @throws \yii\base\Exception
-     * @return int data that were written to the file, or false on failure
+     * @param string $id transaction ID
+     * @return Transaction|null
      */
-    public function updateHistory(array $data)
+    public function findTransaction($id)
     {
-        return $this->writeHistory(array_merge($this->readHistory($data), $data));
-    }
-
-    /**
-     * Writes given data to history.
-     * @param array $data
-     * @throws \yii\base\Exception
-     * @return int data that were written to the file, or false on failure
-     */
-    public function writeHistory(array $data)
-    {
-        $path = $this->getHistoryPath($data);
-
-        FileHelper::createDirectory(dirname($path));
-        $res = file_put_contents($path, Json::encode($data));
-
-        return $res === false ? $res : $data;
-    }
-
-    /**
-     * Reads history.
-     *
-     * @param string|array $data
-     * @return array
-     */
-    public function readHistory($data)
-    {
-        $path = $this->getHistoryPath($data);
-
-        return file_exists($path) ? Json::decode(file_get_contents($path)) : [];
-    }
-
-    /**
-     * Returns path for the transaction log depending on $transactionId.
-     *
-     * @param string|array $data transactionId or array containing transactionId
-     * @return bool|string Path to the transaction log
-     */
-    protected function getHistoryPath($data)
-    {
-        $transactionId = is_array($data) ? $data['transactionId'] : $data;
-
-        return Yii::getAlias('@runtime/merchant/' . substr(md5($transactionId), 0, 2) . '/' . $transactionId . '.json');
+        try {
+            return $this->transactionRepository->findById($id);
+        } catch (TransactionException $e) {
+            return null;
+        }
     }
 }

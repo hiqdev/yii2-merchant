@@ -11,8 +11,10 @@
 namespace hiqdev\yii2\merchant\controllers;
 
 use hiqdev\yii2\merchant\Module;
+use hiqdev\yii2\merchant\transactions\Transaction;
 use Yii;
 use yii\base\InvalidCallException;
+use yii\base\InvalidConfigException;
 use yii\base\UserException;
 use yii\helpers\Json;
 use yii\web\BadRequestHttpException;
@@ -71,15 +73,17 @@ class PayController extends \yii\web\Controller
     public function actionCheckReturn($transactionId)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        $data = $this->getMerchantModule()->readHistory($transactionId);
+        $transaction = $this->getMerchantModule()->findTransaction($transactionId);
 
-        if ($data['username'] !== $this->getMerchantModule()->username) {
+        if ($transaction->getParameter('username') !== $this->getMerchantModule()->getUsername()) {
             throw new BadRequestHttpException('Access denied', 403);
         }
 
         return [
-            'status' => $data['_isCompleted'],
-            'url'    => $data['_isCompleted'] ? $data['finishUrl'] : $data['cancelUrl'],
+            'status' => $transaction->getStatus(),
+            'url'    => $transaction->isConfirmed()
+                ? $transaction->getParameter('finishUrl')
+                : $transaction->getParameter('cancelUrl'),
         ];
     }
 
@@ -90,22 +94,20 @@ class PayController extends \yii\web\Controller
      */
     public function actionNotify()
     {
-        $result = $this->checkNotify();
+        $transaction = $this->checkNotify();
         Yii::$app->response->format = Response::FORMAT_RAW;
 
-        return $result['_isCompleted'] ? 'OK' : $result['_error'];
+        return $transaction->isConfirmed() ? 'OK' : $transaction->getParameter('error');
     }
 
     /**
      * Check notifications.
      * TODO: implement actual request check and proper handling.
-     * @return array
+     * @return Transaction
      */
     public function checkNotify()
     {
-        $result = $_REQUEST;
-
-        return $this->completeHistory($result);
+        throw new InvalidConfigException('Method checkNotify must be implemented');
     }
 
     public function actionDeposit()
@@ -159,8 +161,9 @@ class PayController extends \yii\web\Controller
         $data       = Json::decode(Yii::$app->request->post('data', '{}'));
         $merchant   = $this->getMerchantModule()->getMerchant($merchant, $data);
         $request    = $merchant->request('purchase', $data);
-
-        $this->getMerchantModule()->writeHistory(array_merge($data, ['username' => $this->getMerchantModule()->username]));
+        $this->getMerchantModule()->insertTransaction(array_merge($data, [
+            'username' => $this->getMerchantModule()->getUsername()
+        ]));
 
         $response   = $request->send();
 
