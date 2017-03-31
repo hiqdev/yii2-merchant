@@ -95,6 +95,10 @@ class PayController extends \yii\web\Controller
     public function actionNotify()
     {
         $transaction = $this->checkNotify();
+        if ($transaction === null) {
+            return 'Unknown transaction';
+        }
+
         Yii::$app->response->format = Response::FORMAT_RAW;
 
         return $transaction->isConfirmed() ? 'OK' : $transaction->getParameter('error');
