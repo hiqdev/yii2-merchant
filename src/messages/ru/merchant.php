@@ -27,6 +27,8 @@
  */
 return [
     'Sum' => 'Сумма',
+    'Available payment methods' => 'Доступные методы оплаты',
+    'Enter the amount of the replenishment in dollars. For example: 8.79' => 'Введите сумму пополнения в долларах. Например: 8,79',
     'Important information' => 'Важная информация',
     'Select payment method' => 'Выберите способ оплаты',
     'We support fully automatic account depositing with the following payment systems: {merchants}' => 'Мы принимаем к оплате в автоматическом режиме следующие платежные системы: {merchants}',
