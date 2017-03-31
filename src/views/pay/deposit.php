@@ -10,9 +10,6 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="row">
     <div class="col-md-8">
         <div class="box <?= empty($requests) ? 'box-danger' : '' ?>">
-            <div class="box-header with-border">
-                <h3 class="box-title"><?= $this->title ?></h3>
-            </div>
             <div class="box-body">
 
                 <?php if (empty($requests)) : ?>
