@@ -326,20 +326,15 @@ class Module extends \yii\base\Module
         return $this->getPayController()->renderDeposit($params);
     }
 
-    public function completeTransaction(array $data)
+    /**
+     * @param Transaction $transaction
+     * @return Transaction
+     */
+    public function saveTransaction($transaction)
     {
-        $transaction = $this->transactionRepository->findById($data['id']);
         if ($transaction->isCompleted()) {
             return $transaction;
         }
-
-        if (isset($data['_error'])) {
-            $transaction->cancel();
-            $transaction->addParameter('_error', $data['error']);
-        }
-
-        $transaction->confirm();
-        $transaction->addParameter('bill_id', $data['id']);
 
         return $this->transactionRepository->save($transaction);
     }

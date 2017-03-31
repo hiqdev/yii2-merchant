@@ -80,7 +80,7 @@ class PayController extends \yii\web\Controller
         }
 
         return [
-            'status' => $transaction->getStatus(),
+            'status' => $transaction->getSuccess(),
             'url'    => $transaction->isConfirmed()
                 ? $transaction->getParameter('finishUrl')
                 : $transaction->getParameter('cancelUrl'),

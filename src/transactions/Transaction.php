@@ -17,7 +17,7 @@ class Transaction
     /**
      * @var boolean
      */
-    protected $status;
+    protected $success;
 
     /**
      * @var string
@@ -45,31 +45,31 @@ class Transaction
      */
     public function isCompleted()
     {
-        return $this->status !== null;
+        return $this->success !== null;
     }
 
-    public function confirm()
+    public function complete()
     {
-        $this->status = true;
+        $this->success = true;
     }
 
     public function cancel($error = null)
     {
-        $this->status = false;
+        $this->success = false;
         $this->addParameter('error', $error);
     }
 
     public function isConfirmed()
     {
-        return $this->status === true;
+        return $this->success === true;
     }
 
     /**
      * @return bool
      */
-    public function getStatus()
+    public function getSuccess()
     {
-        return $this->status;
+        return $this->success;
     }
 
     /**
@@ -120,7 +120,7 @@ class Transaction
             'id' => $this->getId(),
             'merchant' => $this->getMerchant(),
             'parameters' => $this->getParameters(),
-            'status' => $this->getStatus()
+            'success' => $this->getSuccess()
         ];
     }
 
