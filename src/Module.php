@@ -332,10 +332,6 @@ class Module extends \yii\base\Module
      */
     public function saveTransaction($transaction)
     {
-        if ($transaction->isCompleted()) {
-            return $transaction;
-        }
-
         return $this->transactionRepository->save($transaction);
     }
 
