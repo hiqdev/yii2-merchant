@@ -17,7 +17,7 @@ use yii\widgets\ActiveForm;
 <?= Html::hiddenInput('type', $request->getType()) ?>
 <?= Html::hiddenInput('data', Json::encode($request->data)) ?>
 
-<button type="submit" class="btn-block">
+<button type="submit" class="btn-block"<?= $request->merchant->data['system_state'] === 'disabled' ? " disabled" : "" ?>>
     <div class="product-img">
         <i class="pi pi-sm pi-<?= strtolower($request->merchant->getGateway()) ?>" style="float:right"></i>
     </div>
