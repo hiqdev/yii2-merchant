@@ -156,7 +156,7 @@ class Module extends \yii\base\Module
     {
         $data = array_merge([
             'merchant'      => $merchant,
-            'description'   => Yii::$app->request->getServerName() . ' deposit: ' . $this->username,
+            'description'   => Yii::$app->request->getHostName() . ' deposit: ' . $this->username,
             'transactionId' => uniqid(),
         ], $data);
 
