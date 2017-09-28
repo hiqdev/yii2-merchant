@@ -9,8 +9,12 @@
 [![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/hiqdev/yii2-merchant.svg)](https://scrutinizer-ci.com/g/hiqdev/yii2-merchant/)
 [![Dependency Status](https://www.versioneye.com/php/hiqdev:yii2-merchant/dev-master/badge.svg)](https://www.versioneye.com/php/hiqdev:yii2-merchant/dev-master)
 
-This [Yii2](http://yiiframework.com/) extension provides payment gateways integration with use of
-[Omnipay](http://omnipay.thephpleague.com/) and [Payum](http://payum.org/) payment processing libraries.
+This [Yii2] extension provides payment gateways integration with use of
+[Omnipay] and [Payum] payment processing libraries.
+
+[Yii2]:     http://yiiframework.com/
+[Omnipay]:  http://omnipay.thephpleague.com/
+[Payum]:    http://payum.org/
 
 ## Installation
 

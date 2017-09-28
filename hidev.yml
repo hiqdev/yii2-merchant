@@ -6,6 +6,9 @@ package:
     keywords:       yii2, merchant, payment, omnipay, payum
     namespace:      hiqdev\yii2\merchant
     description:    |
-        This [Yii2](http://yiiframework.com/) extension provides payment gateways integration with use of
-        [Omnipay](http://omnipay.thephpleague.com/) and [Payum](http://payum.org/) payment processing libraries.
+        This [Yii2] extension provides payment gateways integration with use of
+        [Omnipay] and [Payum] payment processing libraries.
 
+        [Yii2]:     http://yiiframework.com/
+        [Omnipay]:  http://omnipay.thephpleague.com/
+        [Payum]:    http://payum.org/
