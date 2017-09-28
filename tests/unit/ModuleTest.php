@@ -19,7 +19,7 @@ use yii\web\Application;
 /**
  * Module test suite.
  */
-class ModuleTest extends \PHPUnit_Framework_TestCase
+class ModuleTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Module
@@ -56,6 +56,11 @@ class ModuleTest extends \PHPUnit_Framework_TestCase
                     'returnPage' => '/merchant/pay/return',
                     'cancelPage' => '/merchant/pay/cancel',
                     'collection' => $this->gateways,
+                ],
+            ],
+            'container' => [
+                'singletons' => [
+                    \hiqdev\yii2\merchant\transactions\TransactionRepositoryInterface::class => \hiqdev\yii2\merchant\tests\unit\FakeTransactionRepository::class,
                 ],
             ],
         ]);

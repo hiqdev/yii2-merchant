@@ -95,6 +95,10 @@ class Module extends \yii\base\Module
         $this->transactionRepository = $transactionRepository;
     }
 
+    public function setCollection(array $collection)
+    {
+        $this->_collection = $collection;
+    }
     /**
      * @param array $params parameters for collection
      * @return AbstractMerchant[] list of merchants
