@@ -30,6 +30,7 @@ trait MerchantTrait
             [['signature'],         'string'],
             [['total', 'fee'],      'number'],
             [['commission'],        'number'],
+            [['system_state'],      'string'],
         ];
     }
 
