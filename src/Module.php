@@ -14,8 +14,10 @@ use Closure;
 use hiqdev\php\merchant\AbstractMerchant;
 use hiqdev\php\merchant\Helper;
 use hiqdev\yii2\merchant\Collection;
-use hiqdev\yii2\merchant\models\Deposit;
+use hiqdev\yii2\merchant\models\DepositForm;
 use hiqdev\yii2\merchant\controllers\PayController;
+use hiqdev\yii2\merchant\models\DepositRequest;
+use hiqdev\yii2\merchant\models\PurchaseRequest;
 use hiqdev\yii2\merchant\transactions\Transaction;
 use hiqdev\yii2\merchant\transactions\TransactionException;
 use hiqdev\yii2\merchant\transactions\TransactionRepositoryInterface;
@@ -66,24 +68,14 @@ class Module extends \yii\base\Module
     const URL_PREFIX = 'merchant_url_';
 
     /**
-     * @var string merchant library name. Defaults to `Omnipay`
-     */
-    public $merchantLibrary = 'Omnipay';
-
-    /**
      * @var string merchant collection class name. Defaults to [[Collection]]
      */
-    public $collectionClass = Collection::class;
+    public $purchaseRequestCollectionClass = Collection::class;
 
     /**
      * @var string Deposit model class name. Defaults to [[Deposit]]
      */
-    public $depositClass = Deposit::class;
-
-    /**
-     * @var array|Closure list of merchants
-     */
-    protected $_collection = [];
+    public $depositClass = DepositForm::class;
     /**
      * @var TransactionRepositoryInterface
      */
@@ -92,6 +84,7 @@ class Module extends \yii\base\Module
     public function __construct($id, $parent = null, TransactionRepositoryInterface $transactionRepository, array $config = [])
     {
         parent::__construct($id, $parent, $config);
+
         $this->transactionRepository = $transactionRepository;
     }
 
@@ -99,27 +92,28 @@ class Module extends \yii\base\Module
     {
         $this->_collection = $collection;
     }
+
     /**
-     * @param array $params parameters for collection
-     * @return AbstractMerchant[] list of merchants
+     * @param DepositRequest $depositRequest
+     * @return PurchaseRequest[] list of merchants
      */
-    public function getCollection(array $params = [])
+    public function getPurchaseRequestCollection($depositRequest = null)
     {
-        return Yii::createObject(array_merge([
-            'class'  => $this->collectionClass,
+        return Yii::createObject([
+            'class'  => $this->purchaseRequestCollectionClass,
             'module' => $this,
-            'params' => $params,
-        ], (array) $this->_collection));
+            'depositRequest' => $depositRequest,
+        ]);
     }
 
     /**
-     * @param string $id merchant id
-     * @param array $params parameters for collection
-     * @return AbstractMerchant merchant instance
+     * @param string $merchant_name merchant id
+     * @param DepositRequest $depositRequest
+     * @return PurchaseRequest merchant instance
      */
-    public function getMerchant($id, array $params = [])
+    public function getPurchaseRequest($merchant_name, DepositRequest $depositRequest)
     {
-        return $this->getCollection($params)->get($id);
+        return $this->getPurchaseRequestCollection($depositRequest)->get($merchant_name);
     }
 
     /**
@@ -128,50 +122,24 @@ class Module extends \yii\base\Module
      * @param string $id merchant id
      * @return bool whether merchant exist
      */
-    public function hasMerchant($id)
+    public function hasPurchaseRequest($id)
     {
-        return $this->getCollection()->has($id);
-    }
-
-    /**
-     * Creates merchant instance from its array configuration.
-     *
-     * @param string $id     ID
-     * @param array  $config merchant instance configuration
-     * @return AbstractMerchant merchant instance
-     */
-    public function createMerchant($id, array $config)
-    {
-        return Helper::create(array_merge([
-            'library'   => $this->merchantLibrary,
-            'gateway'   => $id,
-            'id'        => $id,
-        ], $config));
+        return $this->getPurchaseRequestCollection()->has($id);
     }
 
     /**
      * Method builds data for merchant request.
      *
-     * @param string $merchant
-     * @param array  $data     request data
+     * @param DepositRequest $depositRequest
      * @return array
      */
-    public function prepareRequestData($merchant, array $data)
+    public function prepareRequestData($depositRequest)
     {
-        $data = array_merge([
-            'merchant'      => $merchant,
-            'description'   => Yii::$app->request->getHostName() . ' deposit: ' . $this->username,
-            'transactionId' => uniqid(),
-        ], $data);
-
-        return array_merge([
-            'notifyUrl'     => $this->buildUrl('notify', $data),
-            'returnUrl'     => $this->buildUrl('return', $data),
-            'cancelUrl'     => $this->buildUrl('cancel', $data),
-            'finishUrl'     => $this->buildUrl('finish', $data),
-            'returnMethod'  => 'POST',
-            'cancelMethod'  => 'POST',
-        ], $data);
+        $depositRequest->username = $this->getUsername();
+        $depositRequest->notifyUrl = $this->buildUrl('notify', $depositRequest);
+        $depositRequest->returnUrl = $this->buildUrl('return', $depositRequest);
+        $depositRequest->cancelUrl = $this->buildUrl('cancel', $depositRequest);
+        $depositRequest->finishUrl = $this->buildUrl('finish', $depositRequest);
     }
 
     /**
@@ -235,17 +203,17 @@ class Module extends \yii\base\Module
      * Builds URLs that will be passed in the request to the merchant.
      *
      * @param string $destination `notify`, `return`, `cancel`
-     * @param array  $data data, that will be used to build URL. Only `merchant` and `transactionId` keys
-     * will be used from the array
+     * @param DepositRequest $depositRequest
      * @return string URL
      */
-    public function buildUrl($destination, array $data)
+    public function buildUrl($destination, DepositRequest $depositRequest)
     {
-        $page = array_merge([
-            'username'      => $this->username,
-            'merchant'      => $data['merchant'],
-            'transactionId' => $data['transactionId'],
-        ], (array) $this->getPage($destination, $data));
+        $page = [
+            $this->getPage($destination),
+            'username'      => $depositRequest->username,
+            'merchant'      => $depositRequest->merchant,
+            'transactionId' => $depositRequest->id,
+        ];
 
         if (is_array($page)) {
             $page[0] = $this->localizePage($page[0]);
@@ -266,12 +234,9 @@ class Module extends \yii\base\Module
         return is_string($page) && $page[0] !== '/' ? ('/' . $this->id . '/pay/' . $page) : $page;
     }
 
-    public function getPage($destination, array $data)
+    public function getPage($destination)
     {
         $name = $destination . 'Page';
-        if (isset($data[$name])) {
-            return $data[$name];
-        }
 
         return $this->hasProperty($name) ? $this->{$name} : $destination;
     }
@@ -339,20 +304,9 @@ class Module extends \yii\base\Module
         return $this->transactionRepository->save($transaction);
     }
 
-    public function createTransaction($data)
+    public function insertTransaction($id, $merchant, $data)
     {
-        $id = ArrayHelper::remove($data, 'transactionId', uniqid());
-        $merchant = ArrayHelper::remove($data, 'merchant');
-        if (empty($merchant)) {
-            throw new InvalidConfigException('Merchant is required to create a transaction');
-        }
-
-        return $this->transactionRepository->create($id, $merchant, $data);
-    }
-
-    public function insertTransaction($data)
-    {
-        $transaction = $this->createTransaction($data);
+        $transaction = $this->transactionRepository->create($id, $merchant, $data);
 
         return $this->transactionRepository->insert($transaction);
     }

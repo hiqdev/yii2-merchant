@@ -12,8 +12,11 @@ namespace hiqdev\yii2\merchant\widgets;
 
 use hiqdev\paymenticons\yii2\PaymentIconsAsset;
 use hiqdev\php\merchant\AbstractRequest;
+use hiqdev\yii2\merchant\models\DepositRequest;
+use hiqdev\yii2\merchant\models\PurchaseRequest;
 use Yii;
 use yii\base\Event;
+use yii\helpers\Json;
 
 /**
  * Class PayButton.
@@ -23,7 +26,7 @@ class PayButton extends \yii\base\Widget
     const EVENT_RENDER_COMMENT = 'renderComment';
 
     /**
-     * @var AbstractRequest
+     * @var PurchaseRequest
      */
     public $request;
 
@@ -71,6 +74,7 @@ class PayButton extends \yii\base\Widget
         return $this->render('pay-button', [
             'widget' => $this,
             'request' => $this->request,
+            'depositRequest' => new DepositRequest()
         ]);
     }
 
@@ -80,7 +84,12 @@ class PayButton extends \yii\base\Widget
      */
     public function getMerchantName()
     {
-        return $this->request->merchant->id;
+        return $this->request->merchant_name;
+    }
+
+    public function getButtonData()
+    {
+        return Json::encode($this->request->getFormInputs());
     }
 
     /**
@@ -93,6 +102,6 @@ class PayButton extends \yii\base\Widget
 
     public function formatMoney($sum)
     {
-        return Yii::$app->formatter->format($sum, ['currency', $this->request->getCurrency()]);
+        return Yii::$app->formatter->format($sum, ['currency', $this->request->currency]);
     }
 }

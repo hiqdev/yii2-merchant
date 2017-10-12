@@ -10,14 +10,16 @@
 
 namespace hiqdev\yii2\merchant\controllers;
 
+use hiqdev\yii2\merchant\models\DepositForm;
+use hiqdev\yii2\merchant\models\DepositRequest;
 use hiqdev\yii2\merchant\Module;
 use hiqdev\yii2\merchant\transactions\Transaction;
 use Yii;
 use yii\base\InvalidCallException;
 use yii\base\InvalidConfigException;
 use yii\base\UserException;
-use yii\helpers\Json;
 use yii\web\BadRequestHttpException;
+use yii\web\HttpException;
 use yii\web\Response;
 
 class PayController extends \yii\web\Controller
@@ -119,34 +121,27 @@ class PayController extends \yii\web\Controller
         $model   = Yii::createObject($this->getMerchantModule()->depositClass);
         $request = Yii::$app->request;
         if ($model->load($request->isPost ? $request->post() : $request->get()) && $model->validate()) {
-            return $this->renderDeposit($model->getAttributes());
+            return $this->renderDeposit($model);
         }
 
         return $this->render('deposit-form', [
             'model' => $model,
-            'availableMerchants' => $this->getMerchantModule()->getCollection()->getItems(),
+            'availableMerchants' => $this->getMerchantModule()->getPurchaseRequestCollection()->getItems(),
         ]);
     }
 
     /**
      * Renders depositing buttons for given request data.
      *
-     * @param array $data request data:
-     *  - `sum` - the amount of payment without fees
-     *  - `currency` - the currency of transaction
-     *  - `finishPage/Url` - page or URL to redirect user after the payment
-     *  - `returnPage/Url` - page or URL to return user from payment system on success
-     *  - `cancelPage/Url` - page or URL to return user from payment system on fail
-     *  - `notifyPage/Url` - page or URL used by payment system to notify us on successful payment
+     * @param DepositForm $form request data:
      * @return \yii\web\Response
      */
-    public function renderDeposit(array $data)
+    public function renderDeposit($form)
     {
-        $merchants = $this->getMerchantModule()->getCollection($data)->getItems();
-        $requests = [];
-        foreach ($merchants as $id => $merchant) {
-            $requests[$id] = $merchant->request('purchase', $this->getMerchantModule()->prepareRequestData($id, $data));
-        }
+        $request = new DepositRequest();
+        $request->amount = $form->sum;
+
+        $requests = $this->getMerchantModule()->getPurchaseRequestCollection($request)->getItems();
 
         return $this->render('deposit', compact('requests'));
     }
@@ -157,27 +152,56 @@ class PayController extends \yii\web\Controller
      */
     public function actionRequest()
     {
-        $merchant   = Yii::$app->request->post('merchant');
-        if (empty($merchant)) {
-            throw new BadRequestHttpException('Merchant is missing');
+        $depositRequest = new DepositRequest();
+        $depositRequest->load(Yii::$app->request->post());
+        if (!$depositRequest->validate()) {
+            throw new BadRequestHttpException('Deposit request is not loaded');
         }
 
-        $data       = Json::decode(Yii::$app->request->post('data', '{}'));
-        $merchant   = $this->getMerchantModule()->getMerchant($merchant, $data);
-        $request    = $merchant->request('purchase', $data);
-        $this->getMerchantModule()->insertTransaction(array_merge($data, [
-            'username' => $this->getMerchantModule()->getUsername()
-        ]));
+        $this->getMerchantModule()->prepareRequestData($depositRequest);
+        $merchant = $this->getMerchantModule()->getPurchaseRequest($depositRequest->merchant, $depositRequest);
+        $this->getMerchantModule()->insertTransaction($depositRequest->id, $depositRequest->merchant, array_merge([
+            'username' => $depositRequest->username,
+        ], $depositRequest->toArray()));
 
-        $response   = $request->send();
+        if ('GET' === $merchant->getFormMethod()) {
+            return $this->redirect($merchant->getFormAction());
+        } elseif ('POST' === $merchant->getFormMethod()) {
+            $hiddenFields = '';
+            foreach ($merchant->getFormInputs() as $key => $value) {
+                $hiddenFields .= sprintf(
+                        '<input type="hidden" name="%1$s" value="%2$s" />',
+                        htmlentities($key, ENT_QUOTES, 'UTF-8', false),
+                        htmlentities($value, ENT_QUOTES, 'UTF-8', false)
+                    )."\n";
+            }
 
-        if ($response->isSuccessful()) {
-            throw new InvalidCallException('Instant payment is not implemented yet');
-//            $merchant->registerMoney($response);
-        } elseif ($response->isRedirect()) {
-            $response->redirect();
-        } else {
-            throw new UserException('Merchant request failed');
+            $output = '<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>Redirecting...</title>
+    </head>
+    <body onload="document.forms[0].submit();">
+        <form action="%1$s" method="post">
+            <p>Redirecting to payment page...</p>
+            <p>
+                %2$s
+                <input type="submit" value="Continue" />
+            </p>
+        </form>
+    </body>
+</html>';
+            $output = sprintf(
+                $output,
+                htmlentities($merchant->getFormAction(), ENT_QUOTES, 'UTF-8', false),
+                $hiddenFields
+            );
+
+            echo $output;
+            Yii::$app->end();
         }
+
+        throw new BadRequestHttpException();
     }
 }

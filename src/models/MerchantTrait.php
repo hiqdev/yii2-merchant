@@ -25,11 +25,13 @@ trait MerchantTrait
         return [
             [['name', 'system'],    'string'],
             [['purse'],             'string'],
+            [['method'],            'string'],
             [['currency'],          'string'],
-            [['username'],          'string'],
-            [['signature'],         'string'],
-            [['total', 'fee'],      'number'],
+            [['label'],             'string'],
+            [['amount', 'fee'],     'number'],
             [['commission'],        'number'],
+            [['invoice_id'],        'number'],
+            [['action'],            'string'],
         ];
     }
 
@@ -42,7 +44,7 @@ trait MerchantTrait
             'name'       => Yii::t('merchant', 'Name'),
             'system'     => Yii::t('merchant', 'Payment System'),
             'purse'      => Yii::t('merchant', 'Purse'),
-            'total'      => Yii::t('merchant', 'Total'),
+            'amount'      => Yii::t('merchant', 'Amount'),
             'fee'        => Yii::t('merchant', 'Fee'),
             'currency'   => Yii::t('merchant', 'Currency'),
             'signature'  => Yii::t('merchant', 'Signature'),

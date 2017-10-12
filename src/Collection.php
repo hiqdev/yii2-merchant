@@ -10,15 +10,17 @@
 
 namespace hiqdev\yii2\merchant;
 
+use hiqdev\yii2\merchant\models\DepositRequest;
+
 /**
  * Merchants Collection.
  */
 class Collection extends \hiqdev\yii2\collection\Manager
 {
     /**
-     * @var array
+     * @var DepositRequest
      */
-    public $params = [];
+    public $depositRequest = [];
 
     /**
      * @var Module

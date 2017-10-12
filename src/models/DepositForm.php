@@ -16,7 +16,7 @@ use yii\base\Model;
 /**
  * Class Deposit.
  */
-class Deposit extends Model
+class DepositForm extends Model
 {
     /**
      * @var float the amount of money
@@ -32,12 +32,13 @@ class Deposit extends Model
             [['amount'], 'number'],
             [['amount'], 'required'],
             [['amount'], 'compare', 'operator' => '>', 'compareValue' => 0],
+            [['merchant'], 'string']
         ];
     }
 
     public function attributes()
     {
-        return ['amount'];
+        return ['amount', 'merchant'];
     }
 
     /**

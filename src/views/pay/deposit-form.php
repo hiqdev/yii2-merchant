@@ -6,7 +6,7 @@ use yii\widgets\ActiveForm;
 
 /**
  * @var \yii\web\View $this
- * @var \hiqdev\php\merchant\AbstractMerchant[] $availableMerchants
+ * @var \hiqdev\yii2\merchant\models\PurchaseRequest[] $availableMerchants
  */
 
 $this->title = Yii::t('merchant', 'Account recharging');
@@ -15,10 +15,7 @@ PaymentIconsAsset::register(Yii::$app->getView());
 
 $merchantNames = [];
 foreach ($availableMerchants as $merchant) {
-    if (isset($merchantNames[$merchant->getGateway()])) {
-        continue;
-    }
-    $merchantNames[$merchant->getGateway()] = $merchant->getLabel();
+    $merchantNames[$merchant->system] = $merchant->label;
 }
 
 ?>
