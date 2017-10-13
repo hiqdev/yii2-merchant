@@ -159,21 +159,21 @@ class PayController extends \yii\web\Controller
         }
 
         $this->getMerchantModule()->prepareRequestData($depositRequest);
-        $merchant = $this->getMerchantModule()->getPurchaseRequest($depositRequest->merchant, $depositRequest);
+        $request = $this->getMerchantModule()->getPurchaseRequest($depositRequest->merchant, $depositRequest);
         $this->getMerchantModule()->insertTransaction($depositRequest->id, $depositRequest->merchant, array_merge([
             'username' => $depositRequest->username,
         ], $depositRequest->toArray()));
 
-        if ('GET' === $merchant->getFormMethod()) {
-            return $this->redirect($merchant->getFormAction());
-        } elseif ('POST' === $merchant->getFormMethod()) {
+        if ('GET' === $request->getFormMethod()) {
+            return $this->redirect($request->getFormAction());
+        } elseif ('POST' === $request->getFormMethod()) {
             $hiddenFields = '';
-            foreach ($merchant->getFormInputs() as $key => $value) {
+            foreach ($request->getFormInputs() as $key => $value) {
                 $hiddenFields .= sprintf(
-                        '<input type="hidden" name="%1$s" value="%2$s" />',
-                        htmlentities($key, ENT_QUOTES, 'UTF-8', false),
-                        htmlentities($value, ENT_QUOTES, 'UTF-8', false)
-                    )."\n";
+                    '<input type="hidden" name="%1$s" value="%2$s" />',
+                    htmlentities($key, ENT_QUOTES, 'UTF-8', false),
+                    htmlentities($value, ENT_QUOTES, 'UTF-8', false)
+                )."\n";
             }
 
             $output = '<!DOCTYPE html>
@@ -194,7 +194,7 @@ class PayController extends \yii\web\Controller
 </html>';
             $output = sprintf(
                 $output,
-                htmlentities($merchant->getFormAction(), ENT_QUOTES, 'UTF-8', false),
+                htmlentities($request->getFormAction(), ENT_QUOTES, 'UTF-8', false),
                 $hiddenFields
             );
 
