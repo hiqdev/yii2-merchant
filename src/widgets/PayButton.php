@@ -12,6 +12,7 @@ namespace hiqdev\yii2\merchant\widgets;
 
 use hiqdev\paymenticons\yii2\PaymentIconsAsset;
 use hiqdev\php\merchant\AbstractRequest;
+use hiqdev\yii2\merchant\models\DepositForm;
 use hiqdev\yii2\merchant\models\DepositRequest;
 use hiqdev\yii2\merchant\models\PurchaseRequest;
 use Yii;
@@ -29,6 +30,11 @@ class PayButton extends \yii\base\Widget
      * @var PurchaseRequest
      */
     public $request;
+
+    /**
+     * @var DepositForm
+     */
+    public $depositForm;
 
     /**
      * @var array|string the URL for action
@@ -60,8 +66,7 @@ class PayButton extends \yii\base\Widget
      */
     public function run()
     {
-        parent::run();
-        echo $this->renderButton();
+        return $this->renderButton();
     }
 
     /**
@@ -74,7 +79,11 @@ class PayButton extends \yii\base\Widget
         return $this->render('pay-button', [
             'widget' => $this,
             'request' => $this->request,
-            'depositRequest' => new DepositRequest()
+            'depositRequest' => new DepositRequest([
+                'id' => $this->request->id,
+                'amount' => $this->depositForm->amount,
+                'merchant' => $this->getMerchantName()
+            ])
         ]);
     }
 

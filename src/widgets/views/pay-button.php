@@ -12,9 +12,9 @@ use yii\widgets\ActiveForm;
  */
 ?>
 <?php $form = ActiveForm::begin(['action' => $widget->action]) ?>
-<?= Html::activeHiddenInput($depositRequest, 'id', ['value' => $request->id]) ?>
-<?= Html::activeHiddenInput($depositRequest, 'amount', ['value' => $request->amount]) ?>
-<?= Html::activeHiddenInput($depositRequest, 'merchant', ['value' => $request->merchant_name]) ?>
+<?= Html::activeHiddenInput($depositRequest, 'id') ?>
+<?= Html::activeHiddenInput($depositRequest, 'amount') ?>
+<?= Html::activeHiddenInput($depositRequest, 'merchant') ?>
 
 <button type="submit" class="btn-block">
     <div class="product-img">

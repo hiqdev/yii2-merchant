@@ -6,6 +6,7 @@ use yii\helpers\Html;
 /**
  * @var \yii\web\View $this
  * @var \hiqdev\yii2\merchant\models\PurchaseRequest[] $requests
+ * @var \hiqdev\yii2\merchant\models\DepositForm $depositForm
  */
 
 $this->title = Yii::t('merchant', 'Select payment method');
@@ -23,7 +24,14 @@ $this->params['breadcrumbs'][] = $this->title;
                     <ul class="products-list product-list-in-box">
                         <?php foreach ($requests as $request) : ?>
                             <li class="item">
-                                <?= PayButton::widget(compact('request')) ?>
+                                <?php
+                                /** @var PayButton $payButton */
+                                $payButton = Yii::createObject([
+                                    'class' => PayButton::class,
+                                    'request' => $request,
+                                    'depositForm' => $depositForm
+                                ]); ?>
+                                <?= $payButton->run() ?>
                             </li>
                         <?php endforeach ?>
                     </ul>

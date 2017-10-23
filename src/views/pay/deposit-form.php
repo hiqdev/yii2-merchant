@@ -7,6 +7,7 @@ use yii\widgets\ActiveForm;
 /**
  * @var \yii\web\View $this
  * @var \hiqdev\yii2\merchant\models\PurchaseRequest[] $availableMerchants
+ * @var \hiqdev\yii2\merchant\models\DepositForm $model
  */
 
 $this->title = Yii::t('merchant', 'Account recharging');
@@ -25,8 +26,8 @@ foreach ($availableMerchants as $merchant) {
         <div class="box">
             <div class="box-body">
                 <?php $form = ActiveForm::begin() ?>
-                <?= Html::tag('label', $model->getAttributeLabel('sum'), ['for' => 'deposit-sum']) ?>
-                <?= $form->field($model, 'sum', [
+                <?= Html::tag('label', $model->getAttributeLabel('amount'), ['for' => 'deposit-amount']) ?>
+                <?= $form->field($model, 'amount', [
                     'template' => "<div class='input-group'><span class=\"input-group-addon\">$</span>{input}</div>{hint}{error}",
                 ]) ?>
                 <div class="well well-sm">

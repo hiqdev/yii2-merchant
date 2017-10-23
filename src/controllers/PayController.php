@@ -10,20 +10,27 @@
 
 namespace hiqdev\yii2\merchant\controllers;
 
+use hiqdev\yii2\merchant\actions\RequestAction;
 use hiqdev\yii2\merchant\models\DepositForm;
 use hiqdev\yii2\merchant\models\DepositRequest;
 use hiqdev\yii2\merchant\Module;
 use hiqdev\yii2\merchant\transactions\Transaction;
 use Yii;
-use yii\base\InvalidCallException;
 use yii\base\InvalidConfigException;
-use yii\base\UserException;
 use yii\web\BadRequestHttpException;
-use yii\web\HttpException;
 use yii\web\Response;
 
 class PayController extends \yii\web\Controller
 {
+    public function actions()
+    {
+        return array_merge(parent::actions(), [
+            'request' => [
+                'class' => RequestAction::class
+            ]
+        ]);
+    }
+
     /**
      * @return Module|\yii\base\Module
      */
@@ -118,7 +125,7 @@ class PayController extends \yii\web\Controller
 
     public function actionDeposit()
     {
-        $model   = Yii::createObject($this->getMerchantModule()->depositClass);
+        $model   = Yii::createObject($this->getMerchantModule()->depositFromClass);
         $request = Yii::$app->request;
         if ($model->load($request->isPost ? $request->post() : $request->get()) && $model->validate()) {
             return $this->renderDeposit($model);
@@ -139,69 +146,13 @@ class PayController extends \yii\web\Controller
     public function renderDeposit($form)
     {
         $request = new DepositRequest();
-        $request->amount = $form->sum;
+        $request->amount = $form->amount;
 
         $requests = $this->getMerchantModule()->getPurchaseRequestCollection($request)->getItems();
 
-        return $this->render('deposit', compact('requests'));
-    }
-
-    /**
-     * Performs purchase request.
-     * @void
-     */
-    public function actionRequest()
-    {
-        $depositRequest = new DepositRequest();
-        $depositRequest->load(Yii::$app->request->post());
-        if (!$depositRequest->validate()) {
-            throw new BadRequestHttpException('Deposit request is not loaded');
-        }
-
-        $this->getMerchantModule()->prepareRequestData($depositRequest);
-        $request = $this->getMerchantModule()->getPurchaseRequest($depositRequest->merchant, $depositRequest);
-        $this->getMerchantModule()->insertTransaction($depositRequest->id, $depositRequest->merchant, array_merge([
-            'username' => $depositRequest->username,
-        ], $depositRequest->toArray()));
-
-        if ('GET' === $request->getFormMethod()) {
-            return $this->redirect($request->getFormAction());
-        } elseif ('POST' === $request->getFormMethod()) {
-            $hiddenFields = '';
-            foreach ($request->getFormInputs() as $key => $value) {
-                $hiddenFields .= sprintf(
-                    '<input type="hidden" name="%1$s" value="%2$s" />',
-                    htmlentities($key, ENT_QUOTES, 'UTF-8', false),
-                    htmlentities($value, ENT_QUOTES, 'UTF-8', false)
-                )."\n";
-            }
-
-            $output = '<!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>Redirecting...</title>
-    </head>
-    <body onload="document.forms[0].submit();">
-        <form action="%1$s" method="post">
-            <p>Redirecting to payment page...</p>
-            <p>
-                %2$s
-                <input type="submit" value="Continue" />
-            </p>
-        </form>
-    </body>
-</html>';
-            $output = sprintf(
-                $output,
-                htmlentities($request->getFormAction(), ENT_QUOTES, 'UTF-8', false),
-                $hiddenFields
-            );
-
-            echo $output;
-            Yii::$app->end();
-        }
-
-        throw new BadRequestHttpException();
+        return $this->render('deposit', [
+            'requests' => $requests,
+            'depositForm' => $form
+        ]);
     }
 }

@@ -73,9 +73,9 @@ class Module extends \yii\base\Module
     public $purchaseRequestCollectionClass = Collection::class;
 
     /**
-     * @var string Deposit model class name. Defaults to [[Deposit]]
+     * @var string Deposit model class name. Defaults to [[DepositForm]]
      */
-    public $depositClass = DepositForm::class;
+    public $depositFromClass = DepositForm::class;
     /**
      * @var TransactionRepositoryInterface
      */

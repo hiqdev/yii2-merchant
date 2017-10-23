@@ -32,13 +32,12 @@ class DepositForm extends Model
             [['amount'], 'number'],
             [['amount'], 'required'],
             [['amount'], 'compare', 'operator' => '>', 'compareValue' => 0],
-            [['merchant'], 'string']
         ];
     }
 
     public function attributes()
     {
-        return ['amount', 'merchant'];
+        return ['amount'];
     }
 
     /**
