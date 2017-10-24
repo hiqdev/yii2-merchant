@@ -67,10 +67,10 @@ class PayController extends \yii\web\Controller
      */
     public function actionReturn()
     {
-        $this->checkNotify();
+        $transaction = $this->checkNotify();
 
         return $this->render('return', [
-            'transactionId' => Yii::$app->request->get('transactionId'),
+            'transactionId' => $transaction->getId(),
         ]);
     }
 
