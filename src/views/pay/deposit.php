@@ -24,14 +24,10 @@ $this->params['breadcrumbs'][] = $this->title;
                     <ul class="products-list product-list-in-box">
                         <?php foreach ($requests as $request) : ?>
                             <li class="item">
-                                <?php
-                                /** @var PayButton $payButton */
-                                $payButton = Yii::createObject([
-                                    'class' => PayButton::class,
+                                <?= PayButton::widget([
                                     'request' => $request,
                                     'depositForm' => $depositForm
-                                ]); ?>
-                                <?= $payButton->run() ?>
+                                ]) ?>
                             </li>
                         <?php endforeach ?>
                     </ul>
