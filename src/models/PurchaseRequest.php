@@ -28,7 +28,7 @@ class PurchaseRequest
 
     public $amount;
     public $fee;
-    public $commission;
+    public $commission_fee;
     public $currency;
 
     /** @var RedirectPurchaseResponse */

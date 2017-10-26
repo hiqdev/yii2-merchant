@@ -96,6 +96,11 @@ class PayButton extends \yii\base\Widget
         return $this->request->merchant_name;
     }
 
+    public function getTotalCommission()
+    {
+        return $this->request->fee + $this->request->commission_fee;
+    }
+
     public function getButtonData()
     {
         return Json::encode($this->request->getFormInputs());

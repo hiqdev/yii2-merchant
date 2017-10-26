@@ -29,9 +29,9 @@ use yii\widgets\ActiveForm;
             <span class="pull-right" style="font-size: 24px"><?= $widget->formatMoney($request->amount) ?></span>
         </div>
         <span class="product-description">
-            <?php if ($request->fee > 0) : ?>
+            <?php if ($widget->getTotalCommission() > 0) : ?>
                 (<?= Yii::t('merchant', 'including commission {commission}', [
-                    'commission' => Html::tag('b', $widget->formatMoney($request->fee)),
+                    'commission' => Html::tag('b', $widget->formatMoney($widget->getTotalCommission())),
                 ]) ?>)
             <?php endif ?>
             <?php $widget->renderButtonComment() ?>
