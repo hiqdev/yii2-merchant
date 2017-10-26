@@ -45,7 +45,7 @@ class PayController extends \yii\web\Controller
      */
     public function beforeAction($action)
     {
-        if (in_array($this->action->id, ['notify', 'return', 'cancel'], true)) {
+        if (in_array($this->action->id, ['notify', 'return', 'cancel', 'proxy-notification'], true)) {
             Yii::$app->controller->enableCsrfValidation = false;
         }
 
@@ -121,6 +121,11 @@ class PayController extends \yii\web\Controller
     public function checkNotify()
     {
         throw new InvalidConfigException('Method checkNotify must be implemented');
+    }
+
+    public function actionProxyNotification()
+    {
+        throw new InvalidConfigException('Method actionProxyNotification must be implemented');
     }
 
     public function actionDeposit()
