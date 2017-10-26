@@ -52,9 +52,7 @@
     "require-dev": {
         "hiqdev/hidev-php": "*",
         "hiqdev/hidev-hiqdev": "*",
-        "yiisoft/yii2": "*@dev",
-        "omnipay/stripe": "*",
-        "dercoder/omnipay-webmoney": "*@dev"
+        "yiisoft/yii2": "*@dev"
     },
     "autoload": {
         "psr-4": {
