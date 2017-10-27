@@ -118,4 +118,9 @@ class PayButton extends \yii\base\Widget
     {
         return Yii::$app->formatter->format($sum, ['currency', $this->request->currency]);
     }
+
+    public function isDisabled()
+    {
+        return $this->request->disableReason !== null;
+    }
 }

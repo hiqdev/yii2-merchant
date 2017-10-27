@@ -30,6 +30,7 @@ class PurchaseRequest
     public $fee;
     public $commission_fee;
     public $currency;
+    public $disableReason;
 
     /** @var RedirectPurchaseResponse */
     public $form;

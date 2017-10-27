@@ -16,7 +16,7 @@ use yii\widgets\ActiveForm;
 <?= Html::activeHiddenInput($depositRequest, 'amount') ?>
 <?= Html::activeHiddenInput($depositRequest, 'merchant') ?>
 
-<button type="submit" class="btn-block">
+<button type="submit" class="btn-block" <?= $widget->isDisabled() ? 'disabled' : ''?>>
     <div class="product-img">
         <i class="pi pi-sm pi-<?= strtolower($request->system) ?>" style="float:right"></i>
     </div>
