@@ -287,12 +287,12 @@ class Module extends \yii\base\Module
      * Renders page, that contains list of payment systems, that might be choosen by user.
      * Should be implemented in `PayController`.
      *
-     * @param array $params
+     * @param DepositForm $form
      * @return \yii\web\Response
      */
-    public function renderDeposit(array $params)
+    public function renderDeposit($form)
     {
-        return $this->getPayController()->renderDeposit($params);
+        return $this->getPayController()->renderDeposit($form);
     }
 
     /**

@@ -145,13 +145,14 @@ class PayController extends \yii\web\Controller
     /**
      * Renders depositing buttons for given request data.
      *
-     * @param DepositForm $form request data:
+     * @param DepositForm $form request data
      * @return \yii\web\Response
      */
     public function renderDeposit($form)
     {
         $request = new DepositRequest();
         $request->amount = $form->amount;
+        $request->finishUrl = $form->finishUrl;
 
         $requests = $this->getMerchantModule()->getPurchaseRequestCollection($request)->getItems();
 

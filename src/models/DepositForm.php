@@ -24,6 +24,12 @@ class DepositForm extends Model
     public $amount;
 
     /**
+     * @var string the route that will be passed to merchant
+     * in order to redirect user to a custom page
+     */
+    public $finishUrl;
+
+    /**
      * {@inheritdoc}
      */
     public function rules()
