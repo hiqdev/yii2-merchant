@@ -68,6 +68,9 @@ class PayController extends \yii\web\Controller
     public function actionReturn()
     {
         $transaction = $this->checkNotify();
+        if ($transaction === null) {
+            return $this->actionCancel();
+        }
 
         return $this->render('return', [
             'transactionId' => $transaction->getId(),
