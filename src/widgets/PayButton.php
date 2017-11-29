@@ -15,6 +15,7 @@ use hiqdev\php\merchant\AbstractRequest;
 use hiqdev\yii2\merchant\models\DepositForm;
 use hiqdev\yii2\merchant\models\DepositRequest;
 use hiqdev\yii2\merchant\models\PurchaseRequest;
+use NumberFormatter;
 use Yii;
 use yii\base\Event;
 use yii\helpers\Json;
@@ -116,7 +117,20 @@ class PayButton extends \yii\base\Widget
 
     public function formatMoney($sum)
     {
-        return Yii::$app->formatter->format($sum, ['currency', $this->request->currency]);
+        $currency = $this->request->currency;
+        $formatter = new NumberFormatter(Yii::$app->language, NumberFormatter::CURRENCY);
+
+        switch ($currency) {
+            case 'BTC':
+                $formatter->setAttribute(NumberFormatter::MAX_SIGNIFICANT_DIGITS, 6);
+                $formatter->setSymbol(NumberFormatter::CURRENCY_SYMBOL, '₿');
+                break;
+            case 'RUB':
+                $formatter->setSymbol(NumberFormatter::CURRENCY_SYMBOL, '₽');
+                break;
+        }
+
+        return $formatter->formatCurrency($sum, $currency);
     }
 
     public function isDisabled()
