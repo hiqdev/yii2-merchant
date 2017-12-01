@@ -123,7 +123,6 @@ class PayButton extends \yii\base\Widget
         switch ($currency) {
             case 'BTC':
                 $formatter->setAttribute(NumberFormatter::MAX_SIGNIFICANT_DIGITS, 6);
-                $formatter->setSymbol(NumberFormatter::CURRENCY_SYMBOL, '₿');
                 break;
             case 'RUB':
                 $formatter->setSymbol(NumberFormatter::CURRENCY_SYMBOL, '₽');
