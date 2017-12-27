@@ -120,8 +120,7 @@ class RequestAction extends Action
                 $hiddenFields
             );
 
-            echo $output;
-            Yii::$app->end();
+            return $output;
         }
 
         throw new BadRequestHttpException();
