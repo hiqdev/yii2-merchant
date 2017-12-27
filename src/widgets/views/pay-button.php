@@ -15,6 +15,9 @@ use yii\widgets\ActiveForm;
 <?= Html::activeHiddenInput($depositRequest, 'id') ?>
 <?= Html::activeHiddenInput($depositRequest, 'amount') ?>
 <?= Html::activeHiddenInput($depositRequest, 'merchant') ?>
+<?php if ($depositRequest->finishUrl) : ?>
+    <?= Html::activeHiddenInput($depositRequest, 'finishUrl') ?>
+<?php endif ?>
 
 <button type="submit" class="btn-block" <?= $widget->isDisabled() ? 'disabled' : ''?>>
     <div class="product-img">

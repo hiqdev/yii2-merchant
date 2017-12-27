@@ -53,6 +53,7 @@ class DepositRequest extends Model
             [['amount'], 'number'],
             [['id', 'amount'], 'required'],
             [['merchant'], 'required'],
+            [['finishUrl'], 'safe'],
         ];
     }
 }

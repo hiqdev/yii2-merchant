@@ -83,7 +83,8 @@ class PayButton extends \yii\base\Widget
             'depositRequest' => new DepositRequest([
                 'id' => $this->request->id,
                 'amount' => $this->depositForm->amount,
-                'merchant' => $this->getMerchantName()
+                'merchant' => $this->getMerchantName(),
+                'finishUrl' => $this->depositForm->finishUrl,
             ])
         ]);
     }

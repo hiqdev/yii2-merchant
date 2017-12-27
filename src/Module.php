@@ -209,7 +209,7 @@ class Module extends \yii\base\Module
     public function buildUrl($destination, DepositRequest $depositRequest)
     {
         $page = [
-            $this->getPage($destination),
+            $this->getPage($destination, $depositRequest),
             'username'      => $depositRequest->username,
             'merchant'      => $depositRequest->merchant,
             'transactionId' => $depositRequest->id,
@@ -234,8 +234,13 @@ class Module extends \yii\base\Module
         return is_string($page) && $page[0] !== '/' ? ('/' . $this->id . '/pay/' . $page) : $page;
     }
 
-    public function getPage($destination)
+    public function getPage($destination, DepositRequest $depositRequest)
     {
+        $property = $destination . 'Url';
+        if ($depositRequest->$property) {
+            return $depositRequest->$property;
+        }
+
         $name = $destination . 'Page';
 
         return $this->hasProperty($name) ? $this->{$name} : $destination;
