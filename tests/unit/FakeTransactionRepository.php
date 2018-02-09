@@ -10,10 +10,10 @@
 
 namespace hiqdev\yii2\merchant\tests\unit;
 
-use yii\base\Object;
+use yii\base\BaseObject;
 use hiqdev\yii2\merchant\transactions\TransactionRepositoryInterface;
 
-class FakeTransactionRepository extends Object implements TransactionRepositoryInterface
+class FakeTransactionRepository extends BaseObject implements TransactionRepositoryInterface
 {
     public function findById($id)
     {

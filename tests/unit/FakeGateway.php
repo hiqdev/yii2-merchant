@@ -10,7 +10,7 @@
 
 namespace hiqdev\yii2\merchant\tests\unit;
 
-class FakeGateway extends \yii\base\Object
+class FakeGateway extends \yii\base\BaseObject
 {
     public $gateway;
 
