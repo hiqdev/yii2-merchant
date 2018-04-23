@@ -35,7 +35,7 @@ class DepositForm extends Model
     public function rules()
     {
         return [
-            [['amount'], 'number'],
+            [['amount'], 'number', 'max' => 9999999999999],
             [['amount'], 'required'],
             [['amount'], 'compare', 'operator' => '>', 'compareValue' => 0],
         ];
