@@ -18,6 +18,7 @@ use hiqdev\yii2\merchant\transactions\Transaction;
 use Yii;
 use yii\base\InvalidConfigException;
 use yii\web\BadRequestHttpException;
+use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
 class PayController extends \yii\web\Controller
@@ -86,6 +87,10 @@ class PayController extends \yii\web\Controller
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $transaction = $this->getMerchantModule()->findTransaction($transactionId);
+
+        if ($transaction === null) {
+            throw new NotFoundHttpException('Transaction does not exist');
+        }
 
         if ($transaction->getParameter('username') !== $this->getMerchantModule()->getUsername()) {
             throw new BadRequestHttpException('Access denied', 403);
