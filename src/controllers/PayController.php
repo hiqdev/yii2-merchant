@@ -64,11 +64,17 @@ class PayController extends \yii\web\Controller
     }
 
     /**
+     * @param string|null $transactionId
+     *
+     * Parameters are NOT required because some merchants may NOT send them, or send in POST or JSON bode.
+     * The main purpose of these parameters is handling of special routes using UrlManager
+     *
      * @return string
+     * @throws InvalidConfigException
      */
-    public function actionReturn()
+    public function actionReturn(string $transactionId = null)
     {
-        $transaction = $this->checkNotify();
+        $transaction = $this->checkNotify($transactionId);
         if ($transaction === null) {
             return $this->actionCancel();
         }
@@ -105,13 +111,18 @@ class PayController extends \yii\web\Controller
     }
 
     /**
-     * Action is designed to get the system notification from payment system,
-     * process it and report success or error for the payment system.
+     * Action handles notifications from payment systems,
+     * processes them and report success or error for the payment system.
+     *
+     * @param string|null $transactionId Parameters is NOT required because some merchants may NOT send it, or send in POST or JSON body.
+     * The main purpose of these parameters is handling of special routes using UrlManager
+     *
      * @return null|string
+     * @throws InvalidConfigException
      */
-    public function actionNotify()
+    public function actionNotify(string $transactionId = null)
     {
-        $transaction = $this->checkNotify();
+        $transaction = $this->checkNotify($transactionId);
         if ($transaction === null) {
             return 'Unknown transaction';
         }
@@ -124,9 +135,14 @@ class PayController extends \yii\web\Controller
     /**
      * Check notifications.
      * TODO: implement actual request check and proper handling.
-     * @return Transaction
+     *
+     * @param string|null $transactionId Parameters is NOT required because some merchants may NOT send it, or send in POST or JSON body.
+     * The main purpose of these parameters is handling of special routes using UrlManager
+     *
+     * @return Transaction|null
+     * @throws InvalidConfigException
      */
-    public function checkNotify()
+    public function checkNotify(string $transactionId = null): ?Transaction
     {
         throw new InvalidConfigException('Method checkNotify must be implemented');
     }
