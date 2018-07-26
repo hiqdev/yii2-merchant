@@ -1,7 +1,8 @@
 <?php
 
 /**
- * @var View
+ * @var View $this
+ * @var string $transactionId
  */
 use hipanel\helpers\Url;
 use yii\web\View;
@@ -16,11 +17,12 @@ $this->title = Yii::t('merchant', 'Payment result');
 
 <?php
 $options = \yii\helpers\Json::encode([
-    'url' => Url::to('check-return'),
+    'url' => Url::to(['@pay/check-return']),
     'data' => [
         'transactionId' => $transactionId,
     ],
 ]);
+
 $this->registerJs(<<<JS
     function checkPaymentStatus(options) {
         $.ajax({
