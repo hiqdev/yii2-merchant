@@ -35,7 +35,14 @@ class DepositForm extends Model
     public function rules()
     {
         return [
-            [['amount'], 'number', 'max' => 9999999999999],
+            [['amount'], 'number', 'max' => 9999999999999, 'whenClient' => 'function (attribute, value) {
+                        if (value.includes(",")) {
+                            var form = attribute.$form;
+                            $("#" + attribute.id).val(value.replace(/[,]/g, "."));
+                            form.yiiActiveForm("validate");
+                        }
+                        return true;
+            }'],
             [['amount'], 'required'],
             [['amount'], 'compare', 'operator' => '>', 'compareValue' => 0],
         ];
