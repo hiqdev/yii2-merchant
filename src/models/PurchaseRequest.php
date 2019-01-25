@@ -29,6 +29,10 @@ class PurchaseRequest
     public $amount;
     public $fee;
     public $commission_fee;
+
+    public $vat_rate;
+    public $vat_sum;
+
     public $currency;
     public $disableReason;
 

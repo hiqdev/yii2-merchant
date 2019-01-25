@@ -32,11 +32,22 @@ use yii\widgets\ActiveForm;
             <span class="pull-right" style="font-size: 24px"><?= $widget->formatMoney($request->amount) ?></span>
         </div>
         <span class="product-description">
-            <?php if ($widget->getTotalCommission() > 0) : ?>
-                (<?= Yii::t('merchant', 'including commission {commission}', [
-                    'commission' => Html::tag('b', $widget->formatMoney($widget->getTotalCommission())),
-                ]) ?>)
-            <?php endif ?>
+            <?php if ($widget->getTotalCommission() > 0 || $widget->includesVat()) {
+                $comments = [];
+                if ($widget->getTotalCommission() > 0) {
+                    $comments[] = Yii::t('merchant', 'including commission {commission}', [
+                        'commission' => Html::tag('b', $widget->formatMoney($widget->getTotalCommission())),
+                    ]);
+                }
+                if ($widget->includesVat()) {
+                    $comments[] = Yii::t('merchant', 'including VAT {rate}% &mdash; {sum}', [
+                        'rate' => $widget->getVatRate()*100,
+                        'sum' => Html::tag('b', $widget->formatMoney($widget->getVatSum())),
+                    ]);
+                }
+
+                echo '(' . implode(', ', $comments) . ')';
+            } ?>
             <?php $widget->renderButtonComment() ?>
         </span>
     </div>

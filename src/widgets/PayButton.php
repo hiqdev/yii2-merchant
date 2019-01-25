@@ -103,6 +103,21 @@ class PayButton extends \yii\base\Widget
         return $this->request->fee + $this->request->commission_fee;
     }
 
+    public function includesVat(): bool
+    {
+        return $this->request->vat_rate !== null;
+    }
+
+    public function getVatRate(): float
+    {
+        return $this->request->vat_rate;
+    }
+
+    public function getVatSum(): float
+    {
+        return $this->request->vat_sum;
+    }
+
     public function getButtonData()
     {
         return Json::encode($this->request->getFormInputs());
