@@ -19,9 +19,14 @@ use yii\base\Model;
 class DepositForm extends Model
 {
     /**
-     * @var float the amount of money
+     * @var float the amount of money to be deposited
      */
     public $amount;
+
+    /**
+     * @var string desired currency
+     */
+    public $currency;
 
     /**
      * @var string the route that will be passed to merchant
@@ -43,14 +48,15 @@ class DepositForm extends Model
                         }
                         return true;
             }'],
-            [['amount'], 'required'],
+            [['currency'], 'default', 'value' => 'usd'],
+            [['amount', 'currency'], 'required'],
             [['amount'], 'compare', 'operator' => '>', 'compareValue' => 0],
         ];
     }
 
     public function attributes()
     {
-        return ['amount'];
+        return ['amount', 'currency'];
     }
 
     /**
@@ -60,6 +66,7 @@ class DepositForm extends Model
     {
         return [
             'amount' => Yii::t('merchant', 'Amount'),
+            'currency' => Yii::t('merchant', 'Currency'),
         ];
     }
 }

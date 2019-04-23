@@ -154,7 +154,9 @@ class PayController extends \yii\web\Controller
 
     public function actionDeposit()
     {
-        $model   = Yii::createObject($this->getMerchantModule()->depositFromClass);
+        $merchantModule = $this->getMerchantModule();
+
+        $model   = Yii::createObject($merchantModule->depositFromClass);
         $request = Yii::$app->request;
         if ($model->load($request->isPost ? $request->post() : $request->get()) && $model->validate()) {
             return $this->renderDeposit($model);
@@ -163,6 +165,7 @@ class PayController extends \yii\web\Controller
         return $this->render('deposit-form', [
             'model' => $model,
             'availableMerchants' => $this->getMerchantModule()->getPurchaseRequestCollection()->getItems(),
+            'availableCurrencies' => $this->getMerchantModule()->getAvailableCurrenciesCollection()->getList(),
         ]);
     }
 
@@ -176,6 +179,7 @@ class PayController extends \yii\web\Controller
     {
         $request = new DepositRequest();
         $request->amount = $form->amount;
+        $request->currency = $form->currency;
         $request->finishUrl = $form->finishUrl;
 
         $requests = $this->getMerchantModule()->getPurchaseRequestCollection($request)->getItems();

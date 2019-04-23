@@ -10,10 +10,6 @@
 
 namespace hiqdev\yii2\merchant;
 
-use Closure;
-use hiqdev\php\merchant\AbstractMerchant;
-use hiqdev\php\merchant\Helper;
-use hiqdev\yii2\merchant\Collection;
 use hiqdev\yii2\merchant\models\DepositForm;
 use hiqdev\yii2\merchant\controllers\PayController;
 use hiqdev\yii2\merchant\models\DepositRequest;
@@ -23,9 +19,6 @@ use hiqdev\yii2\merchant\transactions\TransactionException;
 use hiqdev\yii2\merchant\transactions\TransactionRepositoryInterface;
 use Yii;
 use yii\base\InvalidConfigException;
-use yii\helpers\ArrayHelper;
-use yii\helpers\FileHelper;
-use yii\helpers\Json;
 use yii\helpers\Url;
 
 /**
@@ -71,7 +64,10 @@ class Module extends \yii\base\Module
      * @var string merchant collection class name. Defaults to [[Collection]]
      */
     public $purchaseRequestCollectionClass = Collection::class;
-
+    /**
+     * @var string currencies collection class name. Defaults to [[Collection]]
+     */
+    public $currenciesCollectionClass;
     /**
      * @var string Deposit model class name. Defaults to [[DepositForm]]
      */
@@ -95,7 +91,8 @@ class Module extends \yii\base\Module
 
     /**
      * @param DepositRequest $depositRequest
-     * @return PurchaseRequest[] list of merchants
+     * @return Collection
+     * @throws InvalidConfigException
      */
     public function getPurchaseRequestCollection($depositRequest = null)
     {
@@ -103,6 +100,18 @@ class Module extends \yii\base\Module
             'class'  => $this->purchaseRequestCollectionClass,
             'module' => $this,
             'depositRequest' => $depositRequest,
+        ]);
+    }
+
+    /**
+     * @return Currencies
+     * @throws InvalidConfigException
+     */
+    public function getAvailableCurrenciesCollection(): Currencies
+    {
+        return Yii::createObject([
+            'class'  => $this->currenciesCollectionClass,
+            'module' => $this,
         ]);
     }
 

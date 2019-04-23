@@ -70,13 +70,13 @@ class RequestAction extends Action
 
         $transaction = $this->getMerchantModule()->insertTransaction($depositRequest->id, $depositRequest->merchant, array_merge([
             'username' => $depositRequest->username,
+            'currency' => $depositRequest->currency,
         ], $depositRequest->toArray()));
 
         $this->trigger(self::EVENT_AFTER_TRANSACTION_INSERT, new TransactionInsertEvent([
             'depositRequest' => $depositRequest,
             'transaction' => $transaction
         ]));
-
     }
 
     /**

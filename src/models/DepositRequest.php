@@ -17,6 +17,11 @@ class DepositRequest extends Model
     public $amount;
 
     /**
+     * @var string|null
+     */
+    public $currency;
+
+    /**
      * @var string
      */
     public $merchant;
@@ -49,7 +54,7 @@ class DepositRequest extends Model
     public function rules()
     {
         return [
-            [['id', 'merchant'], 'string'],
+            [['id', 'merchant', 'currency'], 'string'],
             [['amount'], 'number'],
             [['id', 'amount'], 'required'],
             [['merchant'], 'required'],

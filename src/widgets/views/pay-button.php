@@ -5,7 +5,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /**
- * @var \yii\web\View
+ * @var \yii\web\View $this
  * @var PayButton $widget
  * @var \hiqdev\yii2\merchant\models\PurchaseRequest $request
  * @var \hiqdev\yii2\merchant\models\DepositRequest $depositRequest
@@ -15,6 +15,7 @@ use yii\widgets\ActiveForm;
 <?= Html::activeHiddenInput($depositRequest, 'id') ?>
 <?= Html::activeHiddenInput($depositRequest, 'amount') ?>
 <?= Html::activeHiddenInput($depositRequest, 'merchant') ?>
+<?= Html::activeHiddenInput($depositRequest, 'currency') ?>
 <?php if ($depositRequest->finishUrl) : ?>
     <?= Html::activeHiddenInput($depositRequest, 'finishUrl') ?>
 <?php endif ?>
