@@ -30,7 +30,10 @@ $primaryCurrencySymbol = $primaryCurrency->getSymbol();
         <div class="box">
             <div class="box-body">
                 <?php $form = ActiveForm::begin() ?>
-	            <?= Html::activeHiddenInput($model, 'currency', ['data-attribute' => 'currency']) ?>
+	            <?= Html::activeHiddenInput($model, 'currency', [
+                    'data-attribute' => 'currency',
+                    'value' => $model->currency ?? $primaryCurrency->code,
+	            ]) ?>
                 <?= Html::tag('label', $model->getAttributeLabel('amount'), ['for' => 'deposit-amount']) ?>
 
 	            <?php if (count($availableCurrencies) > 1) : ?>
