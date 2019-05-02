@@ -68,15 +68,20 @@ HTML
                             ;
                         })()
                     ]) ?>
+                    <div class="well well-sm">
+                        <?= Yii::t('merchant', 'Choose the purse currency  you want to replenish and enter the payment amount.') ?>
+                    </div>
 	            <?php else: ?>
                     <?= $form->field($model, 'amount', [
                         'template' => "<div class='input-group'><span class=\"input-group-addon\">{$primaryCurrencySymbol}</span>{input}</div>{hint}{error}",
                     ]) ?>
+                    <div class="well well-sm">
+                        <?= Yii::t('merchant', 'Enter the amount of the replenishment in {currency}. For example: 8.79', [
+                            'currency' => $primaryCurrency->code,
+                        ]) ?>
+                    </div>
                 <?php endif ?>
 
-                <div class="well well-sm">
-                    <?= Yii::t('merchant', 'Enter the amount of the replenishment. For example: 8.79') ?>
-                </div>
                 <?= Html::submitButton(Yii::t('merchant', 'Proceed'), ['class' => 'btn btn-primary']) ?>
                 <?php $form->end() ?>
             </div>
