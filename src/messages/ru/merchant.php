@@ -52,4 +52,5 @@ return [
     'Payment failed or cancelled' => 'Платеж прошел неуспешно или был отменён',
     'including commission {commission}' => 'включая комиссию {commission}',
     'including VAT {rate}% &mdash; {sum}' => 'включая НДС {rate}% &mdash; {sum}',
+    'Due to technical issues Paxum payment system has been disabled for some period of time. In case of any questions please contact directly to our support team.' => 'Из-за технических проблем платежная система Paxum была отключена на некоторое время. В случае каких-либо вопросов, пожалуйста, свяжитесь напрямую с нашей службой поддержки.',
 ];

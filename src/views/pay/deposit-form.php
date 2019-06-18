@@ -111,6 +111,9 @@ HTML
                 <div class="callout callout-warning">
                     <h4><?= Yii::t('merchant', 'Important information') ?></h4>
                     <p><?= Yii::t('merchant', 'Remember to return to the site after successful payment!') ?></p>
+                    <?php if (Yii::$app->params['merchant.paxum.disabled']) : ?>
+                        <p><?= Yii::t('merchant', 'Due to technical issues Paxum payment system has been disabled for some period of time. In case of any questions please contact directly to our support team.') ?></p>
+                    <?php endif ?>
                 </div>
             </div>
         </div>
