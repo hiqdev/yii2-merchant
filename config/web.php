@@ -13,7 +13,7 @@ return [
         'themeManager' => [
             'class' => \hiqdev\thememanager\ThemeManager::class,
             'pathMap' => [
-                '@hiqdev/yii2/merchant/views' => '$themedViewPaths',
+                dirname(__DIR__) . '/src/views' => '$themedViewPaths',
             ],
         ],
         'i18n' => [
@@ -21,7 +21,7 @@ return [
                 'merchant' => [
                     'class'          => \yii\i18n\PhpMessageSource::class,
                     'sourceLanguage' => 'en-US',
-                    'basePath'       => '@hiqdev/yii2/merchant/messages',
+                    'basePath'       => dirname(__DIR__) . '/src/messages',
                 ],
             ],
         ],
