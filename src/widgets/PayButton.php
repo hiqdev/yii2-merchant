@@ -54,7 +54,7 @@ class PayButton extends \yii\base\Widget
 
     protected function registerMerchantCss()
     {
-        $pathToCss = Yii::getAlias('@hiqdev/yii2/merchant/assets/css/selectPayment.css');
+        $pathToCss = dirname(__DIR__) . '/assets/css/selectPayment.css';
         if (is_file($pathToCss)) {
             Yii::$app->assetManager->publish($pathToCss);
             $file = Yii::$app->assetManager->getPublishedUrl($pathToCss);
