@@ -15,6 +15,7 @@ use yii\web\View;
 $this->title = Yii::t('merchant', 'Select payment method');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('merchant', 'Recharge account'), 'url' => ['deposit']];
 $this->params['breadcrumbs'][] = $this->title;
+$cashewKey = sprintf('cashew_%s', strtolower($depositForm->currency));
 ?>
 
 <?php if (empty($requests)) : ?>
@@ -22,10 +23,10 @@ $this->params['breadcrumbs'][] = $this->title;
         'class' => 'alert alert-danger text-center',
         'style' => 'width: 50rem; margin: 0 auto;',
     ]) ?>
-<?php elseif ($this->context->module->cashewOnly) : ?>
+<?php elseif ($this->context->module->cashewOnly && array_key_exists($cashewKey, $requests)) : ?>
     <?= Html::tag('iframe', null, [
-        'src' => $requests['cashew_usd']->form->getRedirectUrl(), // TODO: refactor instead of hardcore
-        'style' => 'border: none; width: 100%; height: 100vh; overflow: hidden;'
+        'src' => $requests[$cashewKey]->form->getRedirectUrl(),
+        'style' => 'border: none; width: 100%; height: 100vh; overflow: hidden;',
     ]) ?>
 <?php else : ?>
     <div class="row">
@@ -47,4 +48,3 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 <?php endif ?>
-
