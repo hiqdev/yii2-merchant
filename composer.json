@@ -45,6 +45,7 @@
         }
     ],
     "require": {
+        "php": "^7.4",
         "hiqdev/yii2-collection": "*",
         "hiqdev/payment-icons": "*",
         "hiqdev/php-merchant": "*"

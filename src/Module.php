@@ -73,6 +73,10 @@ class Module extends \yii\base\Module
      */
     public $depositFromClass = DepositForm::class;
     /**
+     * @var bool Whether to use payment processing only through Cashew
+     */
+    public bool $cashewOnly = false;
+    /**
      * @var TransactionRepositoryInterface
      */
     protected $transactionRepository;
