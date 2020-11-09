@@ -61,7 +61,7 @@ class Module extends \yii\base\Module
     const URL_PREFIX = 'merchant_url_';
 
     /**
-     * @var string merchant collection class name. Defaults to [[Collection]]
+     * @var string|class-string<Collection> merchant collection class name. Defaults to [[Collection]]
      */
     public $purchaseRequestCollectionClass = Collection::class;
     /**
@@ -144,9 +144,8 @@ class Module extends \yii\base\Module
      * Method builds data for merchant request.
      *
      * @param DepositRequest $depositRequest
-     * @return array
      */
-    public function prepareRequestData($depositRequest)
+    public function prepareRequestData($depositRequest): void
     {
         $depositRequest->username = $this->getUsername();
         $depositRequest->notifyUrl = $this->buildUrl('notify', $depositRequest);

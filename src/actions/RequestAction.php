@@ -42,7 +42,8 @@ class RequestAction extends Action
         $depositRequest = new DepositRequest();
         $depositRequest->load(Yii::$app->request->post());
         if (!$depositRequest->validate()) {
-            throw new BadRequestHttpException('Deposit request is not loaded: ' . reset($depositRequest->getFirstErrors()));
+            $errors = $depositRequest->getFirstErrors();
+            throw new BadRequestHttpException('Deposit request is not loaded: ' . reset($errors));
         }
 
         $this->getMerchantModule()->prepareRequestData($depositRequest);
