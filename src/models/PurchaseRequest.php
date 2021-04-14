@@ -12,6 +12,7 @@ namespace hiqdev\yii2\merchant\models;
 
 use hiqdev\php\merchant\response\RedirectPurchaseResponse;
 use yii\base\InvalidConfigException;
+use Yii;
 
 /**
  * Class PurchaseRequest
@@ -35,6 +36,8 @@ class PurchaseRequest
 
     public $currency;
     public $disableReason;
+
+    public $paymentMethod;
 
     /** @var RedirectPurchaseResponse */
     public $form;
@@ -69,5 +72,22 @@ class PurchaseRequest
         }
 
         return $this->form->getMethod();
+    }
+
+    public function getPaymentMethod(): ?string
+    {
+        if ($this->system !== 'yandexmoney') {
+            return null;
+        }
+
+        if ($this->paymentMethod === 'AC') {
+            return Yii::t('merchant', 'bank card');
+        }
+
+        if ($this->paymentMethod === 'PC') {
+            return Yii::t('merchant', 'account balance');
+        }
+
+        return Yii::t('merchant', 'phone');
     }
 }

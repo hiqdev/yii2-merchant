@@ -52,4 +52,8 @@ return [
     'Payment failed or cancelled' => 'Платеж прошел неуспешно или был отменён',
     'including commission {commission}' => 'включая комиссию {commission}',
     'including VAT {rate}% &mdash; {sum}' => 'включая НДС {rate}% &mdash; {sum}',
+    'via {method}' => 'с помощью {method}',
+    'account balance' => 'перевода с баланса',
+    'bank card' => 'банковской карты',
+    'phone' => 'телефона',
 ];
