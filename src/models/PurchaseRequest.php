@@ -80,14 +80,18 @@ class PurchaseRequest
             return null;
         }
 
+        if ($this->paymentMethod === null) {
+            return null;
+        }
+
         if ($this->paymentMethod === 'AC') {
-            return Yii::t('merchant', 'bank card');
+            return Yii::t('merchant', 'via bank card');
         }
 
         if ($this->paymentMethod === 'PC') {
-            return Yii::t('merchant', 'account balance');
+            return Yii::t('merchant', 'via account balance');
         }
 
-        return Yii::t('merchant', 'phone');
+        return Yii::t('merchant', 'via phone');
     }
 }
