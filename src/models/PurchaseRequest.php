@@ -74,7 +74,7 @@ class PurchaseRequest
         return $this->form->getMethod();
     }
 
-    public function getPaymentMethod(): ?string
+    public function getPaymentMethodLabel(): ?string
     {
         if ($this->system !== 'yandexmoney') {
             return null;

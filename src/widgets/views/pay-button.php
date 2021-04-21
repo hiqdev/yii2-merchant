@@ -30,8 +30,8 @@ use yii\widgets\ActiveForm;
                 'amount' => Html::tag('b', $widget->formatMoney($request->amount)),
                 'merchantLabel' => Html::tag('b', $request->label),
             ]); ?>
-            <?php if ($request->getPaymentMethod()) : ?>
-                <?= $request->getPaymentMethod() ?>
+            <?php if ($request->getPaymentMethodLabel() !== null) : ?>
+                <?= $request->getPaymentMethodLabel() ?>
             <?php endif ?>
             <span class="pull-right" style="font-size: 24px"><?= $widget->formatMoney($request->amount) ?></span>
         </div>
