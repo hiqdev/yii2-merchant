@@ -99,6 +99,15 @@ class PayButton extends \yii\base\Widget
         return $this->request->merchant_name;
     }
 
+    /**
+     * Extracts merchant system from the [[request]].
+     * @return string
+     */
+    public function getMerchantSystem()
+    {
+        return $this->request->system;
+    }
+
     public function getTotalCommission()
     {
         return $this->request->fee + $this->request->commission_fee;

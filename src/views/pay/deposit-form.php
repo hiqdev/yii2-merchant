@@ -30,13 +30,13 @@ $primaryCurrencySymbol = $primaryCurrency->getSymbol();
         <div class="box">
             <div class="box-body">
                 <?php $form = ActiveForm::begin() ?>
-	            <?= Html::activeHiddenInput($model, 'currency', [
+                <?= Html::activeHiddenInput($model, 'currency', [
                     'data-attribute' => 'currency',
                     'value' => $model->currency ?? $primaryCurrency->code,
-	            ]) ?>
+                ]) ?>
                 <?= Html::tag('label', $model->getAttributeLabel('amount'), ['for' => 'deposit-amount']) ?>
 
-	            <?php if (count($availableCurrencies) > 1) : ?>
+                <?php if (count($availableCurrencies) > 1) : ?>
                     <?= $form->field($model, 'amount', [
                         'template' => (function () use ($availableCurrencies, $primaryCurrencySymbol) {
                             foreach ($availableCurrencies as $currency) {
@@ -71,7 +71,7 @@ HTML
                     <div class="well well-sm">
                         <?= Yii::t('merchant', 'Choose the purse currency  you want to replenish and enter the payment amount.') ?>
                     </div>
-	            <?php else: ?>
+                <?php else: ?>
                     <?= $form->field($model, 'amount', [
                         'template' => "<div class='input-group'><span class=\"input-group-addon\">{$primaryCurrencySymbol}</span>{input}</div>{hint}{error}",
                     ]) ?>
