@@ -90,23 +90,25 @@ HTML
 
     <div class="col-md-6">
         <div class="row">
-            <div class="col-md-12">
-                <div class="box">
-                    <div class="box-header">
-                        <?= Html::tag('h3', Yii::t('merchant', 'Available payment methods'), ['class' => 'box-title']) ?>
-                    </div>
-                    <div class="box-body text-muted">
-                        <?= Yii::t('merchant', 'We support fully automatic account depositing with the following payment systems: {merchants}', [
-                            'merchants' => implode(',&nbsp; ', $merchantNames)
-                        ]) ?>
-                        <br>
-                        <br>
-                        <?php foreach ($merchantNames as $name => $label) : ?>
-                            <i class="pi pi-xs pi-<?= $name ?>"></i>
-                        <?php endforeach; ?>
+            <?php if ($this->context->module->cashewOnly === false) : ?>
+                <div class="col-md-12">
+                    <div class="box">
+                        <div class="box-header">
+                            <?= Html::tag('h3', Yii::t('merchant', 'Available payment methods'), ['class' => 'box-title']) ?>
+                        </div>
+                        <div class="box-body text-muted">
+                            <?= Yii::t('merchant', 'We support fully automatic account depositing with the following payment systems: {merchants}', [
+                                'merchants' => implode(',&nbsp; ', $merchantNames)
+                            ]) ?>
+                            <br>
+                            <br>
+                            <?php foreach ($merchantNames as $name => $label) : ?>
+                                <i class="pi pi-xs pi-<?= $name ?>"></i>
+                            <?php endforeach; ?>
+                        </div>
                     </div>
                 </div>
-            </div>
+            <?php endif ?>
             <div class="col-md-12">
                 <div class="callout callout-warning">
                     <h4><?= Yii::t('merchant', 'Important information') ?></h4>
