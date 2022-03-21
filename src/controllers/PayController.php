@@ -182,21 +182,22 @@ class PayController extends \yii\web\Controller
         $request->currency = $form->currency;
         $request->finishUrl = $form->finishUrl;
 
-        $requests = $this->getMerchantModule()->getPurchaseRequestCollection($request)->getItems();
+        if ($this->getMerchantModule()->cashewOnly) {
+            $request->id = bin2hex(random_bytes(8));
+            $request->merchant = sprintf('cashew_%s', strtolower($request->currency));
+            $this->getMerchantModule()->prepareRequestData($request);
 
-        $this->handleCashew($requests, $form);
+            $requests = $this->getMerchantModule()->getPurchaseRequestCollection($request)->getItems();
+            if (isset($requests[$request->merchant])) {
+                return $this->redirect($requests[$request->merchant]->form->getRedirectUrl());
+            }
+        } else {
+            $requests = $this->getMerchantModule()->getPurchaseRequestCollection($request)->getItems();
+        }
 
         return $this->render('deposit', [
             'requests' => $requests,
             'depositForm' => $form
         ]);
-    }
-
-    private function handleCashew(array $requests, DepositForm $depositForm)
-    {
-        $cashewKey = sprintf('cashew_%s', strtolower($depositForm->currency));
-        if ($this->module->cashewOnly && array_key_exists($cashewKey, $requests)) {
-            return $this->redirect($requests[$cashewKey]->form->getRedirectUrl());
-        }
     }
 }
