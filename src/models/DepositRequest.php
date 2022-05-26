@@ -7,7 +7,7 @@ use yii\base\Model;
 class DepositRequest extends Model
 {
     /**
-     * @var string
+     * @var string|null
      */
     public $id;
 
@@ -22,7 +22,7 @@ class DepositRequest extends Model
     public $currency;
 
     /**
-     * @var string
+     * @var string|null
      */
     public $merchant;
 

@@ -17,6 +17,7 @@ use hiqdev\yii2\merchant\Module;
 use hiqdev\yii2\merchant\transactions\Transaction;
 use Yii;
 use yii\base\InvalidConfigException;
+use yii\base\Model;
 use yii\web\BadRequestHttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
@@ -173,16 +174,13 @@ class PayController extends \yii\web\Controller
      * Renders depositing buttons for given request data.
      *
      * @param DepositForm $form request data
-     * @return \yii\web\Response
+     * @return Response|string
+     * @throws InvalidConfigException
      */
-    public function renderDeposit($form)
+    public function renderDeposit(Model $form)
     {
-        $request = new DepositRequest();
-        $request->amount = $form->amount;
-        $request->currency = $form->currency;
-        $request->finishUrl = $form->finishUrl;
-
         if ($this->getMerchantModule()->cashewOnly) {
+            $request = $this->createDepositRequestWithForm($form);
             $request->id = bin2hex(random_bytes(8));
             $request->merchant = sprintf('cashew_%s', strtolower($request->currency));
             $this->getMerchantModule()->prepareRequestData($request);
@@ -191,13 +189,23 @@ class PayController extends \yii\web\Controller
             if (isset($requests[$request->merchant])) {
                 return $this->redirect($requests[$request->merchant]->form->getRedirectUrl());
             }
-        } else {
-            $requests = $this->getMerchantModule()->getPurchaseRequestCollection($request)->getItems();
         }
+        $request = $this->createDepositRequestWithForm($form);
+        $requests = $this->getMerchantModule()->getPurchaseRequestCollection($request)->getItems();
 
         return $this->render('deposit', [
             'requests' => $requests,
             'depositForm' => $form
         ]);
+    }
+
+    private function createDepositRequestWithForm(Model $form): DepositRequest
+    {
+        $request = new DepositRequest();
+        $request->amount = $form->amount;
+        $request->currency = $form->currency;
+        $request->finishUrl = $form->finishUrl;
+
+        return $request;
     }
 }
