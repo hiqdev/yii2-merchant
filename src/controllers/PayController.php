@@ -18,12 +18,16 @@ use hiqdev\yii2\merchant\transactions\Transaction;
 use Yii;
 use yii\base\InvalidConfigException;
 use yii\base\Model;
+use yii\helpers\Url;
 use yii\web\BadRequestHttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
 class PayController extends \yii\web\Controller
 {
+    public ?array $successPaymentRedirectRoute = ['@pay/deposit'];
+    public ?array $failedPaymentRedirectRoute = ['@pay/deposit'];
+
     public function actions()
     {
         return array_merge(parent::actions(), [
@@ -106,8 +110,8 @@ class PayController extends \yii\web\Controller
         return [
             'status' => $transaction->getSuccess(),
             'url'    => $transaction->isConfirmed()
-                ? $transaction->getParameter('finishUrl')
-                : $transaction->getParameter('cancelUrl'),
+                ? Url::toRoute($this->successPaymentRedirectRoute)
+                : Url::toRoute($this->failedPaymentRedirectRoute),
         ];
     }
 
