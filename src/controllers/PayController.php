@@ -22,6 +22,7 @@ use yii\helpers\Url;
 use yii\web\BadRequestHttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
+use yii\web\ForbiddenHttpException;
 
 class PayController extends \yii\web\Controller
 {
@@ -159,6 +160,11 @@ class PayController extends \yii\web\Controller
 
     public function actionDeposit()
     {
+        $user = Yii::$app->user;
+        if (!$user->isGuest && !$user->can('deposit')) {
+            throw new ForbiddenHttpException(Yii::t('yii', 'You are not allowed to perform this action.'));
+        }
+
         $merchantModule = $this->getMerchantModule();
 
         $model   = Yii::createObject($merchantModule->depositFromClass);
