@@ -169,6 +169,11 @@ class PayController extends \yii\web\Controller
 
         $model   = Yii::createObject($merchantModule->depositFromClass);
         $request = Yii::$app->request;
+
+        if ($request->get('currency') !== null) {
+            $model->currency = strtoupper($request->get('currency'));
+        }
+
         if ($model->load($request->isPost ? $request->post() : $request->get()) && $model->validate()) {
             return $this->renderDeposit($model);
         }

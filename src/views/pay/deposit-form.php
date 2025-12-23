@@ -21,7 +21,16 @@ foreach ($availableMerchants as $merchant) {
 }
 
 $primaryCurrency = reset($availableCurrencies);
-$primaryCurrencySymbol = $primaryCurrency->getSymbol();
+$currentCode = $model->currency ?? $primaryCurrency->code;
+
+$currencySymbol = $primaryCurrency->getSymbol();
+foreach ($availableCurrencies as $currency) {
+    if ($currentCode === $currency->code) {
+        $currencySymbol = $currency->getSymbol();
+
+        break;
+    }
+}
 
 ?>
 
@@ -34,11 +43,11 @@ $primaryCurrencySymbol = $primaryCurrency->getSymbol();
                     'data-attribute' => 'currency',
                     'value' => $model->currency ?? $primaryCurrency->code,
                 ]) ?>
-                <?= Html::tag('label', $model->getAttributeLabel('amount'), ['for' => 'deposit-amount']) ?>
+                <?= Html::tag('label', $model->getAttributeLabel('amount'), ['for' => 'depositform-amount']) ?>
 
                 <?php if (count($availableCurrencies) > 1) : ?>
                     <?= $form->field($model, 'amount', [
-                        'template' => (function () use ($availableCurrencies, $primaryCurrencySymbol) {
+                        'template' => (function () use ($availableCurrencies, $currencySymbol) {
                             foreach ($availableCurrencies as $currency) {
                                 $currencyDropdownOptions[] =
                                     '<li>' .
@@ -54,7 +63,7 @@ $primaryCurrencySymbol = $primaryCurrency->getSymbol();
                                 <div class="input-group">
                                     <div class="input-group-btn currency-selector">
                                         <button type="button" data-toggle="dropdown" class="btn btn-default iwd-label dropdown-toggle">
-                                            <span class="currency">{$primaryCurrencySymbol}</span>
+                                            <span class="currency">{$currencySymbol}</span>
                                             <span class="caret"></span>
                                         </button>
                                         <ul class="dropdown-menu">
@@ -73,7 +82,7 @@ HTML
                     </div>
                 <?php else: ?>
                     <?= $form->field($model, 'amount', [
-                        'template' => "<div class='input-group'><span class=\"input-group-addon\">{$primaryCurrencySymbol}</span>{input}</div>{hint}{error}",
+                        'template' => "<div class='input-group'><span class=\"input-group-addon\">{$currencySymbol}</span>{input}</div>{hint}{error}",
                     ]) ?>
                     <div class="well well-sm">
                         <?= Yii::t('merchant', 'Enter the amount of the replenishment in {currency}. For example: 8.79', [
@@ -120,11 +129,19 @@ HTML
 </div>
 
 <?php $this->registerJs(<<<JS
-$('.currency-selector a').click(function(e) {
-    let item = $(this);
+function applyCurrency(item) {
     let form = $('.deposit-form');
+
     form.find('.iwd-label .currency').text(item.data('label'));
-    form.find('input[data-attribute=currency]').val(item.data('value')).trigger('change');
+    form.find('input[data-attribute=currency]')
+        .val(item.data('value'))
+        .trigger('change');
+}
+
+$('.currency-selector a').click(function(e) {
+    e.preventDefault();
+
+    applyCurrency( $(this) );
 });
 JS
 ) ?>
