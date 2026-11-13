@@ -78,7 +78,7 @@ class PayController extends \yii\web\Controller
      * @return string
      * @throws InvalidConfigException
      */
-    public function actionReturn(string $transactionId = null)
+    public function actionReturn(?string $transactionId = null)
     {
         $transaction = $this->checkNotify($transactionId);
         if ($transaction === null) {
@@ -126,7 +126,7 @@ class PayController extends \yii\web\Controller
      * @return null|string
      * @throws InvalidConfigException
      */
-    public function actionNotify(string $transactionId = null)
+    public function actionNotify(?string $transactionId = null)
     {
         $transaction = $this->checkNotify($transactionId);
         if ($transaction === null) {
@@ -148,7 +148,7 @@ class PayController extends \yii\web\Controller
      * @return Transaction|null
      * @throws InvalidConfigException
      */
-    public function checkNotify(string $transactionId = null): ?Transaction
+    public function checkNotify(?string $transactionId = null): ?Transaction
     {
         throw new InvalidConfigException('Method checkNotify must be implemented');
     }
