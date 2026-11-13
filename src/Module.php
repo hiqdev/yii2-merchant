@@ -81,7 +81,7 @@ class Module extends \yii\base\Module
      */
     protected $transactionRepository;
 
-    public function __construct($id, $parent = null, TransactionRepositoryInterface $transactionRepository, array $config = [])
+    public function __construct($id, $parent, TransactionRepositoryInterface $transactionRepository, array $config = [])
     {
         parent::__construct($id, $parent, $config);
 
