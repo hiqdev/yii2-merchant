@@ -4,9 +4,6 @@
 
 [![Latest Stable Version](https://poser.pugx.org/hiqdev/yii2-merchant/v/stable)](https://packagist.org/packages/hiqdev/yii2-merchant)
 [![Total Downloads](https://poser.pugx.org/hiqdev/yii2-merchant/downloads)](https://packagist.org/packages/hiqdev/yii2-merchant)
-[![Build Status](https://img.shields.io/travis/hiqdev/yii2-merchant.svg)](https://travis-ci.org/hiqdev/yii2-merchant)
-[![Scrutinizer Code Coverage](https://img.shields.io/scrutinizer/coverage/g/hiqdev/yii2-merchant.svg)](https://scrutinizer-ci.com/g/hiqdev/yii2-merchant/)
-[![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/hiqdev/yii2-merchant.svg)](https://scrutinizer-ci.com/g/hiqdev/yii2-merchant/)
 [![Dependency Status](https://www.versioneye.com/php/hiqdev:yii2-merchant/dev-master/badge.svg)](https://www.versioneye.com/php/hiqdev:yii2-merchant/dev-master)
 
 This [Yii2] extension provides payment gateways integration with use of

@@ -51,9 +51,8 @@
         "hiqdev/php-merchant": "*"
     },
     "require-dev": {
-        "hiqdev/hidev-php": "*",
-        "hiqdev/hidev-hiqdev": "*",
-        "yiisoft/yii2": "*@dev"
+        "yiisoft/yii2": "*@dev",
+        "phpunit/phpunit": "^12"
     },
     "autoload": {
         "psr-4": {
@@ -75,5 +74,10 @@
             "type": "composer",
             "url": "https://asset-packagist.org"
         }
-    ]
+    ],
+    "config": {
+        "allow-plugins": {
+            "yiisoft/yii2-composer": true
+        }
+    }
 }
